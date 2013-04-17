@@ -1,9 +1,5 @@
 grammar Grammar;
 
-tokens {
-  If, Else
-}
-
 line returns [LOGONode node]
 		: conditional_statement EOF
 		| expression EOF {$node = $expression.node; LOGOPP.io.debug("line->expr");}
@@ -108,10 +104,50 @@ assignment_expression returns [LOGONode node]
         : Set id expression {$node = new LOGOSetNode($id.node.id, $expression.node);}
         ;
 
+/* -------------- conditional and iterations (implementation still in progress -----*/
+// statement list should be a list of statement that can be any statement or command list
 conditional_statement returns [LOGONode node]
-		: If LPARAN expression RPARAN LBRACKET command_list RBRACKET
-		| If LPARAN expression RPARAN LBRACKET command_list RBRACKET Else LBRACKET command_list RBRACKET
+		: If LPARAN expression RPARAN LBRACKET statement_list RBRACKET
+		| If LPARAN expression RPARAN LBRACKET statement_list RBRACKET Else LBRACKET statement_list RBRACKET
 		;
+
+iteration_statement returns [LOGONode node]
+        : While LPARAN expression RPARAN LBRACKET statement_list RBRACKET
+        | For Identifier '=' for_expression LBRACKET statement_list RBRACKET  
+        | For LPARAN Identifier '=' for_expression RPARAN LBRACKET statement_list RBRACKET  
+        ;
+
+for_expression
+    :   expression ':' expression
+    |   expression ':' expression ':' expression
+    ;
+		
+/* ----------------------- function (grammar still in progress)------------------------ */
+
+function
+		: Function function_declare LBRACKET statement_list RBRACKET
+    	;
+
+function_declare
+        : function_declare_noret
+        | func_return_list '=' function_declare_noret
+        ;
+
+function_declare_noret
+        : Identifier LPARAN RPARAN
+        | Identifier LPARAN func_Identifier_list RPARAN
+        ;
+
+func_Identifier_list
+        : Identifier
+        | func_Identifier_list ',' Identifier
+        ;
+
+func_return_list
+        : Identifier
+        | LPARAN func_Identifier_list RPARAN
+        ;
+/* -------------------------------------------------------------*/
 
 catch[RecognitionException e] {throw e;}
 
@@ -120,84 +156,84 @@ Unary_operator
         ;
 
 Forward
-		: ('Forward ' | 'FORWARD ' | 'FD ')
-		;
-		
+        : ('Forward' | 'FORWARD' | 'FD')
+        ;
+
 Back
-		: ('Back ' | 'BACK ' | 'BK ')
-		;
+        : ('Back' | 'BACK' | 'BK')
+        ;
 
 Left
-		: ('Left ' | 'LEFT ' | 'LT ')
-		;
+        : ('Left' | 'LEFT' | 'LT')
+        ;
 
 Right
-		: ('Right ' | 'RIGHT ' | 'RT ')
-		;
+        : ('Right' | 'RIGHT' | 'RT')
+        ;
 
 Setx
-		: ('SetX ' | 'SETX ')
-		;
+        : ('SetX' | 'SETX')
+        ;
 
 Sety
-		: ('SetY ' | 'SETY ')
-		;
-		
+        : ('SetY' | 'SETY')
+        ;
+
 Setxy
-		: ('SetXY ' | 'SETXY ' | 'Teleport ' | 'TELEPORT ')
-		;
+        : ('SetXY' | 'SETXY' | 'Teleport' | 'TELEPORT')
+        ;
 
 Speed
-		: ('Speed ' | 'SPEED ')
-		;
+        : ('Speed' | 'SPEED')
+        ;
 
 Print
-		: ('Print ' | 'PRINT ')
-		;
-		
+        : ('Print' | 'PRINT')
+        ;
+
 Clearscreen
-		: ('Clearscreen' | 'CLEARSCREEN' | 'CS')
-		;
+        : ('Clearscreen' | 'CLEARSCREEN' | 'CS')
+        ;
 
 Origin
-		: ('Origin' | 'ORIGIN' | 'Home' | 'HOME')
-		;
+        : ('Origin' | 'ORIGIN' | 'Home' | 'HOME')
+        ;
 
 Wrap
-		: ('Wrap' | 'WRAP')
-		;
+        : ('Wrap' | 'WRAP')
+        ;
 
 Fence
-		: ('Fence' | 'FENCE')
-		;
+        : ('Fence' | 'FENCE')
+        ;
 
 Getx
-		: ('Getx' | 'GETX')
-		;
+        : ('Getx' | 'GETX')
+        ;
 
 Gety
-		: ('Gety' | 'GETY')
-		;
+        : ('Gety' | 'GETY')
+        ;
 
 Getxy
-		: ('Getxy' | 'GETXY' | 'GPS')
-		;
+        : ('Getxy' | 'GETXY' | 'GPS')
+        ;
 
 Penup
-		: ('Penup' | 'PENUP' | 'PU')
-		;
+        : ('Penup' | 'PENUP' | 'PU')
+        ;
 
 Pendown
-		: ('Pendown' | 'PENDOWN' | 'PD')
-		;
+        : ('Pendown' | 'PENDOWN' | 'PD')
+        ;
 
 Hideturtle
-		: ('Hideturtle' | 'HIDETURTLE' | 'HT')
-		;
+        : ('Hideturtle' | 'HIDETURTLE' | 'HT')
+        ;
 
 Showturtle
-		: ('Showturtle' | 'SHOWTURTLE' |'ST')
-		;
+        : ('Showturtle' | 'SHOWTURTLE' |'ST')
+        ;
 		
 Set
 		: ('Set' | 'Set' | 'set')
@@ -226,6 +262,19 @@ LBRACKET
 RBRACKET
 		: ']'
 		;
+		
+While
+        : 'while'
+        ;
+
+For
+        : 'for'
+        ;
+
+
+Function
+    : ('FUNCTION' | 'function')
+    ;
 
 Number
         : ('0'..'9')+ ('.' ('0'..'9')+)?
