@@ -1,8 +1,7 @@
 grammar Grammar;
 
 line returns [LOGONode node]
-		: conditional_statement EOF
-		| expression EOF {$node = $expression.node; LOGOPP.io.debug("line->expr");}
+		: expression EOF {$node = $expression.node; LOGOPP.io.debug("line->expr");}
 		| command_list EOF {$node = $command_list.node; LOGOPP.io.debug("line->comdlist");}
 		;
 
@@ -104,49 +103,49 @@ assignment_expression returns [LOGONode node]
         : Set id expression {$node = new LOGOSetNode($id.node.id, $expression.node);}
         ;
 
-/* -------------- conditional and iterations (implementation still in progress -----*/
-// statement list should be a list of statement that can be any statement or command list
+/* -------------- conditional and iterations (implementation still in progress) -----*/
 conditional_statement returns [LOGONode node]
-		: If LPARAN expression RPARAN LBRACKET statement_list RBRACKET
-		| If LPARAN expression RPARAN LBRACKET statement_list RBRACKET Else LBRACKET statement_list RBRACKET
+		: If LPAREN expression RPAREN LBRACKET command_list RBRACKET
+		| If LPAREN expression RPAREN LBRACKET command_list RBRACKET Else LBRACKET command_list RBRACKET
 		;
 
 iteration_statement returns [LOGONode node]
-        : While LPARAN expression RPARAN LBRACKET statement_list RBRACKET
-        | For Identifier '=' for_expression LBRACKET statement_list RBRACKET  
-        | For LPARAN Identifier '=' for_expression RPARAN LBRACKET statement_list RBRACKET  
+        : While LPAREN expression RPAREN LBRACKET command_list RBRACKET  {System.out.println("This is a while statement!");} 
+        | For Identifier '=' for_expression LBRACKET command_list RBRACKET  
+        | For LPAREN Identifier '=' for_expression RPAREN LBRACKET command_list RBRACKET  
         ;
 
 for_expression
     :   expression ':' expression
     |   expression ':' expression ':' expression
     ;
-		
-/* ----------------------- function (grammar still in progress)------------------------ */
 
-function
-		: Function function_declare LBRACKET statement_list RBRACKET
+/* ----------------------- function------------------------ */
+
+function_definition returns [LOGONode node]
+		: Function function_declaration LBRACKET command_list RBRACKET
     	;
 
-function_declare
-        : function_declare_noret
-        | func_return_list '=' function_declare_noret
+function_declaration returns [LOGONode node]
+        : Identifier LPAREN RPAREN
+        | Identifier LPAREN identifier_list RPAREN
         ;
 
-function_declare_noret
-        : Identifier LPARAN RPARAN
-        | Identifier LPARAN func_Identifier_list RPARAN
+identifier_list
+        : Identifier ',' identifier_list 
+        | Identifier
         ;
 
-func_Identifier_list
-        : Identifier
-        | func_Identifier_list ',' Identifier
+funcall returns [LOGONode node]
+		: Identifier LPAREN expression_list RPAREN
+		;
+		
+expression_list
+        : expression ',' expression_list 
+        | expression
+        |
         ;
 
-func_return_list
-        : Identifier
-        | LPARAN func_Identifier_list RPARAN
-        ;
 /* -------------------------------------------------------------*/
 
 catch[RecognitionException e] {throw e;}
@@ -247,11 +246,11 @@ Else
 		: 'else'
 		;
 
-LPARAN
+LPAREN
 		: '('
 		;
 
-RPARAN
+RPAREN
 		: ')'
 		;
 
@@ -271,10 +270,9 @@ For
         : 'for'
         ;
 
-
 Function
-    : ('FUNCTION' | 'function')
-    ;
+    	: ('FUNCTION' | 'function')
+    	;
 
 Number
         : ('0'..'9')+ ('.' ('0'..'9')+)?
@@ -285,5 +283,5 @@ Identifier
         ;
 
 WS
-        :(' ' | '\t' | '\r'| '\n') -> skip
+        :[ \t\r\n]+ -> skip
 		;
