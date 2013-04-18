@@ -186,7 +186,7 @@ public class LOGOOperatorNode extends LOGONode{
 			arg1 = runAndCheck(children[1]);
 			if (LOGOPP.errorhandler.error())
 				return null;
-			if (arg0 > 0 || arg1 > 0)
+			if (arg0 != 0 || arg1 != 0)
 				ret = (double) 1;
 			else
 				ret = (double) 0;
