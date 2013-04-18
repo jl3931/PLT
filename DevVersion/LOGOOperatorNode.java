@@ -32,7 +32,7 @@ public class LOGOOperatorNode extends LOGONode{
 			if (LOGOPP.errorhandler.error())
 				return null;
 			ret = arg0 * -1;
-			LOGOPP.io.debug("Unary minus");
+			LOGOPP.io.debug("unary minus");
 			LOGOPP.io.debug(ret.toString());
 			return ret;
 		}
@@ -42,7 +42,7 @@ public class LOGOOperatorNode extends LOGONode{
 			if (LOGOPP.errorhandler.error())
 				return null;
 			ret = arg0 * arg1;
-			LOGOPP.io.debug("Multiply");
+			LOGOPP.io.debug("multiply");
 			LOGOPP.io.debug(ret.toString());
 			return ret;
 		}
@@ -56,7 +56,7 @@ public class LOGOOperatorNode extends LOGONode{
 				return null;
 			}
 			ret = arg0 / arg1;
-			LOGOPP.io.debug("devision");
+			LOGOPP.io.debug("division");
 			LOGOPP.io.debug(ret.toString());
 			return ret;
 		}
@@ -87,6 +87,110 @@ public class LOGOOperatorNode extends LOGONode{
 				return null;
 			ret = arg0 - arg1;
 			LOGOPP.io.debug("minus");
+			LOGOPP.io.debug(ret.toString());
+			return ret;
+		}
+		if (id.equals("<")) {
+			arg0 = runAndCheck(children[0]);
+			arg1 = runAndCheck(children[1]);
+			if (LOGOPP.errorhandler.error())
+				return null;
+			if (arg0 < arg1)
+				ret = (double) 1;
+			else
+				ret = (double) 0;
+			LOGOPP.io.debug("less than");
+			LOGOPP.io.debug(ret.toString());
+			return ret;
+		}
+		if (id.equals(">")) {
+			arg0 = runAndCheck(children[0]);
+			arg1 = runAndCheck(children[1]);
+			if (LOGOPP.errorhandler.error())
+				return null;
+			if (arg0 > arg1)
+				ret = (double) 1;
+			else
+				ret = (double) 0;
+			LOGOPP.io.debug("greater than");
+			LOGOPP.io.debug(ret.toString());
+			return ret;
+		}
+		if (id.equals("<=")) {
+			arg0 = runAndCheck(children[0]);
+			arg1 = runAndCheck(children[1]);
+			if (LOGOPP.errorhandler.error())
+				return null;
+			if (arg0 <= arg1)
+				ret = (double) 1;
+			else
+				ret = (double) 0;
+			LOGOPP.io.debug("less than or equal to");
+			LOGOPP.io.debug(ret.toString());
+			return ret;
+		}
+		if (id.equals(">=")) {
+			arg0 = runAndCheck(children[0]);
+			arg1 = runAndCheck(children[1]);
+			if (LOGOPP.errorhandler.error())
+				return null;
+			if (arg0 >= arg1)
+				ret = (double) 1;
+			else
+				ret = (double) 0;
+			LOGOPP.io.debug("greater than or equal to");
+			LOGOPP.io.debug(ret.toString());
+			return ret;
+		}
+		if (id.equals("=")) {
+			arg0 = runAndCheck(children[0]);
+			arg1 = runAndCheck(children[1]);
+			if (LOGOPP.errorhandler.error())
+				return null;
+			if (arg0 == arg1)
+				ret = (double) 1;
+			else
+				ret = (double) 0;
+			LOGOPP.io.debug("equal to");
+			LOGOPP.io.debug(ret.toString());
+			return ret;
+		}
+		if (id.equals("!=")) {
+			arg0 = runAndCheck(children[0]);
+			arg1 = runAndCheck(children[1]);
+			if (LOGOPP.errorhandler.error())
+				return null;
+			if (arg0 != arg1)
+				ret = (double) 1;
+			else
+				ret = (double) 0;
+			LOGOPP.io.debug("not equal to");
+			LOGOPP.io.debug(ret.toString());
+			return ret;
+		}
+		if (id.equals("&&")) {
+			arg0 = runAndCheck(children[0]);
+			arg1 = runAndCheck(children[1]);
+			if (LOGOPP.errorhandler.error())
+				return null;
+			if (arg0 == 0 || arg1 == 0)
+				ret = (double) 0;
+			else
+				ret = (double) 1;
+			LOGOPP.io.debug("logical and");
+			LOGOPP.io.debug(ret.toString());
+			return ret;
+		}
+		if (id.equals("||")) {
+			arg0 = runAndCheck(children[0]);
+			arg1 = runAndCheck(children[1]);
+			if (LOGOPP.errorhandler.error())
+				return null;
+			if (arg0 > 0 || arg1 > 0)
+				ret = (double) 1;
+			else
+				ret = (double) 0;
+			LOGOPP.io.debug("logical or");
 			LOGOPP.io.debug(ret.toString());
 			return ret;
 		}
