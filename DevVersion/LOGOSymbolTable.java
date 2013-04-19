@@ -12,6 +12,12 @@ public class LOGOSymbolTable {
 		st.push(new HashMap<String, Object>());
 	}
 
+	public void clearAll() {
+		while (!st.isEmpty())
+			st.pop();
+		push();
+	}
+
 	public void pop() {
 		if (st.size() <= 1)
 			LOGOPP.errorhandler.setRunTime("Symbol Table", "Cannot pop");
@@ -22,6 +28,13 @@ public class LOGOSymbolTable {
 		HashMap<String, Object> hm = st.peek();
 		hm.put(id, value);
 		LOGOPP.io.debug("ST: " + id + " " + value);
+		LOGOPP.io.debug(hm.toString());
+	}
+
+	public void unset(String id) {
+		HashMap<String, Object> hm = st.peek();
+		hm.remove(id);
+		LOGOPP.io.debug("ST unset: " + id + " " + value);
 		LOGOPP.io.debug(hm.toString());
 	}
 
