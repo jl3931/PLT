@@ -34,7 +34,7 @@ public class LOGOSymbolTable {
 	public void unset(String id) {
 		HashMap<String, Object> hm = st.peek();
 		hm.remove(id);
-		LOGOPP.io.debug("ST unset: " + id + " " + value);
+		LOGOPP.io.debug("ST unset: " + id);
 		LOGOPP.io.debug(hm.toString());
 	}
 

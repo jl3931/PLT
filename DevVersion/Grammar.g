@@ -93,6 +93,7 @@ primary_expression returns [LOGONode node]
         | '(' expression ')' {$node = $expression.node; LOGOPP.io.debug("parentheses");}
         | assignment_expression {$node = $assignment_expression.node; LOGOPP.io.debug("SET");}
         | id {$node = $id.node; LOGOPP.io.debug("ID");}
+        | funcall {$node = $funcall.node;}
         ;
 
 id returns [LOGONode node]
@@ -123,27 +124,23 @@ for_expression
 /* ----------------------- function------------------------ */
 
 function_definition returns [LOGONode node]
-		: Function function_declaration LBRACKET command_list RBRACKET
+		: Function id LPAREN RPAREN LBRACKET command_list RBRACKET {$node = new LOGOFunction($id.node.id, "define",  null, $command_list.node);}
+		: Function id LPAREN identifier_list RPAREN LBRACKET command_list RBRACKET {$node = new LOGOFunction($id.node.id, "define", $identifier_list.list, $command_list.node);}
     	;
 
-function_declaration returns [LOGONode node]
-        : Identifier LPAREN RPAREN
-        | Identifier LPAREN identifier_list RPAREN
-        ;
-
-identifier_list
-        : Identifier ',' identifier_list 
-        | Identifier
+identifier_list returns [LOGOIdList list]
+        : Identifier ',' identifier_list {$list = new LOGOIdList($Identifier.text, $identifier_list.list);}
+        | Identifier {$list = new LOGOIdList($Identifier.text);}
         ;
 
 funcall returns [LOGONode node]
-		: Identifier LPAREN expression_list RPAREN
+		: id LPAREN expression_list RPAREN {$node = new LOGOFunction($id.node.id, "execute", $expression_list.node);}
 		;
 		
-expression_list
-        : expression ',' expression_list 
-        | expression
-        |
+expression_list returns [LOGONodo node]
+        : expression ',' expression_list {$node = new LOGOExpreListNode($expression.node, $expression_list.node);}
+        | expression {$node = new LOGOExpreListNode($expression.node);}
+        | {$node = null;}
         ;
 
 /* -------------------------------------------------------------*/
