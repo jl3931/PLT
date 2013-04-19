@@ -105,14 +105,14 @@ assignment_expression returns [LOGONode node]
 
 /* -------------- conditional and iterations (implementation still in progress) -----*/
 conditional_statement returns [LOGONode node]
-		: If LPAREN expression RPAREN LBRACKET command_list RBRACKET
-		| If LPAREN expression RPAREN LBRACKET command_list RBRACKET Else LBRACKET command_list RBRACKET
+		: If LPAREN expression RPAREN LBRACKET command_list RBRACKET {$node = new LOGOConditionalNode("if", $expression.node, $command_list.node); LOGOPP.io.debug("if" + $node.id}
+		| If LPAREN expression RPAREN LBRACKET n = command_list RBRACKET Else LBRACKET m = command_list RBRACKET{$node = new LOGOConditionalNode("if_else", $expression.node, $n.node, $m.node); LOGOPP.io.debug("if_else" + $node.id}
 		;
 
 iteration_statement returns [LOGONode node]
-        : While LPAREN expression RPAREN LBRACKET command_list RBRACKET  {System.out.println("This is a while statement!");} 
-        | For Identifier '=' for_expression LBRACKET command_list RBRACKET  
-        | For LPAREN Identifier '=' for_expression RPAREN LBRACKET command_list RBRACKET  
+        : While LPAREN expression RPAREN LBRACKET command_list RBRACKET  {$node = new LOGOIterationNode("while", $expression.node, $command_list.node); LOGOPP.io.debug("while" + $node.id}
+        | For Identifier '=' for_expression LBRACKET command_list RBRACKET  {$node = new LOGOIterationNode("for", $Identifier.node, $for_expression.node, $command_list.node); LOGOPP.io.debug("for" + $node.id}
+        | For LPAREN Identifier '=' for_expression RPAREN LBRACKET command_list RBRACKET  {$node = new LOGOIterationNode("for", $Identifier.node, $for_expression.node, $command_list.node); LOGOPP.io.debug("for" + $node.id}
         ;
 
 for_expression
