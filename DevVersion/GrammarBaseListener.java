@@ -12,14 +12,14 @@ public class GrammarBaseListener implements GrammarListener {
 	@Override public void enterExpression_list(GrammarParser.Expression_listContext ctx) { }
 	@Override public void exitExpression_list(GrammarParser.Expression_listContext ctx) { }
 
-	@Override public void enterFunction_declaration(GrammarParser.Function_declarationContext ctx) { }
-	@Override public void exitFunction_declaration(GrammarParser.Function_declarationContext ctx) { }
-
 	@Override public void enterFuncall(GrammarParser.FuncallContext ctx) { }
 	@Override public void exitFuncall(GrammarParser.FuncallContext ctx) { }
 
 	@Override public void enterOr_expression(GrammarParser.Or_expressionContext ctx) { }
 	@Override public void exitOr_expression(GrammarParser.Or_expressionContext ctx) { }
+
+	@Override public void enterStatement_list(GrammarParser.Statement_listContext ctx) { }
+	@Override public void exitStatement_list(GrammarParser.Statement_listContext ctx) { }
 
 	@Override public void enterAssignment_expression(GrammarParser.Assignment_expressionContext ctx) { }
 	@Override public void exitAssignment_expression(GrammarParser.Assignment_expressionContext ctx) { }

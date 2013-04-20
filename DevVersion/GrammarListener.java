@@ -9,14 +9,14 @@ public interface GrammarListener extends ParseTreeListener {
 	void enterExpression_list(GrammarParser.Expression_listContext ctx);
 	void exitExpression_list(GrammarParser.Expression_listContext ctx);
 
-	void enterFunction_declaration(GrammarParser.Function_declarationContext ctx);
-	void exitFunction_declaration(GrammarParser.Function_declarationContext ctx);
-
 	void enterFuncall(GrammarParser.FuncallContext ctx);
 	void exitFuncall(GrammarParser.FuncallContext ctx);
 
 	void enterOr_expression(GrammarParser.Or_expressionContext ctx);
 	void exitOr_expression(GrammarParser.Or_expressionContext ctx);
+
+	void enterStatement_list(GrammarParser.Statement_listContext ctx);
+	void exitStatement_list(GrammarParser.Statement_listContext ctx);
 
 	void enterAssignment_expression(GrammarParser.Assignment_expressionContext ctx);
 	void exitAssignment_expression(GrammarParser.Assignment_expressionContext ctx);
