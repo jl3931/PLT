@@ -73,7 +73,7 @@ public class LOGOPP extends JFrame implements KeyListener {
         switch(e.getKeyCode()) {
         case KeyEvent.VK_ENTER:
             //////////////////////
-            if (cur.getText().substring(0,5).equals("tur2:")) {
+            if (cur.getText().length() >=5 && cur.getText().substring(0,5).equals("tur2:")) {
                 cmd = cur.getText().substring(5);
                 canvas.changeToTurtle("tur2");
             } else {
