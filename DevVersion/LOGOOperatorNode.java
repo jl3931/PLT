@@ -28,7 +28,7 @@ public class LOGOOperatorNode extends LOGONode{
 		Double ret;
 		Double arg0, arg1;
 		if (id.equals("u-")) {
-			arg0 = runAndCheck(children[0]);
+			arg0 = runAndCheck(children.get(0));
 			if (LOGOPP.errorhandler.error())
 				return null;
 			ret = arg0 * -1;
@@ -37,8 +37,8 @@ public class LOGOOperatorNode extends LOGONode{
 			return ret;
 		}
 		if (id.equals("*")) {
-			arg0 = runAndCheck(children[0]);
-			arg1 = runAndCheck(children[1]);
+			arg0 = runAndCheck(children.get(0));
+			arg1 = runAndCheck(children.get(1));
 			if (LOGOPP.errorhandler.error())
 				return null;
 			ret = arg0 * arg1;
@@ -47,8 +47,8 @@ public class LOGOOperatorNode extends LOGONode{
 			return ret;
 		}
 		if (id.equals("/")) {
-			arg0 = runAndCheck(children[0]);
-			arg1 = runAndCheck(children[1]);
+			arg0 = runAndCheck(children.get(0));
+			arg1 = runAndCheck(children.get(1));
 			if (LOGOPP.errorhandler.error())
 				return null;
 			if (arg0 == 0.) {
@@ -61,8 +61,8 @@ public class LOGOOperatorNode extends LOGONode{
 			return ret;
 		}
 		if (id.equals("^")) {
-			arg0 = runAndCheck(children[0]);
-			arg1 = runAndCheck(children[1]);
+			arg0 = runAndCheck(children.get(0));
+			arg1 = runAndCheck(children.get(1));
 			if (LOGOPP.errorhandler.error())
 				return null;
 			ret = Math.pow(arg0, arg1);
@@ -71,8 +71,8 @@ public class LOGOOperatorNode extends LOGONode{
 			return ret;
 		}
 		if (id.equals("+")) {
-			arg0 = runAndCheck(children[0]);
-			arg1 = runAndCheck(children[1]);
+			arg0 = runAndCheck(children.get(0));
+			arg1 = runAndCheck(children.get(1));
 			if (LOGOPP.errorhandler.error())
 				return null;
 			ret = arg0 + arg1;
@@ -81,8 +81,8 @@ public class LOGOOperatorNode extends LOGONode{
 			return ret;
 		}
 		if (id.equals("-")) {
-			arg0 = runAndCheck(children[0]);
-			arg1 = runAndCheck(children[1]);
+			arg0 = runAndCheck(children.get(0));
+			arg1 = runAndCheck(children.get(1));
 			if (LOGOPP.errorhandler.error())
 				return null;
 			ret = arg0 - arg1;
@@ -91,8 +91,8 @@ public class LOGOOperatorNode extends LOGONode{
 			return ret;
 		}
 		if (id.equals("<")) {
-			arg0 = runAndCheck(children[0]);
-			arg1 = runAndCheck(children[1]);
+			arg0 = runAndCheck(children.get(0));
+			arg1 = runAndCheck(children.get(1));
 			if (LOGOPP.errorhandler.error())
 				return null;
 			if (arg0 < arg1)
@@ -104,8 +104,8 @@ public class LOGOOperatorNode extends LOGONode{
 			return ret;
 		}
 		if (id.equals(">")) {
-			arg0 = runAndCheck(children[0]);
-			arg1 = runAndCheck(children[1]);
+			arg0 = runAndCheck(children.get(0));
+			arg1 = runAndCheck(children.get(1));
 			if (LOGOPP.errorhandler.error())
 				return null;
 			if (arg0 > arg1)
@@ -117,8 +117,8 @@ public class LOGOOperatorNode extends LOGONode{
 			return ret;
 		}
 		if (id.equals("<=")) {
-			arg0 = runAndCheck(children[0]);
-			arg1 = runAndCheck(children[1]);
+			arg0 = runAndCheck(children.get(0));
+			arg1 = runAndCheck(children.get(1));
 			if (LOGOPP.errorhandler.error())
 				return null;
 			if (arg0 <= arg1)
@@ -130,8 +130,8 @@ public class LOGOOperatorNode extends LOGONode{
 			return ret;
 		}
 		if (id.equals(">=")) {
-			arg0 = runAndCheck(children[0]);
-			arg1 = runAndCheck(children[1]);
+			arg0 = runAndCheck(children.get(0));
+			arg1 = runAndCheck(children.get(1));
 			if (LOGOPP.errorhandler.error())
 				return null;
 			if (arg0 >= arg1)
@@ -143,8 +143,8 @@ public class LOGOOperatorNode extends LOGONode{
 			return ret;
 		}
 		if (id.equals("=")) {
-			arg0 = runAndCheck(children[0]);
-			arg1 = runAndCheck(children[1]);
+			arg0 = runAndCheck(children.get(0));
+			arg1 = runAndCheck(children.get(1));
 			if (LOGOPP.errorhandler.error())
 				return null;
 			if (arg0 == arg1)
@@ -156,8 +156,8 @@ public class LOGOOperatorNode extends LOGONode{
 			return ret;
 		}
 		if (id.equals("!=")) {
-			arg0 = runAndCheck(children[0]);
-			arg1 = runAndCheck(children[1]);
+			arg0 = runAndCheck(children.get(0));
+			arg1 = runAndCheck(children.get(1));
 			if (LOGOPP.errorhandler.error())
 				return null;
 			if (arg0 != arg1)
@@ -169,8 +169,8 @@ public class LOGOOperatorNode extends LOGONode{
 			return ret;
 		}
 		if (id.equals("&&")) {
-			arg0 = runAndCheck(children[0]);
-			arg1 = runAndCheck(children[1]);
+			arg0 = runAndCheck(children.get(0));
+			arg1 = runAndCheck(children.get(1));
 			if (LOGOPP.errorhandler.error())
 				return null;
 			if (arg0 == 0 || arg1 == 0)
@@ -182,8 +182,8 @@ public class LOGOOperatorNode extends LOGONode{
 			return ret;
 		}
 		if (id.equals("||")) {
-			arg0 = runAndCheck(children[0]);
-			arg1 = runAndCheck(children[1]);
+			arg0 = runAndCheck(children.get(0));
+			arg1 = runAndCheck(children.get(1));
 			if (LOGOPP.errorhandler.error())
 				return null;
 			if (arg0 != 0 || arg1 != 0)

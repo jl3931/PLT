@@ -26,7 +26,7 @@ public class LOGOCommandNode extends LOGONode {
 				command(id);
 				System.out.println("command received:" + id + " with 0 arguments");
 			} else if (commandID == 1) {
-				command(id, children[0]);
+				command(id, children.get(0));
 				System.out.println("command received:" + id + " with 1 arguments");
 			}
 		}

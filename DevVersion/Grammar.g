@@ -6,10 +6,10 @@ line returns [LOGONode node]
 		;
 
 command_list returns [LOGONode node]
-        : command_noarg l=command_list {$node = new LOGOCommandNode("commandList", $command_noarg.node, $l.node);}
-        | command_expr l=command_list {$node = new LOGOCommandNode("commandList",$command_expr.node, $l.node);}
-        | command_noarg {$node = $command_noarg.node;}
-		| command_expr {$node = $command_expr.node;}
+        : l=command_list command_noarg {$l.node.children.add($command_noarg.node); $node = $l.node);}
+        | l=command_list command_expr {$l.node.children.add($command_expr.node); $node = $l.node);}
+        | command_noarg {$node = new LOGOCommandNode("commandList",$command_noarg.node);}
+		| command_expr {$node = new LOGOCommandNode("commandList",$command_expr.node);}
 		;
 
 command_noarg returns [LOGONode node]
@@ -138,7 +138,7 @@ funcall returns [LOGONode node]
 		;
 		
 expression_list returns [LOGONodo node]
-        : expression ',' expression_list {$node = new LOGOExpreListNode($expression.node, $expression_list.node);}
+        : l=expression_list ',' expression {$l.node.children.add($expression.node); $node = $l.node;}
         | expression {$node = new LOGOExpreListNode($expression.node);}
         | {$node = null;}
         ;

@@ -19,6 +19,9 @@ public class LOGOPP extends JFrame implements KeyListener {
 	static HashMap<String, Object> variableTable = new HashMap<String, Object>();
 	//TODO:static HashMap<String, LOGOFunc> functionTable = new HashMap<String, LOGOFunc>();
 
+    static ArrayList<String> commandHistory = new ArrayList<String>();
+    static int curCmdIndex = 0;
+
 
 	public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -62,22 +65,38 @@ public class LOGOPP extends JFrame implements KeyListener {
     }
      
     public void keyPressed(KeyEvent e) {
-    	if (e.getKeyCode() == 10) {
-    		cmd = cur.getText();
-    		new Thread(){
-            	public void run() {
-               		ProcessCommand(cmd);
-            	}
-        	}.start();
-        	prev.append(cur.getText()+"\n");
-        	cur.setText("");
-    	}
+        switch(e.getKeyCode()) {
+        case KeyEvent.VK_ENTER:
+            cmd = cur.getText();
+            new Thread(){
+                public void run() {
+                    execute(cmd);
+                }
+            }.start();
+            prev.append(cur.getText()+"\n");
+            cur.setText("");
+            commandHistory.add(cmd);
+            curCmdIndex++;
+            break;
+        case KeyEvent.VK_UP:
+            curCmdIndex = (curCmdIndex > 0) ? curCmdIndex - 1 : 0;
+            cur.setText(commandHistory.get(curCmdIndex));
+            break;
+        case KeyEvent.VK_DOWN:
+            if (curCmdIndex < commandHistory.size() - 1) {
+                cur.setText(commandHistory.get(curCmdIndex++));
+            } else {
+                cur.setText("");
+                curCmdIndex = commandHistory.size();
+            }
+            break;
+        }
     }
      
     public void keyReleased(KeyEvent e) {
     }
 
-	public void ProcessCommand (String str) {
+	/*public void ProcessCommand (String str) {
 		if (!str.equals("exit") && !errorhandler.error()) {
 			execute(str);
 			canvas.repaint();
@@ -85,13 +104,16 @@ public class LOGOPP extends JFrame implements KeyListener {
 			if (errorhandler.error())
 				errorhandler.errorOut();
 		}
-	}
+	}*/
 
 	public void execute(String str) {
+        if (errorhandler.error())
+            errorhandler.errorOut();
 		errorhandler.reset();
 		try {
 			LOGONode root = interpreter.parse(str);
 			root.run();
+            canvas.repaint();
 		}
 		catch (Exception e) {
 			errorhandler.set(e.toString());

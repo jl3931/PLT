@@ -21,7 +21,7 @@ public class LOGOSetNode extends LOGONode{
 	}
 
 	public Object run() {
-		Object arg0 = runAndCheck(children[0]);
+		Object arg0 = runAndCheck(children.get(0));
 		if (LOGOPP.errorhandler.error())
 			return null;
 		LOGOPP.symboltable.set(id, arg0);

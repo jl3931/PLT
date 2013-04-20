@@ -28,10 +28,10 @@ public class LOGOIterationNode extends LOGONode{
 		double bool;
 		double true_ = (double) 1;
 		if (id.equals("while")) {
-			bool = runAndCheck(children[0]);
+			bool = runAndCheck(children.get(0));
 			while (bool == true_) {
-				children[1].run();
-				bool = runAndCheck(children[0]);
+				children.get(1).run();
+				bool = runAndCheck(children.get(0));
 			}
 			return null;
 		}

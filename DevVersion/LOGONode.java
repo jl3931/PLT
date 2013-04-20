@@ -1,11 +1,15 @@
+import java.util.*;
+
 public class LOGONode {
-	LOGONode[] children;
+	ArrayList<LOGONode> children;
 	String id;
 	public LOGONode(String id, LOGONode... args) {
 		this.id = id;
-		children = args;
+		//children = args;
+		children = new ArrayList<LOGONode>();
 		LOGOPP.io.debug(id);
-		for (LOGONode node : children) {
+		for (LOGONode node : args) {
+			children.add(node);
 			LOGOPP.io.debug("child: " + node.id);
 		}
 	}

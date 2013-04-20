@@ -8,7 +8,7 @@ class LOGOFunctionNode extends LOGONode {
 	}
 	public Object run() {
 		if (arguments[0].equals("define")) {
-			LOGOFunction function = new LOGOFunction(id, (LOGOIdList)arguments[1], (LOGOCommandNode)children[0]);
+			LOGOFunction function = new LOGOFunction(id, (LOGOIdList)arguments[1], (LOGOCommandNode)children.get(0));
 			LOGOPP.symboltable.set(id, function);
 			return null;
 		}
