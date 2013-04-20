@@ -11,12 +11,12 @@ public class LOGOBasic {
 			double step = (isForward) ? ((Double)ret).doubleValue() :
 										-((Double)ret).doubleValue();
 			System.out.println("step size:" + step);
-			double startX = LOGOPP.canvas.turtle.getXPos();
-			double startY = LOGOPP.canvas.turtle.getYPos();
-			double directX = Math.cos(Math.toRadians(LOGOPP.canvas.turtle.getAngle()));
-			double directY = Math.sin(Math.toRadians(LOGOPP.canvas.turtle.getAngle()));
+			double startX = LOGOPP.canvas.getCurTurtle().getXPos();
+			double startY = LOGOPP.canvas.getCurTurtle().getYPos();
+			double directX = Math.cos(Math.toRadians(LOGOPP.canvas.getCurTurtle().getAngle()));
+			double directY = Math.sin(Math.toRadians(LOGOPP.canvas.getCurTurtle().getAngle()));
 			moveTurtle(startX + directX * step, startY + directY * step, 
-							LOGOPP.canvas.turtle.getPenDown());
+							LOGOPP.canvas.getCurTurtle().getPenDown());
 		} else {
 			//TODO: errorhandler
 		}
@@ -32,7 +32,7 @@ public class LOGOBasic {
 		if (ret instanceof Double) {
 			double turn = (isLeft) ? ((Double)ret).doubleValue() :
 									-((Double)ret).doubleValue();
-			LOGOPP.canvas.turtle.setAngle(LOGOPP.canvas.turtle.getAngle() - turn);
+			LOGOPP.canvas.getCurTurtle().setAngle(LOGOPP.canvas.getCurTurtle().getAngle() - turn);
 			System.out.println("basic:turn finished");	
 		} else {
 			//TODO:errorhandler
@@ -48,28 +48,28 @@ public class LOGOBasic {
 	 */
 	private void moveTurtle(double endX, double endY, boolean isDraw) {
 		if (isDraw) {
-			double startX = LOGOPP.canvas.turtle.getXPos();
-			double startY = LOGOPP.canvas.turtle.getYPos();
+			double startX = LOGOPP.canvas.getCurTurtle().getXPos();
+			double startY = LOGOPP.canvas.getCurTurtle().getYPos();
 			double length = Math.sqrt((endX - startX) * (endX - startX) +
 										(endY - startY) * (endY - startY));
 			double deltaX = (endX - startX) / length;
 			double deltaY = (endY - startY) / length;
 			int count = (int)length;
 			for (int cnt = 0; cnt < count; cnt++) {
-				LOGOPP.canvas.paintPoint((int)(startX + cnt * deltaX),
+				LOGOPP.canvas.getCurTurtle().paintPoint((int)(startX + cnt * deltaX),
 										(int)(startY + cnt * deltaY));
-				LOGOPP.canvas.turtle.setXPos(startX + cnt * deltaX);
-				LOGOPP.canvas.turtle.setYPos(startY + cnt * deltaY);
+				LOGOPP.canvas.getCurTurtle().setXPos(startX + cnt * deltaX);
+				LOGOPP.canvas.getCurTurtle().setYPos(startY + cnt * deltaY);
 				double speed = 0.;
 				while (speed < LOGOTurtle.SPEED_ITR_MAX) {
 					LOGOPP.canvas.repaint();
-					speed += LOGOPP.canvas.turtle.getSpeed();
+					speed += LOGOPP.canvas.getCurTurtle().getSpeed();
 				}
 			}
-			LOGOPP.canvas.paintPoint((int)endX, (int)endY);
+			LOGOPP.canvas.getCurTurtle().paintPoint((int)endX, (int)endY);
 		}
-		LOGOPP.canvas.turtle.setXPos(endX);
-		LOGOPP.canvas.turtle.setYPos(endY);
+		LOGOPP.canvas.getCurTurtle().setXPos(endX);
+		LOGOPP.canvas.getCurTurtle().setYPos(endY);
 		LOGOPP.canvas.repaint();
 	}
 
@@ -90,9 +90,9 @@ public class LOGOBasic {
 			if (ret instanceof Double) {
 				double value = ((Double)ret).doubleValue();
 				if (setX)
-					moveTurtle(value, LOGOPP.canvas.turtle.getYPos(), false);
+					moveTurtle(value, LOGOPP.canvas.getCurTurtle().getYPos(), false);
 				else //setY
-					moveTurtle(LOGOPP.canvas.turtle.getXPos(), value, false);
+					moveTurtle(LOGOPP.canvas.getCurTurtle().getXPos(), value, false);
 			} else {
 				//TODO:error handling
 			}
@@ -102,7 +102,7 @@ public class LOGOBasic {
 	public void origin() {
 		moveTurtle((double)LOGOPP.canvas.getWidth() / 2, 
 					(double)LOGOPP.canvas.getHeight() / 2, false);
-		LOGOPP.canvas.turtle.setAngle(LOGOTurtle.INIT_ANGLE);
+		LOGOPP.canvas.getCurTurtle().setAngle(LOGOTurtle.INIT_ANGLE);
 		LOGOPP.canvas.repaint();
 	}
 

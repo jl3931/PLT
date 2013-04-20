@@ -43,6 +43,11 @@ public class LOGOPP extends JFrame implements KeyListener {
         logoPP.setSize(canvas.getWidth() + 2 * MARGIN_HEIGHT ,canvas.getHeight() 
         				+ PREV_HEIGHT +  CUR_HEIGHT * 2 + MARGIN_HEIGHT * 2);
         logoPP.setVisible(true);
+        LOGOTurtle tur = new LOGOTurtle("local", canvas.getWidth() / 2, canvas.getHeight() / 2);
+        canvas.putTurtle(tur);
+        ///////////
+        LOGOTurtle tur2 = new LOGOTurtle("tur2", canvas.getWidth() / 2, canvas.getHeight() / 2);
+        canvas.putTurtle(tur2);
     }
 
     private void addComponentsToPane() {
@@ -67,16 +72,23 @@ public class LOGOPP extends JFrame implements KeyListener {
     public void keyPressed(KeyEvent e) {
         switch(e.getKeyCode()) {
         case KeyEvent.VK_ENTER:
-            cmd = cur.getText();
+            //////////////////////
+            if (cur.getText().substring(0,5).equals("tur2:")) {
+                cmd = cur.getText().substring(5);
+                canvas.changeToTurtle("tur2");
+            } else {
+                cmd = cur.getText();
+                canvas.changeToTurtle("local");
+            }
             new Thread(){
                 public void run() {
                     execute(cmd);
                 }
             }.start();
+            commandHistory.add(cur.getText());
+            curCmdIndex++;
             prev.append(cur.getText()+"\n");
             cur.setText("");
-            commandHistory.add(cmd);
-            curCmdIndex++;
             break;
         case KeyEvent.VK_UP:
             curCmdIndex = (curCmdIndex > 0) ? curCmdIndex - 1 : 0;
@@ -95,16 +107,6 @@ public class LOGOPP extends JFrame implements KeyListener {
      
     public void keyReleased(KeyEvent e) {
     }
-
-	/*public void ProcessCommand (String str) {
-		if (!str.equals("exit") && !errorhandler.error()) {
-			execute(str);
-			canvas.repaint();
-		} else {
-			if (errorhandler.error())
-				errorhandler.errorOut();
-		}
-	}*/
 
 	public void execute(String str) {
         if (errorhandler.error())

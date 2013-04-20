@@ -3,12 +3,14 @@ import java.awt.geom.AffineTransform;
 import javax.imageio.*;
 import javax.swing.*;
 import java.io.*;
+import java.util.*;
 
 public class LOGOCanvas extends JComponent {
 	final static public int DEFAULT_WIDTH = 500;
 	final static public int DEFAULT_HEIGHT = 500;
-		
-	public LOGOTurtle turtle;
+	
+	public HashMap<String, LOGOTurtle> turtlePool = new HashMap<String, LOGOTurtle>();
+	private LOGOTurtle curTurtle;
 	public boolean wrap;
 	public int[][] bitmap;
 	private static BMP bmpGenerator = new BMP();
@@ -32,19 +34,33 @@ public class LOGOCanvas extends JComponent {
 				bitmap[i][j] = 255|255<<8|255<<16;
 	
 	}
+
 	private void init(String str, int w, int h) {
 		height = h;
 		width = w;
-		turtle = new LOGOTurtle((double)w / 2, (double)h / 2);
 		if (str != null)
 			title = str;
 		bitmap = new int[height][width];
 		clean();
 	}
 
-	public void paintPoint(int x, int y) {
-		bitmap[height - y][x] = turtle.colorValue();
+	public LOGOTurtle getCurTurtle() {return curTurtle;}
+
+	public boolean changeToTurtle(String name) {
+		if (turtlePool.containsKey(name)) {
+			curTurtle = turtlePool.get(name);
+			return true;
+		}
+		else
+			return false;
 	}
+
+	public void putTurtle(LOGOTurtle tur) {
+		tur.canvasOn = this;
+		turtlePool.put(tur.getName(), tur);
+		curTurtle = tur;
+	}
+
 
 	public void paint(Graphics g) {
 		bmpGenerator.saveBMP(title+".bmp",bitmap);
@@ -57,7 +73,14 @@ public class LOGOCanvas extends JComponent {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		turtle.paint(g, this);
+		Iterator it = turtlePool.entrySet().iterator();
+    	while (it.hasNext()) {
+        	Map.Entry pairs = (Map.Entry)it.next();
+        	LOGOTurtle tur = (LOGOTurtle)pairs.getValue();
+        	tur.paint(g);
+        	//it.remove();
+        	//it.next(); // avoids a ConcurrentModificationException
+    	}
 	}
 	
 	private String title = "untitled canvas";
