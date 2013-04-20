@@ -57,13 +57,13 @@ public class LOGOCommandNode extends LOGONode {
 			else if (id.equals("CLEARSCREEN"))
 				LOGOPP.basic.clearScreen();
 			else if (id.equals("SHOWTURTLE"))
-				;//LOGOPP.basic.showTurtle(true);
+				LOGOPP.canvas.getCurTurtle().setShowTurtle(true);
 			else if (id.equals("HIDETURTLE"))
-				;//LOGOPP.basic.showTurtle(false);
+				LOGOPP.canvas.getCurTurtle().setShowTurtle(false);
 			else if (id.equals("WRAP"))
-				;//LOGOPP.basic.wrap("true");
+				LOGOPP.canvas.wrap = true;
 			else if (id.equals("FENCE"))
-				;//LOGOPP.basic.wrap("false");
+				LOGOPP.canvas.wrap = false;
 			else if (id.equals("PENUP"))
 				LOGOPP.canvas.getCurTurtle().setPenDown(false);
 			else if (id.equals("PENDOWN"))

@@ -43,11 +43,11 @@ public class LOGOPP extends JFrame implements KeyListener {
         logoPP.setSize(canvas.getWidth() + 2 * MARGIN_HEIGHT ,canvas.getHeight() 
         				+ PREV_HEIGHT +  CUR_HEIGHT * 2 + MARGIN_HEIGHT * 2);
         logoPP.setVisible(true);
-        LOGOTurtle tur = new LOGOTurtle("local", canvas.getWidth() / 2, canvas.getHeight() / 2);
-        canvas.putTurtle(tur);
+        LOGOTurtle tur = new LOGOTurtle("local");
+        canvas.putTurtle(tur, canvas.getWidth() / 2, canvas.getHeight() / 2);
         ///////////
-        LOGOTurtle tur2 = new LOGOTurtle("tur2", canvas.getWidth() / 2, canvas.getHeight() / 2);
-        canvas.putTurtle(tur2);
+        LOGOTurtle tur2 = new LOGOTurtle("tur2");
+        canvas.putTurtle(tur2, canvas.getWidth() / 2, canvas.getHeight() / 2);
     }
 
     private void addComponentsToPane() {

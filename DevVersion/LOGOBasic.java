@@ -56,17 +56,18 @@ public class LOGOBasic {
 			double deltaY = (endY - startY) / length;
 			int count = (int)length;
 			for (int cnt = 0; cnt < count; cnt++) {
-				LOGOPP.canvas.getCurTurtle().paintPoint((int)(startX + cnt * deltaX),
-										(int)(startY + cnt * deltaY));
 				LOGOPP.canvas.getCurTurtle().setXPos(startX + cnt * deltaX);
 				LOGOPP.canvas.getCurTurtle().setYPos(startY + cnt * deltaY);
+				LOGOPP.canvas.getCurTurtle().paintPoint();
 				double speed = 0.;
 				while (speed < LOGOTurtle.SPEED_ITR_MAX) {
 					LOGOPP.canvas.repaint();
 					speed += LOGOPP.canvas.getCurTurtle().getSpeed();
 				}
 			}
-			LOGOPP.canvas.getCurTurtle().paintPoint((int)endX, (int)endY);
+			LOGOPP.canvas.getCurTurtle().setXPos(endX);
+			LOGOPP.canvas.getCurTurtle().setYPos(endY);
+			LOGOPP.canvas.getCurTurtle().paintPoint();
 		}
 		LOGOPP.canvas.getCurTurtle().setXPos(endX);
 		LOGOPP.canvas.getCurTurtle().setYPos(endY);
