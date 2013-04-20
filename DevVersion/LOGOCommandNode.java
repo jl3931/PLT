@@ -15,7 +15,7 @@ public class LOGOCommandNode extends LOGONode {
 		int commandID = findCommand(id);	//commandID is the number of arguments taken
 		if (id.equals("commandList")) {
 			for (LOGONode node : children)
-				if (node != null)
+				//if (node != null)
 					node.run();
 		} else {
 			if (commandID < 0) {
@@ -65,9 +65,9 @@ public class LOGOCommandNode extends LOGONode {
 			else if (id.equals("FENCE"))
 				;//LOGOPP.basic.wrap("false");
 			else if (id.equals("PENUP"))
-				LOGOPP.canvas.turtle.setPenDown(false);
+				LOGOPP.canvas.getCurTurtle().setPenDown(false);
 			else if (id.equals("PENDOWN"))
-				LOGOPP.canvas.turtle.setPenDown(true);
+				LOGOPP.canvas.getCurTurtle().setPenDown(true);
 
 		} else if (args.length == 1) {
 			// command with 1 arguments

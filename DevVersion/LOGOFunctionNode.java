@@ -23,6 +23,7 @@ class LOGOFunctionNode extends LOGONode {
 		return null;
 	}
 }
+
 class LOGOFunction {
 	String id;
 	LOGOIdList args;
