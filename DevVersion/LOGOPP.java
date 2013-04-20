@@ -5,22 +5,20 @@ import java.util.*;
 
 public class LOGOPP extends JFrame implements KeyListener {
 	JTextArea prev;
-    JTextField cur;
-    static final int PREV_HEIGHT = 100;
-    static final int CUR_HEIGHT = 25;
-    static final int MARGIN_HEIGHT = 5;
-    String cmd;
+	JTextField cur;
+	static final int PREV_HEIGHT = 100;
+	static final int CUR_HEIGHT = 25;
+	static final int MARGIN_HEIGHT = 5;
+	String cmd;
 	static LOGOIO io = new LOGOIO();
 	static LOGOSymbolTable symboltable = new LOGOSymbolTable();
 	static LOGOErrorHandler errorhandler = new LOGOErrorHandler(io);
 	static LOGOCanvas canvas = new LOGOCanvas("LOGO++", 600, 400);
 	static LOGOInterpreter interpreter = new LOGOInterpreter();
 	static LOGOBasic basic = new LOGOBasic();
-	static HashMap<String, Object> variableTable = new HashMap<String, Object>();
-	//TODO:static HashMap<String, LOGOFunc> functionTable = new HashMap<String, LOGOFunc>();
 
-    static ArrayList<String> commandHistory = new ArrayList<String>();
-    static int curCmdIndex = 0;
+	static ArrayList<String> commandHistory = new ArrayList<String>();
+	static int curCmdIndex = 0;
 
 
 	public static void main(String[] args) {
@@ -46,8 +44,9 @@ public class LOGOPP extends JFrame implements KeyListener {
         LOGOTurtle tur = new LOGOTurtle("local");
         canvas.putTurtle(tur, canvas.getWidth() / 2, canvas.getHeight() / 2);
         ///////////
-        LOGOTurtle tur2 = new LOGOTurtle("tur2");
+	LOGOTurtle tur2 = new LOGOTurtle("tur2");
         canvas.putTurtle(tur2, canvas.getWidth() / 2, canvas.getHeight() / 2);
+	
     }
 
     private void addComponentsToPane() {
@@ -109,13 +108,13 @@ public class LOGOPP extends JFrame implements KeyListener {
     }
 
 	public void execute(String str) {
-        if (errorhandler.error())
-            errorhandler.errorOut();
+		if (errorhandler.error())
+			errorhandler.errorOut();
 		errorhandler.reset();
 		try {
 			LOGONode root = interpreter.parse(str);
 			root.run();
-            canvas.repaint();
+			canvas.repaint();
 		}
 		catch (Exception e) {
 			errorhandler.set(e.toString());
