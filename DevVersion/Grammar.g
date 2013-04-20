@@ -1,8 +1,16 @@
 grammar Grammar;
 
 line returns [LOGONode node]
-		: expression EOF {$node = $expression.node; LOGOPP.io.debug("line->expr");}
-		| command_list EOF {$node = $command_list.node; LOGOPP.io.debug("line->comdlist");}
+		: statement_list EOF {$node = $command_list.node; LOGOPP.io.debug("line->comdlist");}
+		;
+		
+statement_list returns [LOGONode node]
+		: statement_list command_noarg {$node = new LOGOCommandNode("commandList",$command_noarg.node);}
+		| statement_list command_expr {$node = new LOGOCommandNode("commandList",$command_expr.node);}
+		| statement_list expression {$node = expression.node;}
+		| statement_list conditional_statement {$node = $conditional_statement.node;}
+		| statement_list iteration_statement {$node = $iteration_statement.node;}
+		| function_definition {$node = $function_definition.node;}
 		;
 
 command_list returns [LOGONode node]
@@ -111,12 +119,12 @@ conditional_statement returns [LOGONode node]
 		;
 
 iteration_statement returns [LOGONode node]
-        : While LPAREN expression RPAREN LBRACKET command_list RBRACKET  {$node = new LOGOIterationNode("while", $expression.node, $command_list.node); LOGOPP.io.debug("while" + $node.id}
-        | For Identifier '=' for_expression LBRACKET command_list RBRACKET  {$node = new LOGOIterationNode("for", $Identifier.node, $for_expression.node, $command_list.node); LOGOPP.io.debug("for" + $node.id}
-        | For LPAREN Identifier '=' for_expression RPAREN LBRACKET command_list RBRACKET  {$node = new LOGOIterationNode("for", $Identifier.node, $for_expression.node, $command_list.node); LOGOPP.io.debug("for" + $node.id}
+        : While LPAREN expression RPAREN LBRACKET command_list RBRACKET {$node = new LOGOIterationNode("while", $expression.node, $command_list.node); LOGOPP.io.debug("while" + $node.id}
+        | For id '=' for_expression LBRACKET command_list RBRACKET {$node = new LOGOIterationNode("for", $id.node, $for_expression.node, $command_list.node); LOGOPP.io.debug("for" + $node.id}
+        | For LPAREN id '=' for_expression RPAREN LBRACKET command_list RBRACKET {$node = new LOGOIterationNode("for", $id.node, $for_expression.node, $command_list.node); LOGOPP.io.debug("for" + $node.id}
         ;
 
-for_expression
+for_expression returns [LOGONode node]
     :   expression ':' expression
     |   expression ':' expression ':' expression
     ;
@@ -125,11 +133,11 @@ for_expression
 
 function_definition returns [LOGONode node]
 		: Function id LPAREN RPAREN LBRACKET command_list RBRACKET {$node = new LOGOFunction($id.node.id, "define",  null, $command_list.node);}
-		: Function id LPAREN identifier_list RPAREN LBRACKET command_list RBRACKET {$node = new LOGOFunction($id.node.id, "define", $identifier_list.list, $command_list.node);}
+		| Function id LPAREN identifier_list RPAREN LBRACKET command_list RBRACKET {$node = new LOGOFunction($id.node.id, "define", $identifier_list.list, $command_list.node);}
     	;
 
 identifier_list returns [LOGOIdList list]
-        : Identifier ',' identifier_list {$list = new LOGOIdList($Identifier.text, $identifier_list.list);}
+        : Identifier ',' n=identifier_list {$list = new LOGOIdList($Identifier.text, $n.list);}
         | Identifier {$list = new LOGOIdList($Identifier.text);}
         ;
 
