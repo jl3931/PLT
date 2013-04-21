@@ -48,7 +48,7 @@ public class LOGOPP extends JFrame implements KeyListener {
         logoPP.pack();
         logoPP.setVisible(true);
         logoPP.changeWindowSize(false);
-        logoPP.setResizable(false);
+	//        logoPP.setResizable(false);
         LOGOTurtle tur = new LOGOTurtle("local");
         canvas.putTurtle(tur, canvas.getWidth() / 2, canvas.getHeight() / 2);
         ///////////

@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 class LOGOIdList {
-	private ArrayList<String> ids;
+	public ArrayList<String> ids;
 	public LOGOIdList(String id) {
 		ids = new ArrayList<String>();
 		ids.add(id);
@@ -9,7 +9,8 @@ class LOGOIdList {
 		ids = idList.ids;
 		ids.add(0, id);
 	}
-	public String[] getList() {
-		return (String[])ids.toArray();
+	public Object[] getList() {
+		LOGOPP.io.debug(ids.toString());
+		return ids.toArray();
 	}
 }

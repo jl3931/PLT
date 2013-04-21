@@ -102,7 +102,7 @@ primary_expression returns [LOGONode node]
         | '(' expression ')' {$node = $expression.node; LOGOPP.io.debug("parentheses");}
         | assignment_expression {$node = $assignment_expression.node; LOGOPP.io.debug("SET");}
         | id {$node = $id.node; LOGOPP.io.debug("ID");}
-        | funcall {$node = $funcall.node;}
+        | funcall {$node = $funcall.node; LOGOPP.io.debug("FunCall");}
         ;
 
 id returns [LOGONode node]
@@ -139,8 +139,8 @@ function_definition returns [LOGONode node]
     	;
 
 identifier_list returns [LOGOIdList list]
-        : Identifier ',' n=identifier_list {$list = new LOGOIdList($Identifier.text, $n.list);}
-        | Identifier {$list = new LOGOIdList($Identifier.text);}
+        : Identifier ',' n=identifier_list {$list = new LOGOIdList($Identifier.text, $n.list); LOGOPP.io.debug("ID_list");}
+        | Identifier {$list = new LOGOIdList($Identifier.text); LOGOPP.io.debug("ID_list tail");}
         ;
 
 funcall returns [LOGONode node]
@@ -148,8 +148,8 @@ funcall returns [LOGONode node]
 		;
 		
 expression_list returns [LOGONode node]
-        : l=expression_list ',' expression {$l.node.children.add($expression.node); $node = $l.node;}
-        | expression {$node = new LOGOExprListNode($expression.node);}
+        : expression ',' l=expression_list {$l.node.children.add($expression.node); $node = $l.node; LOGOPP.io.debug("expression_list");}
+        | expression {$node = new LOGOExprListNode($expression.node); LOGOPP.io.debug("expression_list tail");}
         | {$node = null;}
         ;
 
