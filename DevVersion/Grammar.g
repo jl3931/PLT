@@ -1,16 +1,19 @@
 grammar Grammar;
 
 line returns [LOGONode node]
-		: command_list EOF {$node = $command_list.node; LOGOPP.io.debug("line->comdlist");}
+		: statement_list EOF {$node = $statement_list.node; LOGOPP.io.debug("line->stmt_list");}
 		;
 		
 statement_list returns [LOGONode node]
-		: statement_list command_noarg {$node = new LOGOCommandNode("commandList",$command_noarg.node);}
-		| statement_list command_expr {$node = new LOGOCommandNode("commandList",$command_expr.node);}
-		| statement_list expression {$node = $expression.node;}
-		| statement_list conditional_statement {$node = $conditional_statement.node;}
-		| statement_list iteration_statement {$node = $iteration_statement.node;}
-		| function_definition {$node = $function_definition.node;}
+		: command_list statement_list {$node = $command_list.node; LOGOPP.io.debug("stmt->cmd_list");}
+		| expression statement_list {$node = $expression.node; LOGOPP.io.debug("stmt->expr");}
+		| conditional_statement statement_list {$node = $conditional_statement.node; LOGOPP.io.debug("stmt->cond");}
+		| iteration_statement statement_list {$node = $iteration_statement.node; LOGOPP.io.debug("stmt->iter");}
+		| function_definition {$node = $function_definition.node; LOGOPP.io.debug("stmt->func");}
+		| command_list {$node = $command_list.node; LOGOPP.io.debug("stmt->cmd_list");}
+		| expression {$node = $expression.node; LOGOPP.io.debug("stmt->expr");}
+		| conditional_statement {$node = $conditional_statement.node; LOGOPP.io.debug("stmt->cond");}
+		| iteration_statement {$node = $iteration_statement.node; LOGOPP.io.debug("stmt->iter");}
 		;
 
 command_list returns [LOGONode node]
@@ -114,14 +117,15 @@ assignment_expression returns [LOGONode node]
 
 /* -------------- conditional and iterations (implementation still in progress) -----*/
 conditional_statement returns [LOGONode node]
-		: If LPAREN expression RPAREN LBRACKET command_list RBRACKET {$node = new LOGOConditionalNode("if", $expression.node, $command_list.node); LOGOPP.io.debug("if" + $node.id);}
-		| If LPAREN expression RPAREN LBRACKET n = command_list RBRACKET Else LBRACKET m = command_list RBRACKET{$node = new LOGOConditionalNode("if_else", $expression.node, $n.node, $m.node); LOGOPP.io.debug("if_else" + $node.id);}
+		: If LPAREN expression RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOConditionalNode("if", $expression.node, $statement_list.node); LOGOPP.io.debug("if" + $node.id);}
+		| If LPAREN expression RPAREN LBRACKET n = statement_list RBRACKET Else LBRACKET m = statement_list RBRACKET{$node = new LOGOConditionalNode("if_else", $expression.node, $n.node, $m.node); LOGOPP.io.debug("if_else" + $node.id);}
 		;
 
 iteration_statement returns [LOGONode node]
-        : While LPAREN expression RPAREN LBRACKET command_list RBRACKET {$node = new LOGOIterationNode("while", $expression.node, $command_list.node); LOGOPP.io.debug("while" + $node.id);}
-        | For id '=' for_expression LBRACKET command_list RBRACKET {$node = new LOGOIterationNode("for", $id.node, $for_expression.node, $command_list.node); LOGOPP.io.debug("for" + $node.id);}
-        | For LPAREN id '=' for_expression RPAREN LBRACKET command_list RBRACKET {$node = new LOGOIterationNode("for", $id.node, $for_expression.node, $command_list.node); LOGOPP.io.debug("for" + $node.id);}
+        : While LPAREN expression RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOIterationNode("while", $expression.node, $statement_list.node); LOGOPP.io.debug("while" + $node.id);}
+        | For id '=' for_expression LBRACKET statement_list RBRACKET {$node = new LOGOIterationNode("for", $id.node, $for_expression.node, $statement_list.node); LOGOPP.io.debug("for" + $node.id);}
+        | For LPAREN id '=' for_expression RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOIterationNode("for", $id.node, $for_expression.node, $statement_list.node); LOGOPP.io.debug("for" + $node.id);}
+        | Repeat expression LBRACKET statement_list RBRACKET
         ;
 
 for_expression returns [LOGONode node]
@@ -132,8 +136,8 @@ for_expression returns [LOGONode node]
 /* ----------------------- function------------------------ */
 
 function_definition returns [LOGONode node]
-		: Function id LPAREN RPAREN LBRACKET command_list RBRACKET {$node = new LOGOFunctionNode($id.node.id, "define",  null, $command_list.node);}
-		| Function id LPAREN identifier_list RPAREN LBRACKET command_list RBRACKET {$node = new LOGOFunctionNode($id.node.id, "define", $identifier_list.list, $command_list.node);}
+		: Function id LPAREN RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOFunctionNode($id.node.id, "define",  null, $statement_list.node);}
+		| Function id LPAREN identifier_list RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOFunctionNode($id.node.id, "define", $identifier_list.list, $statement_list.node);}
     	;
 
 identifier_list returns [LOGOIdList list]
@@ -151,7 +155,14 @@ expression_list returns [LOGONode node]
         | {$node = null;}
         ;
 
-/* -------------------------------------------------------------*/
+/* -------------------------- challenge ---------------------------*/
+challenge returns [LOGONode node]
+		: Challenge String
+		;
+
+match returns [LOGONode node]
+		: Match
+		;
 
 catch[RecognitionException e] {throw e;}
 
@@ -240,7 +251,7 @@ Showturtle
         ;
 		
 Set
-		: ('Set' | 'Set' | 'set')
+		: ('Set' | 'SET' | 'set')
 		;
 		
 If
@@ -274,10 +285,22 @@ While
 For
         : 'for'
         ;
+        
+Repeat
+		: ('Repeat' | 'repeat' | 'REPEAT')
+		;
 
 Function
     	: ('FUNCTION' | 'function')
     	;
+    	
+Challenge
+		: ('Challenge' | 'CHALLENGE' | 'challenge')
+		;
+
+Match
+		: ('Match' | 'MATCH' | 'match')
+		;
 
 Number
         : ('0'..'9')+ ('.' ('0'..'9')+)?
@@ -286,6 +309,10 @@ Number
 Identifier
         : [A-Za-z_] [a-zA-z0-9_]*
         ;
+
+String
+    	:   [a-zA-z0-9_\"\\\:\;]+
+    	;
 
 WS
         :[ \t\r\n]+ -> skip
