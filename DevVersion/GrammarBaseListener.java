@@ -24,6 +24,9 @@ public class GrammarBaseListener implements GrammarListener {
 	@Override public void enterAssignment_expression(GrammarParser.Assignment_expressionContext ctx) { }
 	@Override public void exitAssignment_expression(GrammarParser.Assignment_expressionContext ctx) { }
 
+	@Override public void enterCommands(GrammarParser.CommandsContext ctx) { }
+	@Override public void exitCommands(GrammarParser.CommandsContext ctx) { }
+
 	@Override public void enterLine(GrammarParser.LineContext ctx) { }
 	@Override public void exitLine(GrammarParser.LineContext ctx) { }
 
@@ -38,9 +41,6 @@ public class GrammarBaseListener implements GrammarListener {
 
 	@Override public void enterId(GrammarParser.IdContext ctx) { }
 	@Override public void exitId(GrammarParser.IdContext ctx) { }
-
-	@Override public void enterCommand_list(GrammarParser.Command_listContext ctx) { }
-	@Override public void exitCommand_list(GrammarParser.Command_listContext ctx) { }
 
 	@Override public void enterFor_expression(GrammarParser.For_expressionContext ctx) { }
 	@Override public void exitFor_expression(GrammarParser.For_expressionContext ctx) { }

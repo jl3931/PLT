@@ -5,22 +5,20 @@ line returns [LOGONode node]
 		;
 		
 statement_list returns [LOGONode node]
-		: command_list n=statement_list {$n.node.children.add(0,$command_list.node); $node = $n.node; LOGOPP.io.debug("stmt->cmd_list");}
+		: commands n=statement_list {$n.node.children.add(0,$commands.node); $node = $n.node; LOGOPP.io.debug("stmt->cmd_list");}
 		| expression n=statement_list {$n.node.children.add(0,$expression.node); $node = $n.node; LOGOPP.io.debug("stmt->expr");}
 		| conditional_statement n=statement_list {$n.node.children.add(0,$conditional_statement.node); $node = $n.node; LOGOPP.io.debug("stmt->cond");}
 		| iteration_statement n=statement_list {$n.node.children.add(0,$iteration_statement.node); $node = $n.node; LOGOPP.io.debug("stmt->iter");}
 		| function_definition {$node = new LOGOStatementNode("statement_list",$function_definition.node); LOGOPP.io.debug("stmt->func");}
-		| command_list {$node = new LOGOStatementNode("statement_list",$command_list.node); LOGOPP.io.debug("stmt->cmd_list");}
+		| commands {$node = new LOGOStatementNode("statement_list",$commands.node); LOGOPP.io.debug("stmt->cmd_list");}
 		| expression {$node = new LOGOStatementNode("statement_list",$expression.node); LOGOPP.io.debug("stmt->expr");}
 		| conditional_statement {$node = new LOGOStatementNode("statement_list",$conditional_statement.node); LOGOPP.io.debug("stmt->cond");}
 		| iteration_statement {$node = new LOGOStatementNode("statement_list",$iteration_statement.node); LOGOPP.io.debug("stmt->iter");}
 		;
 
-command_list returns [LOGONode node]
-        : command_noarg l=command_list {$l.node.children.add(0,$command_noarg.node); $node = $l.node;LOGOPP.io.debug("new child:" + $command_noarg.node.id);}
-        | command_expr l=command_list {$l.node.children.add(0,$command_expr.node); $node = $l.node;LOGOPP.io.debug("new child:" + $command_expr.node.id);}
-        | command_noarg {$node = new LOGOCommandNode("commandList",$command_noarg.node);}
-		| command_expr {$node = new LOGOCommandNode("commandList",$command_expr.node);}
+commands returns [LOGONode node]
+        : command_noarg {$node = new LOGOCommandNode("command",$command_noarg.node);}
+		| command_expr {$node = new LOGOCommandNode("command",$command_expr.node);}
 		;
 
 command_noarg returns [LOGONode node]
