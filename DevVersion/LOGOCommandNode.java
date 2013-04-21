@@ -13,7 +13,7 @@ public class LOGOCommandNode extends LOGONode {
 
 	public Object run() {
 		int commandID = findCommand(id);	//commandID is the number of arguments taken
-		if (id.equals("commandList")) {
+		if (id.equals("command")) {
 			for (LOGONode node : children)
 				//if (node != null)
 					node.run();
