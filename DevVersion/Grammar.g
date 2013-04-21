@@ -5,15 +5,15 @@ line returns [LOGONode node]
 		;
 		
 statement_list returns [LOGONode node]
-		: command_list statement_list {$node = $command_list.node; LOGOPP.io.debug("stmt->cmd_list");}
-		| expression statement_list {$node = $expression.node; LOGOPP.io.debug("stmt->expr");}
-		| conditional_statement statement_list {$node = $conditional_statement.node; LOGOPP.io.debug("stmt->cond");}
-		| iteration_statement statement_list {$node = $iteration_statement.node; LOGOPP.io.debug("stmt->iter");}
-		| function_definition {$node = $function_definition.node; LOGOPP.io.debug("stmt->func");}
-		| command_list {$node = $command_list.node; LOGOPP.io.debug("stmt->cmd_list");}
-		| expression {$node = $expression.node; LOGOPP.io.debug("stmt->expr");}
-		| conditional_statement {$node = $conditional_statement.node; LOGOPP.io.debug("stmt->cond");}
-		| iteration_statement {$node = $iteration_statement.node; LOGOPP.io.debug("stmt->iter");}
+		: command_list n=statement_list {$n.node.children.add(0,$command_list.node); $node = $n.node; LOGOPP.io.debug("stmt->cmd_list");}
+		| expression n=statement_list {$n.node.children.add(0,$expression.node); $node = $n.node; LOGOPP.io.debug("stmt->expr");}
+		| conditional_statement n=statement_list {$n.node.children.add(0,$conditional_statement.node); $node = $n.node; LOGOPP.io.debug("stmt->cond");}
+		| iteration_statement n=statement_list {$n.node.children.add(0,$iteration_statement.node); $node = $n.node; LOGOPP.io.debug("stmt->iter");}
+		| function_definition {$node = new LOGOStatementNode("statement_list",$function_definition.node); LOGOPP.io.debug("stmt->func");}
+		| command_list {$node = new LOGOStatementNode("statement_list",$command_list.node); LOGOPP.io.debug("stmt->cmd_list");}
+		| expression {$node = new LOGOStatementNode("statement_list",$expression.node); LOGOPP.io.debug("stmt->expr");}
+		| conditional_statement {$node = new LOGOStatementNode("statement_list",$conditional_statement.node); LOGOPP.io.debug("stmt->cond");}
+		| iteration_statement {$node = new LOGOStatementNode("statement_list",$iteration_statement.node); LOGOPP.io.debug("stmt->iter");}
 		;
 
 command_list returns [LOGONode node]
@@ -157,7 +157,7 @@ expression_list returns [LOGONode node]
 
 /* -------------------------- challenge ---------------------------*/
 challenge returns [LOGONode node]
-		: Challenge String
+		: Challenge //String
 		;
 
 match returns [LOGONode node]
@@ -309,11 +309,11 @@ Number
 Identifier
         : [A-Za-z_] [a-zA-z0-9_]*
         ;
-
+/*
 String
     	:   [a-zA-z0-9_\"\\\:\;]+
     	;
-
+*/
 WS
         :[ \t\r\n]+ -> skip
 		;
