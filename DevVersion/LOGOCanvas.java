@@ -13,18 +13,21 @@ public class LOGOCanvas extends JComponent {
 	final static public int DEFAULT_HEIGHT = 500;
 	
 	private String title = "untitled canvas";
-	private static BMP bmpGenerator = new BMP();
+	public static BMP bmpGenerator = new BMP();
 	public HashMap<String, LOGOTurtle> turtlePool = new HashMap<String, LOGOTurtle>();
 	private LOGOTurtle curTurtle;
 	public boolean wrap = true;
 	public int[][] bitmap;
 	private int width;
 	private int height;	
+	private LOGOPP windowOn;
 
 	// geters
 	public int getWidth() {return width;}
 	public int getHeight() {return height;}
 	public LOGOTurtle getCurTurtle() {return curTurtle;}
+	public LOGOPP getWindow() {return windowOn;}
+	public void setWindow(LOGOPP window) {windowOn = window;}
 
 	/*
 	 * Constructor using default size
@@ -109,8 +112,13 @@ public class LOGOCanvas extends JComponent {
 			BufferedImage image = ImageIO.read(imageFile);
 			int[][] ret = new int[image.getHeight()][image.getWidth()];
 		    for (int y = 0; y < ret.length; y++)
-		        for (int x = 0; x < ret[y].length; x++)
-		        	ret[ret.length - 1 - y][x] = image.getRGB(x, y) & 0x00FFFFFF;
+		        for (int x = 0; x < ret[y].length; x++) {
+		        	int rgb = image.getRGB(x, y) & 0x00FFFFFF;
+		        	int red = (rgb & 0x00FF0000) >> 16;
+		        	int green = (rgb & 0x0000FF00) >> 8;
+		        	int blue = (rgb & 0x000000FF);
+		        	ret[ret.length - 1 - y][x] = red|green<<8|blue<<16;
+		        }
 		    return ret;
 		}
 		catch (Exception e) {
