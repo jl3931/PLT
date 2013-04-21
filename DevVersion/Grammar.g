@@ -125,8 +125,8 @@ iteration_statement returns [LOGONode node]
         ;
 
 for_expression returns [LOGONode node]
-    :   expression ':' expression
-    |   expression ':' expression ':' expression
+    :   o = expression ':' q = expression {$node = new LOGOIterationNode("for_expr1", $o.node, $q.node); LOGOPP.io.debug("for_expr1" + $node.id);}
+    |   o = expression ':' p = expression ':' q = expression {$node = new LOGOIterationNode("for_expr2", $o.node, $p.node, $q.node); LOGOPP.io.debug("for_expr2" + $node.id);}
     ;
 
 /* ----------------------- function------------------------ */

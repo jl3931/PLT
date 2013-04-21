@@ -35,6 +35,30 @@ public class LOGOIterationNode extends LOGONode{
 			}
 			return null;
 		}
+
+		if (id.equals("for")) {
+			double init = 1.0, pace = 1.0, fini = 1.0;
+			LOGONode for_expr = children.get(1);
+			
+			if (for_expr.id.equals("for_expr1")) {
+				init = runAndCheck(for_expr.children.get(0));
+				fini = runAndCheck(for_expr.children.get(1));
+			}
+			else if (for_expr.id.equals("for_expr2")) {
+				init = runAndCheck(for_expr.children.get(0));
+				pace = runAndCheck(for_expr.children.get(1));
+				fini = runAndCheck(for_expr.children.get(2));
+			} else {
+				LOGOPP.errorhandler.setRunTime(id, "Wrong condition in for loop");
+			}
+			//int num_of_iteration = (int) ((fini - init) / pace) + 1;
+			double iterator;
+			for (iterator = init; iterator <= fini; iterator += pace) {
+				LOGOPP.symboltable.set(children.get(0).id, iterator);
+				children.get(2).run();
+			}
+			return null;
+		}
 		
 		return null;		
 
