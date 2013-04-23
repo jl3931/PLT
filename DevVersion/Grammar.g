@@ -5,11 +5,12 @@ line returns [LOGONode node]
 		;
 		
 statement_list returns [LOGONode node]
-		: commands n=statement_list {$n.node.children.add(0,$commands.node); $node = $n.node; LOGOPP.io.debug("stmt->cmd_list");}
-		| expression n=statement_list {$n.node.children.add(0,$expression.node); $node = $n.node; LOGOPP.io.debug("stmt->expr");}
-		| conditional_statement n=statement_list {$n.node.children.add(0,$conditional_statement.node); $node = $n.node; LOGOPP.io.debug("stmt->cond");}
-		| iteration_statement n=statement_list {$n.node.children.add(0,$iteration_statement.node); $node = $n.node; LOGOPP.io.debug("stmt->iter");}
-		| function_definition {$node = new LOGOStatementNode("statement_list",$function_definition.node); LOGOPP.io.debug("stmt->func");}
+		: n=statement_list statement {$n.node.children.add(0, $statement.node); $node = $n.node; LOGOPP.io.debug("stmt_list->stmt_list");}
+		| statement {$node = $statement.node; LOGOPP.io.debug("stmt_list->stmt");}
+		;
+
+statement returns [LOGONode node]
+		: function_definition {$node = new LOGOStatementNode("statement_list",$function_definition.node); LOGOPP.io.debug("stmt->func");}
 		| commands {$node = new LOGOStatementNode("statement_list",$commands.node); LOGOPP.io.debug("stmt->cmd_list");}
 		| expression {$node = new LOGOStatementNode("statement_list",$expression.node); LOGOPP.io.debug("stmt->expr");}
 		| conditional_statement {$node = new LOGOStatementNode("statement_list",$conditional_statement.node); LOGOPP.io.debug("stmt->cond");}
@@ -93,18 +94,28 @@ multiplicative_expression returns [LOGONode node]
         ;
 
 unary_expression returns [LOGONode node]
-        : primary_expression {$node = $primary_expression.node; LOGOPP.io.debug("unary->primary " + $node.id);}
+        : postfix_expression {$node = $postfix_expression.node; LOGOPP.io.debug("unary->postfix " + $node.id);}
         | Unary_operator primary_expression {$node = new LOGOOperatorNode("u-", $primary_expression.node); LOGOPP.io.debug("unary->primary " + $node.id);}
+        ;
+        
+postfix_expression returns [LOGONode node]
+		: n=postfix_expression '(' expression_list ')'  {$node = new LOGOFunctionNode($n.node, "execute", $expression_list.node); LOGOPP.io.debug("funcall test");}
+		| primary_expression {$node = $primary_expression.node; LOGOPP.io.debug("postfix->primary " + $node.id);}
+		;
+
+expression_list returns [LOGONode node]
+        : n=expression_list ',' expression {$n.node.children.add($expression.node); $node = $n.node; LOGOPP.io.debug("expression_list");}
+		| expression {$node = new LOGOExprListNode($expression.node); LOGOPP.io.debug("expression_list tail");}
+		| {$node = null;}
         ;
         
 primary_expression returns [LOGONode node]
         : Number {$node = new LOGOLeaf($Number.text); LOGOPP.io.debug("Number " + $node.id);}
-        | '(' expression ')' {$node = $expression.node; LOGOPP.io.debug("parentheses");}
+        | '(' expression_list ')' {$node = $expression_list.node; LOGOPP.io.debug("parentheses");}
         | assignment_expression {$node = $assignment_expression.node; LOGOPP.io.debug("SET");}
         | id {$node = $id.node; LOGOPP.io.debug("ID");}
-        | funcall {$node = $funcall.node; LOGOPP.io.debug("FunCall");}
         ;
-
+		
 id returns [LOGONode node]
         : Identifier {$node = new LOGOLeaf($Identifier.text);}
         ;
@@ -134,8 +145,8 @@ for_expression returns [LOGONode node]
 /* ----------------------- function------------------------ */
 
 function_definition returns [LOGONode node]
-		: Function id LPAREN RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOFunctionNode($id.node.id, "define",  null, $statement_list.node);}
-		| Function id LPAREN identifier_list RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOFunctionNode($id.node.id, "define", $identifier_list.list, $statement_list.node);}
+		: Function id LPAREN RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOFunctionNode($id.node, "define",  null, $statement_list.node);LOGOPP.io.debug("func_noarg");}
+		| Function id LPAREN identifier_list RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOFunctionNode($id.node, "define", $identifier_list.list, $statement_list.node);LOGOPP.io.debug("func_arg");}
     	;
 
 identifier_list returns [LOGOIdList list]
@@ -144,15 +155,9 @@ identifier_list returns [LOGOIdList list]
         ;
 
 funcall returns [LOGONode node]
-		: id LPAREN expression_list RPAREN {$node = new LOGOFunctionNode($id.node.id, "execute", $expression_list.node);}
+		: id LPAREN expression_list RPAREN {$node = new LOGOFunctionNode($id.node, "execute", $expression_list.node); LOGOPP.io.debug("funcall test");}
 		;
-		
-expression_list returns [LOGONode node]
-        : expression ',' l=expression_list {$l.node.children.add($expression.node); $node = $l.node; LOGOPP.io.debug("expression_list");}
-        | expression {$node = new LOGOExprListNode($expression.node); LOGOPP.io.debug("expression_list tail");}
-        | {$node = null;}
-        ;
-
+        
 /* -------------------------- challenge ---------------------------*/
 challenge returns [LOGONode node]
 		: Challenge //String

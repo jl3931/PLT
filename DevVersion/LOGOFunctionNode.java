@@ -1,7 +1,7 @@
 class LOGOFunctionNode extends LOGONode {
 	Object[] arguments;
-	public LOGOFunctionNode(String id, String type, Object argList, LOGONode... args) {
-		super(id, args);
+	public LOGOFunctionNode(LOGONode name, String type, Object argList, LOGONode... args) {
+		super(name.id, args);
 		arguments = new Object[2];
 		arguments[0] = type;
 		arguments[1] = argList;

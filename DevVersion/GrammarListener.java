@@ -1,4 +1,4 @@
-// Generated from Grammar.g by ANTLR 4.0
+// Generated from workspace\Logo++\src\Grammar.g by ANTLR 4.0
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
@@ -30,6 +30,9 @@ public interface GrammarListener extends ParseTreeListener {
 	void enterId(GrammarParser.IdContext ctx);
 	void exitId(GrammarParser.IdContext ctx);
 
+	void enterPostfix_expression(GrammarParser.Postfix_expressionContext ctx);
+	void exitPostfix_expression(GrammarParser.Postfix_expressionContext ctx);
+
 	void enterEquality_expression(GrammarParser.Equality_expressionContext ctx);
 	void exitEquality_expression(GrammarParser.Equality_expressionContext ctx);
 
@@ -59,6 +62,9 @@ public interface GrammarListener extends ParseTreeListener {
 
 	void enterIdentifier_list(GrammarParser.Identifier_listContext ctx);
 	void exitIdentifier_list(GrammarParser.Identifier_listContext ctx);
+
+	void enterStatement(GrammarParser.StatementContext ctx);
+	void exitStatement(GrammarParser.StatementContext ctx);
 
 	void enterAdditive_expression(GrammarParser.Additive_expressionContext ctx);
 	void exitAdditive_expression(GrammarParser.Additive_expressionContext ctx);

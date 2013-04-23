@@ -5,6 +5,7 @@ class LOGOExprListNode extends LOGONode {
 		//numExpr = 1;
 		//children = new LOGONode[numExpr];
 		//children[0] = expr;
+		System.out.println("expr_list node");
 	}
 	/*public LOGOExprListNode(LOGONode expr, LOGOExprListNode exprList) {
 		super("");
