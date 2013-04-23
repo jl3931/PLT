@@ -7,6 +7,7 @@ line returns [LOGONode node]
 statement_list returns [LOGONode node]
 		: n=statement_list statement {$n.node.children.add(0, $statement.node); $node = $n.node; LOGOPP.io.debug("stmt_list->stmt_list");}
 		| statement {$node = $statement.node; LOGOPP.io.debug("stmt_list->stmt");}
+		| challenge
 		;
 
 statement returns [LOGONode node]
@@ -160,7 +161,7 @@ funcall returns [LOGONode node]
         
 /* -------------------------- challenge ---------------------------*/
 challenge returns [LOGONode node]
-		: Challenge //String
+		: Challenge String { System.out.println($String.text); $node = null;}
 		;
 
 match returns [LOGONode node]
@@ -312,11 +313,10 @@ Number
 Identifier
         : [A-Za-z_] [a-zA-z0-9_]*
         ;
-/*
 String
-    	:   [a-zA-z0-9_\"\\\:\;]+
+   	 	:   '"' (.)*? '"'
     	;
-*/
+    
 WS
         :[ \t\r\n]+ -> skip
 		;
