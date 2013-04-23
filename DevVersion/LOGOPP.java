@@ -65,6 +65,7 @@ public class LOGOPP extends JFrame implements KeyListener {
         pane.setLayout(null);
         //cur = new JTextField();
         cur = new JTextArea();
+        cur.setText("");
         cur.setLineWrap(true);
         cur.addKeyListener(this);
         KeyStroke enter = KeyStroke.getKeyStroke("ENTER");
@@ -99,7 +100,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 
     public void keyTyped(KeyEvent e) {
     }
-     
+    
     public void keyPressed(KeyEvent e) {
         switch(e.getKeyCode()) {
         case KeyEvent.VK_ENTER:
@@ -129,7 +130,9 @@ public class LOGOPP extends JFrame implements KeyListener {
         case KeyEvent.VK_UP:
             if (e.getModifiers() == KeyEvent.ALT_MASK) {
                 curCmdIndex = (curCmdIndex > 0) ? curCmdIndex - 1 : 0;
-                cur.setText(commandHistory.get(curCmdIndex));
+                if (commandHistory.size() > 0 || curCmdIndex > 0) {
+                    cur.setText(commandHistory.get(curCmdIndex));
+                }
             }
             break;
         case KeyEvent.VK_DOWN:
