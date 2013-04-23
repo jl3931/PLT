@@ -8,8 +8,8 @@ import javax.imageio.*;
 import java.io.*;
 
 public class LOGOPP extends JFrame implements KeyListener {
-	JTextArea prev;
-	JTextField cur;
+	static JTextArea prev;
+	static JTextField cur;
 	static final int PREV_HEIGHT = 100;
 	static final int CUR_HEIGHT = 25;
 	static final int MARGIN_HEIGHT = 5;
@@ -109,7 +109,8 @@ public class LOGOPP extends JFrame implements KeyListener {
             }.start();
             commandHistory.add(cur.getText());
             curCmdIndex++;
-            prev.append(cur.getText()+"\n");
+            //prev.append(cur.getText()+"\n");
+            LOGOPP.io.out(cur.getText());
             cur.setText("");
             break;
         case KeyEvent.VK_UP:

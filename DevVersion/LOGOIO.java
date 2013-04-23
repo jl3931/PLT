@@ -7,7 +7,8 @@ public class LOGOIO {
 	}
 	
 	public void out(String str) {
-		System.out.println(str);
+		//System.out.println(str);
+		LOGOPP.prev.append(str+"\n");
 	}
 
 	public void debug(String str) {
@@ -15,7 +16,8 @@ public class LOGOIO {
 	}
 
 	public void err(String str) {
-		System.err.println(str);
+		//System.err.println(str);
+		LOGOPP.prev.append(str+"\n");
 	}
 	
 	public String in() {
