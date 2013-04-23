@@ -104,7 +104,7 @@ public class LOGOPP extends JFrame implements KeyListener {
         switch(e.getKeyCode()) {
         case KeyEvent.VK_ENTER:
             //////////////////////
-            if (e.getModifiers() == KeyEvent.SHIFT_MASK) {
+            if (e.getModifiers() == KeyEvent.CTRL_MASK) {
                 cur.append("\n");
             } else {
                 if (cur.getText().length() >=5 && cur.getText().substring(0,5).equals("tur2:")) {
