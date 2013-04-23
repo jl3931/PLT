@@ -5,7 +5,7 @@ line returns [LOGONode node]
 		;
 		
 statement_list returns [LOGONode node]
-		: statement n=statement_list {$n.node.children.add(0, $statement.node); $node = $n.node; LOGOPP.io.debug("stmt_list->stmt_list");}
+		: n=statement_list statement  {$n.node.children.add($statement.node); $node = $n.node; LOGOPP.io.debug("stmt_list->stmt_list");}
 		| statement {$node = $statement.node; LOGOPP.io.debug("stmt_list->stmt");}
 		| challenge
 		;
