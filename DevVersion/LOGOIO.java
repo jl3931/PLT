@@ -8,7 +8,7 @@ public class LOGOIO {
 	public LOGOIO() {
 		scanner = new Scanner(System.in);
 	}
-	
+
 	public void out(String str) {
 		SimpleAttributeSet set = new SimpleAttributeSet(); 
 		StyleConstants.setForeground(set, Color.black);

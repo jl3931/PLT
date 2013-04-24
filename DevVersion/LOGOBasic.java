@@ -81,21 +81,34 @@ public class LOGOBasic {
 	 * 				 flase true for only setting Y pos
 	 * 				 true true for setting both, arg0 should be a pair
 	 */
-	public void teleport(LOGONode arg0, boolean setX, boolean setY) {
+	public void teleport(LOGONode argx, LOGONode argy, boolean setX, boolean setY) {
 		if (!setX && !setY)
 			return;
-		if (setX && setY);
-			//TODO: handle pair
-		else { //setX or setY
-			Object ret = arg0.run();
+		if (setX && setY) {
+			Object retx = argx.run();
+			Object rety = argy.run();
+			if (retx instanceof Double && rety instanceof Double) {
+				double valuex = ((Double)retx).doubleValue();
+				double valuey = ((Double)rety).doubleValue();
+				moveTurtle(valuex, valuey, false);
+			} else {
+
+			}
+		} else if (setX) {
+			Object ret = argx.run();
 			if (ret instanceof Double) {
 				double value = ((Double)ret).doubleValue();
-				if (setX)
-					moveTurtle(value, LOGOPP.canvas.getCurTurtle().getYPos(), false);
-				else //setY
-					moveTurtle(LOGOPP.canvas.getCurTurtle().getXPos(), value, false);
+				moveTurtle(value, LOGOPP.canvas.getCurTurtle().getYPos(), false);
 			} else {
-				//TODO:error handling
+
+			}
+		} else { //setY
+			Object ret = argy.run();
+			if (ret instanceof Double) {
+				double value = ((Double)ret).doubleValue();
+				moveTurtle(value, LOGOPP.canvas.getCurTurtle().getYPos(), false);
+			} else {
+
 			}
 		}
 	}

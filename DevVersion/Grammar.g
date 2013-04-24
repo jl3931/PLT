@@ -19,8 +19,8 @@ statement returns [LOGONode node]
 		;
 
 commands returns [LOGONode node]
-        : command_noarg {$node = new LOGOCommandNode("command",$command_noarg.node);}
-		| command_expr {$node = new LOGOCommandNode("command",$command_expr.node);}
+        : command_noarg {$node = $command_noarg.node;}
+		| command_expr {$node = $command_expr.node;}
 		;
 
 command_noarg returns [LOGONode node]
@@ -39,6 +39,7 @@ command_noarg returns [LOGONode node]
     
 command_expr returns [LOGONode node]
 	:	command expression {$node = new LOGOCommandNode($command.text, $expression.node);}
+    |   Setxy '(' a=expression ',' b=expression ')' {$node = new LOGOCommandNode("SETXY", $a.node, $b.node);}
 	;
 
 command returns [String text]
@@ -48,7 +49,6 @@ command returns [String text]
 	|	Right {$text = new String("RIGHT");}
 	|	Setx {$text = new String("SETX");}
     |	Sety {$text = new String("SETY");}
-    |	Setxy {$text = new String("SETXY");}
     |	Speed {$text = new String("SPEED");}
     |	Print {$text = new String("PRINT");}
 	;
