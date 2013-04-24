@@ -37,8 +37,8 @@ public class LOGOIterationNode extends LOGONode{
 		}
 		if (id.equals("repeat")) {
 			double iterator = runAndCheck(children.get(0));
-			double i = 0;
-			for (; i < iterator; i++)
+			double i = 1;
+			for (; i <= iterator; i++)
 				children.get(1).run();
 			return null;
 		}
