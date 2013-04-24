@@ -101,34 +101,6 @@ public class LOGOCanvas extends JComponent {
 	}
 
 	/*
-	 * Get a 2D-bitmap from BMP file
-	 * @filename:  name of BMP file
-	 * @return: 2D array of int values
-	 *			origin seems to be left bottom corner
-	 *			value = R|G<<8|B<<16|alpha<<24
-	 */
-	public int[][] getBitmapFromBMP(String filename) {
-		try {
-			File imageFile = new File(filename);
-			BufferedImage image = ImageIO.read(imageFile);
-			int[][] ret = new int[image.getHeight()][image.getWidth()];
-		    for (int y = 0; y < ret.length; y++)
-		        for (int x = 0; x < ret[y].length; x++) {
-		        	int rgb = image.getRGB(x, y) & 0x00FFFFFF;
-		        	int red = (rgb & 0x00FF0000) >> 16;
-		        	int green = (rgb & 0x0000FF00) >> 8;
-		        	int blue = (rgb & 0x000000FF);
-		        	ret[ret.length - 1 - y][x] = red|green<<8|blue<<16;
-		        }
-		    return ret;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	/*
 	 * Compare two bitmap
 	 * @bitmap1, @bitmap2: two bitmaps
 	 * @return: 0. if size not same or nothing on both bitmaps
