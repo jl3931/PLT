@@ -7,7 +7,7 @@ line returns [LOGONode node]
 statement_list returns [LOGONode node]
 		: n=statement_list statement  {$n.node.children.add($statement.node); $node = $n.node; LOGOPP.io.debug("stmt_list->stmt_list");}
 		| statement {$node = $statement.node; LOGOPP.io.debug("stmt_list->stmt");}
-		| challenge
+		| challenge {$node = $challenge.node;}
 		;
 
 statement returns [LOGONode node]
@@ -161,13 +161,9 @@ funcall returns [LOGONode node]
         
 /* -------------------------- challenge ---------------------------*/
 challenge returns [LOGONode node]
-		: Challenge String { System.out.println($String.text); $node = null;}
-		| match {System.out.println("Match");}
-		| Quit {System.out.println("quit");}
-		;
-
-match returns [LOGONode node]
-		: Match
+		: Challenge String { LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("CHALLENGE", temp); System.out.println($String.text);}
+		| Match {$node = new LOGOChallengeNode("MATCH"); System.out.println("Match");}
+		| Quit {$node = new LOGOChallengeNode("QUIT"); System.out.println("quit");}
 		;
 
 catch[RecognitionException e] {throw e;}

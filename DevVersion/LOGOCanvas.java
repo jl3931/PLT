@@ -17,7 +17,7 @@ public class LOGOCanvas extends JComponent {
 	public HashMap<String, LOGOTurtle> turtlePool = new HashMap<String, LOGOTurtle>();
 	private LOGOTurtle curTurtle;
 	public boolean wrap = true;
-	private int[][] bitmap;
+	public int[][] bitmap;
 	private int width;
 	private int height;	
 	private LOGOPP windowOn;

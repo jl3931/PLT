@@ -10,12 +10,13 @@ public class LOGOChallengeNode extends LOGONode {
 	}
 
 	public Object run() {
-		if (id.equals("CHALLENGE") && children.size() == 1) {
-			LOGOPP.challenge.loadChallenge(children[0].id, LOGOPP.canvas.getWindow());
-		}
+		if (id.equals("CHALLENGE") && children.size() == 1)
+			LOGOPP.challenge.loadChallenge((String)(children.get(0).run()),
+										LOGOPP.canvas.getWindow());
 		else if (id.equals("MATCH") && children.size() == 0)
 			LOGOPP.challenge.match();
-		else if (id.equals("CHALLENGEQUIT") && children.size() == 0)
+		else if (id.equals("QUIT") && children.size() == 0)
 			LOGOPP.challenge.closeChallenge();
 		return null;
 	}
+}

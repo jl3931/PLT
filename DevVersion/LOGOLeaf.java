@@ -10,7 +10,7 @@ public class LOGOLeaf extends LOGONode{
 		}
 		else if (id.charAt(0) == '"') {
 			LOGOPP.io.debug("is String");
-			return id;
+			return id.substring(1,id.length() - 1);
 		}
 		else {
 			LOGOPP.io.debug("is ID");
