@@ -36,10 +36,11 @@ public class LOGOCommandNode extends LOGONode {
 	private final static HashSet<String> CommandList0 = new HashSet<String>(
 					Arrays.asList(new String[] {"ORIGIN", "CLEARSCREEN", 
 							"GETX", "GETY", "GETXY", "SHOWTURTLE", "HIDETURTLE", 
-							"WRAP", "FENCE", "PENUP", "PENDOWN"}));
+							"WRAP", "FENCE", "PENUP", "PENDOWN",
+							"MATCH", "CHALLENGEQUIT"}));
 	private final static HashSet<String> CommandList1 = new HashSet<String>(
 					Arrays.asList(new String[] {"FORWARD", "BACK", "LEFT", 
-							"RIGHT","SPEED", "SETX", "SETY", "SETXY"}));
+							"RIGHT","SPEED", "SETX", "SETY", "SETXY", "CHALLENGE"}));
 	
 	private int findCommand(String id) {
 		if (CommandList0.contains(id))
@@ -57,11 +58,9 @@ public class LOGOCommandNode extends LOGONode {
 			else if (id.equals("CLEARSCREEN"))
 				LOGOPP.basic.clearScreen();
 			else if (id.equals("SHOWTURTLE"))
-				//LOGOPP.canvas.getCurTurtle().setShowTurtle(true);
-				LOGOPP.canvas.getWindow().loadChallenge("LOGO++.bmp");
+				LOGOPP.canvas.getCurTurtle().setShowTurtle(true);
 			else if (id.equals("HIDETURTLE"))
-				//LOGOPP.canvas.getCurTurtle().setShowTurtle(false);
-				LOGOPP.canvas.getWindow().closeChallenge();
+				LOGOPP.canvas.getCurTurtle().setShowTurtle(false);
 			else if (id.equals("WRAP"))
 				LOGOPP.canvas.wrap = true;
 			else if (id.equals("FENCE"))
@@ -87,6 +86,7 @@ public class LOGOCommandNode extends LOGONode {
 				LOGOPP.basic.teleport(args[0], false, true);
 			else if (id.equals("SETXY"))
 				;//LOGOPP.basic.teleport(args[0], true, true);
+
 		} else
 			System.out.println(">= 2 arguments");	
 	}	

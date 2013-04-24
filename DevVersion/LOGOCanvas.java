@@ -17,7 +17,7 @@ public class LOGOCanvas extends JComponent {
 	public HashMap<String, LOGOTurtle> turtlePool = new HashMap<String, LOGOTurtle>();
 	private LOGOTurtle curTurtle;
 	public boolean wrap = true;
-	public int[][] bitmap;
+	private int[][] bitmap;
 	private int width;
 	private int height;	
 	private LOGOPP windowOn;
@@ -28,6 +28,7 @@ public class LOGOCanvas extends JComponent {
 	public LOGOTurtle getCurTurtle() {return curTurtle;}
 	public LOGOPP getWindow() {return windowOn;}
 	public void setWindow(LOGOPP window) {windowOn = window;}
+	public int[][] getBitmap() {return bitmap;}
 
 	/*
 	 * Constructor using default size
@@ -134,7 +135,7 @@ public class LOGOCanvas extends JComponent {
 	 *			ratio of intersection / union
 	 *			only consider "hasDrawnOnThisPixel", colors not concerned
 	 */ 
-	public double bitmapCompare(int[][] bitmap1, int[][] bitmap2) {
+	static public double bitmapCompare(int[][] bitmap1, int[][] bitmap2) {
 		if (bitmap1 == null || bitmap2 == null
 			|| bitmap1.length != bitmap2.length)
 			return 0.;
@@ -149,7 +150,7 @@ public class LOGOCanvas extends JComponent {
 			for (int c = 0; c < width; c++) {
 				if (bitmap1[r][c] != WHITE_COLOR) {
 					union++;
-					if (bitmap[r][c] != WHITE_COLOR)
+					if (bitmap2[r][c] != WHITE_COLOR)
 						intersection++;
 				} else if (bitmap2[r][c] != WHITE_COLOR)
 					union++;

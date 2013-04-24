@@ -8,9 +8,9 @@ import javax.imageio.*;
 import java.io.*;
 
 public class LOGOPP extends JFrame implements KeyListener {
-	static JTextArea prev;
-	//static JTextField cur;
-    static JTextArea cur;
+	static JTextArea prev = new JTextArea();
+    static JTextArea cur = new JTextArea();
+    static JPanel pane = new JPanel();
 	static final int PREV_HEIGHT = 100;
     static final int CHAR_HEIGHT = 20;
 	static final int CUR_HEIGHT = 60;
@@ -28,8 +28,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 	static ArrayList<String> commandHistory = new ArrayList<String>();
 	static int curCmdIndex = 0;
 
-    static ChallengeBitmap challengeImage = new ChallengeBitmap();
-    static boolean challengeOn = false;
+    static LOGOChallenge challenge = new LOGOChallenge();
 
 
 	public static void main(String[] args) {
@@ -47,6 +46,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 	private static void createAndShowGUI() {
         LOGOPP logoPP = new LOGOPP("LOGOGUI");
         logoPP.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        logoPP.initComponents();
         logoPP.addComponentsToPane();
         logoPP.pack();
         logoPP.setVisible(true);
@@ -60,17 +60,17 @@ public class LOGOPP extends JFrame implements KeyListener {
 	
     }
 
-    private void addComponentsToPane() {
-        JPanel pane = new JPanel();
-        pane.setLayout(null);
-        //cur = new JTextField();
-        cur = new JTextArea();
+    private void initComponents() {
         cur.setText("");
         cur.setLineWrap(true);
         cur.addKeyListener(this);
+        pane.setLayout(null);
+        this.add(pane);
+    }
+
+    private void addComponentsToPane() {
         KeyStroke enter = KeyStroke.getKeyStroke("ENTER");
         cur.getInputMap().put(enter, "none");
-        prev = new JTextArea();
         prev.setEditable(false);
         JScrollPane scrollPane1 = new JScrollPane(prev);
         scrollPane1.setPreferredSize(new Dimension(canvas.getWidth(), PREV_HEIGHT));
@@ -79,15 +79,28 @@ public class LOGOPP extends JFrame implements KeyListener {
         canvas.setBounds(1,1,canvas.getWidth(), canvas.getHeight());
         canvas.setWindow(this);
         canvas.repaint();
-        pane.add(challengeImage);
-        challengeImage.setBounds(canvas.getWidth() + MARGIN_HEIGHT, 1, canvas.getWidth(), canvas.getHeight());
         pane.add(scrollPane1);
         pane.add(scrollPane2);
         pane.add(canvas);
         scrollPane1.setBounds(1, canvas.getHeight() + MARGIN_HEIGHT, canvas.getWidth(), PREV_HEIGHT);
         scrollPane2.setBounds(1, canvas.getHeight() + MARGIN_HEIGHT * 2 + PREV_HEIGHT, 
                                 canvas.getWidth(), CUR_HEIGHT);
-        this.add(pane);
+        pane.revalidate();
+        this.repaint();
+    }
+
+    public void addChallenge() {
+        pane.add(challenge);
+        challenge.setBounds(canvas.getWidth() + MARGIN_HEIGHT, 1,
+                            canvas.getWidth(), canvas.getHeight());
+        pane.revalidate();
+        this.repaint();
+    }
+
+    public void removeChallenge() {
+        pane.remove(challenge);
+        pane.revalidate();
+        this.repaint();
     }
 
     public void changeWindowSize(boolean isExpand) {
@@ -164,54 +177,4 @@ public class LOGOPP extends JFrame implements KeyListener {
 			errorhandler.set(e.toString());
 		}
 	}
-
-    public void loadChallenge(String path) {
-        challengeImage.loadChallenge(path, this);
-        if (challengeOn) {
-            challengeImage.repaint();
-            changeWindowSize(true);
-        }
-    }
-
-    public void closeChallenge() {
-        if (challengeOn) {
-            challengeOn = false;
-            changeWindowSize(false);
-        }
-    }
-}
-
-class ChallengeBitmap extends JComponent {
-    private int height;
-    private int width;
-    private int[][] bitmap;
-    private LOGOPP windowOn;
-
-    public int[][] getBitmap() {return bitmap;}
-    public int getHeight() {return height;}
-    public int getWidth() {return width;}
-
-    public void loadChallenge(String path, LOGOPP window) {
-        bitmap = LOGOPP.canvas.getBitmapFromBMP(path);
-        window.challengeOn = (bitmap != null);
-        if (bitmap != null) {
-            windowOn = window;
-            height = bitmap.length;
-            width = bitmap[0].length;
-        }
-    }
-
-    public void paint(Graphics g) {
-        LOGOCanvas.bmpGenerator.saveBMP("challenge.bmp",bitmap);
-        
-        try {
-            File imageFile = new File("challenge.bmp");
-            Image image = ImageIO.read(imageFile);
-            ImageIcon icon = new ImageIcon(image);
-            Graphics2D g2 = (Graphics2D) g;
-            g2.drawImage(icon.getImage(), 0, 0, width, height, this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
