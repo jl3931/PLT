@@ -162,6 +162,8 @@ funcall returns [LOGONode node]
 /* -------------------------- challenge ---------------------------*/
 challenge returns [LOGONode node]
 		: Challenge String { System.out.println($String.text); $node = null;}
+		| match {System.out.println("Match");}
+		| Quit {System.out.println("quit");}
 		;
 
 match returns [LOGONode node]
@@ -304,6 +306,10 @@ Challenge
 
 Match
 		: ('Match' | 'MATCH' | 'match')
+		;
+
+Quit
+		: ('Challengequit' | 'CHALLENGEQUIT' | 'challengequit' | 'CQ' | 'Quit' | 'quit' | 'QUIT')
 		;
 
 Number
