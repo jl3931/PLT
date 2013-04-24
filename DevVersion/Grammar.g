@@ -135,7 +135,7 @@ iteration_statement returns [LOGONode node]
         : While LPAREN expression RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOIterationNode("while", $expression.node, $statement_list.node); LOGOPP.io.debug("while" + $node.id);}
         | For id '=' for_expression LBRACKET statement_list RBRACKET {$node = new LOGOIterationNode("for", $id.node, $for_expression.node, $statement_list.node); LOGOPP.io.debug("for" + $node.id);}
         | For LPAREN id '=' for_expression RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOIterationNode("for", $id.node, $for_expression.node, $statement_list.node); LOGOPP.io.debug("for" + $node.id);}
-        | Repeat expression LBRACKET statement_list RBRACKET
+        | Repeat expression LBRACKET statement_list RBRACKET {$node = new LOGOIterationNode("repeat", $expression.node, $statement_list.node); LOGOPP.io.debug("repeat" + $node.id);}
         ;
 
 for_expression returns [LOGONode node]
