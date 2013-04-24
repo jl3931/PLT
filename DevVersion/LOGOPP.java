@@ -8,7 +8,7 @@ import javax.imageio.*;
 import java.io.*;
 
 public class LOGOPP extends JFrame implements KeyListener {
-	static JTextArea prev = new JTextArea();
+	static JTextPane prev = new JTextPane();
     static JTextArea cur = new JTextArea();
     static JPanel pane = new JPanel();
 	static final int PREV_HEIGHT = 100;

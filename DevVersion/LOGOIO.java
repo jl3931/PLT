@@ -1,4 +1,7 @@
 import java.util.Scanner;
+import java.awt.*;
+import javax.swing.text.*; 
+import javax.swing.*;
 
 public class LOGOIO {
 	private Scanner scanner;
@@ -7,8 +10,14 @@ public class LOGOIO {
 	}
 	
 	public void out(String str) {
-		//System.out.println(str);
-		LOGOPP.prev.append(str+"\n");
+		SimpleAttributeSet set = new SimpleAttributeSet(); 
+		StyleConstants.setForeground(set, Color.black);
+		Document doc = LOGOPP.prev.getStyledDocument(); 
+		try { 
+			doc.insertString(doc.getLength(), str + "\n", set);
+		} 
+		catch (BadLocationException e) { 
+		} 
 	}
 
 	public void debug(String str) {
@@ -16,13 +25,17 @@ public class LOGOIO {
 	}
 
 	public void err(String str) {
-		//System.err.println(str);
-		LOGOPP.prev.append(str+"\n");
+		SimpleAttributeSet set = new SimpleAttributeSet(); 
+		StyleConstants.setForeground(set, Color.red);
+		Document doc = LOGOPP.prev.getStyledDocument(); 
+		try { 
+			doc.insertString(doc.getLength(), "Error:" + str + "\n", set);
+		} 
+		catch (BadLocationException e) { 
+		} 
 	}
 	
 	public String in() {
 		return scanner.nextLine();
 	}
-
-	
 }
