@@ -150,7 +150,7 @@ public class LOGOOperatorNode extends LOGONode{
 			System.out.println(arg0 + "==" + arg1 + " " + (arg0 == arg1));
 			if (LOGOPP.errorhandler.error())
 				return null;
-			if (arg0 - arg1 < EPSILON)
+			if (Math.abs(arg0 - arg1) < EPSILON)
 				ret = (double) 1;
 			else
 				ret = (double) 0;
