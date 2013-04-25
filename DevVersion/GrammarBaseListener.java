@@ -1,4 +1,4 @@
-// Generated from Grammar.g by ANTLR 4.0
+// Generated from workspace\Logo++\src\Grammar.g by ANTLR 4.0
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -77,6 +77,9 @@ public class GrammarBaseListener implements GrammarListener {
 
 	@Override public void enterChallenge(GrammarParser.ChallengeContext ctx) { }
 	@Override public void exitChallenge(GrammarParser.ChallengeContext ctx) { }
+
+	@Override public void enterUnary_operator(GrammarParser.Unary_operatorContext ctx) { }
+	@Override public void exitUnary_operator(GrammarParser.Unary_operatorContext ctx) { }
 
 	@Override public void enterAnd_expression(GrammarParser.And_expressionContext ctx) { }
 	@Override public void exitAnd_expression(GrammarParser.And_expressionContext ctx) { }

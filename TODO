@@ -1,6 +1,9 @@
 TODO:
 Grammar throw exception and handle by errorhandler
-a few command to implemente [Bohong: add the commands here]
-Import
-Fix bracket problem, or change to {}
+a few command to implemente [SPEED, GETX, GETY, GETXY]
+Import (file/module)
+-x- Fix bracket problem, or change to {}
 handle print on simple expression like 123*123
+
+-- update 4/25 Kam --
+Bracket problem does not occur anymore: Fix bracket problem, or change to {}

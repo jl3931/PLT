@@ -96,8 +96,13 @@ multiplicative_expression returns [LOGONode node]
 
 unary_expression returns [LOGONode node]
         : postfix_expression {$node = $postfix_expression.node; LOGOPP.io.debug("unary->postfix " + $node.id);}
-        | Unary_operator primary_expression {$node = new LOGOOperatorNode("u-", $primary_expression.node); LOGOPP.io.debug("unary->primary " + $node.id);}
+        | unary_operator primary_expression {$node = new LOGOOperatorNode($unary_operator.text, $primary_expression.node); LOGOPP.io.debug("unary->primary " + $node.id);}
         ;
+
+unary_operator returns [String text]
+		: Unary_minus {$text = "u-";}
+		| Unary_not {$text = "u!";}
+		;
         
 postfix_expression returns [LOGONode node]
 		: n=postfix_expression '(' expression_list ')'  {$node = new LOGOFunctionNode($n.node, "execute", $expression_list.node); LOGOPP.io.debug("funcall test");}
@@ -112,7 +117,7 @@ expression_list returns [LOGONode node]
         
 primary_expression returns [LOGONode node]
         : Number {$node = new LOGOLeaf($Number.text); LOGOPP.io.debug("Number " + $node.id);}
-        | '(' expression_list ')' {$node = $expression_list.node; LOGOPP.io.debug("parentheses");}
+        | '(' expression ')' {$node = $expression.node; LOGOPP.io.debug("parentheses");}
         | assignment_expression {$node = $assignment_expression.node; LOGOPP.io.debug("SET");}
         | id {$node = $id.node; LOGOPP.io.debug("ID");}
         ;
@@ -168,8 +173,12 @@ challenge returns [LOGONode node]
 
 catch[RecognitionException e] {throw e;}
 
-Unary_operator
-        : '-'
+Unary_minus
+		: '-'
+		;
+
+Unary_not
+        : '!'
         ;
 
 Forward

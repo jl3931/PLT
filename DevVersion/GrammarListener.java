@@ -1,4 +1,4 @@
-// Generated from Grammar.g by ANTLR 4.0
+// Generated from workspace\Logo++\src\Grammar.g by ANTLR 4.0
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
@@ -74,6 +74,9 @@ public interface GrammarListener extends ParseTreeListener {
 
 	void enterChallenge(GrammarParser.ChallengeContext ctx);
 	void exitChallenge(GrammarParser.ChallengeContext ctx);
+
+	void enterUnary_operator(GrammarParser.Unary_operatorContext ctx);
+	void exitUnary_operator(GrammarParser.Unary_operatorContext ctx);
 
 	void enterAnd_expression(GrammarParser.And_expressionContext ctx);
 	void exitAnd_expression(GrammarParser.And_expressionContext ctx);

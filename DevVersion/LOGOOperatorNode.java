@@ -38,6 +38,18 @@ public class LOGOOperatorNode extends LOGONode{
 			LOGOPP.io.debug(ret.toString());
 			return ret;
 		}
+		if (id.equals("u!")) {
+			arg0 = runAndCheck(children.get(0));
+			if (LOGOPP.errorhandler.error())
+				return null;
+			if (arg0 == 0)
+				ret = (double)1;
+			else
+				ret = (double)0;
+			LOGOPP.io.debug("unary minus");
+			LOGOPP.io.debug(ret.toString());
+			return ret;
+		}
 		if (id.equals("*")) {
 			arg0 = runAndCheck(children.get(0));
 			arg1 = runAndCheck(children.get(1));
@@ -163,7 +175,7 @@ public class LOGOOperatorNode extends LOGONode{
 			arg1 = runAndCheck(children.get(1));
 			if (LOGOPP.errorhandler.error())
 				return null;
-			if ((arg0 - arg1) > EPSILON || (arg1 - arg0) > EPSILON)
+			if (Math.abs(arg0 - arg1) > EPSILON)
 				ret = (double) 1;
 			else
 				ret = (double) 0;
