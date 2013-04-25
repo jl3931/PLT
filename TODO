@@ -4,6 +4,10 @@ a few command to implemente [SPEED, GETX, GETY, GETXY]
 Import (file/module)
 -x- Fix bracket problem, or change to {}
 handle print on simple expression like 123*123
+[Challenge]Add grammars and functions to enable educators generate .logo
+			file recording all info about a challenge, as well as those
+			loading, showing hints and matching...
+[Optional]Prof suggests to show how each line is parsed during running
 
 -- update 4/25 Kam --
 Bracket problem does not occur anymore: Fix bracket problem, or change to {}
