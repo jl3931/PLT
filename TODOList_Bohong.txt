@@ -1,0 +1,26 @@
+TODO List:
+
+1. SPEED, GETX, GETY, GETXY.
+
+2. no realization of "Print". And maybe we would like to print out the outcome of expression like "123*23"?
+
+3. A new problem. Input:  Set i 1. 
+	It works well, despite on the console, eclipse reports error: Exception in thread "AWT-EventQueue-0" java.lang.IllegalArgumentException: bad position: 10
+
+Same when we input: FD 100.
+
+4. Not sure about the function of "HIDETURTLE" and "SHOWTURTLE".
+
+5. ERROR WITH "[FD 100]". I suppose maybe we can do this.
+
+
+6. Error with if (( 1 <  2 )) [FD 100], but not if ( 1 <  2 ) [FD 100]
+
+	I think maybe we need to implement parentheses.
+	The following one does not function, either.
+	if ((1<2 && 2 < 3) || 1>2) [FD 100]
+	
+	I see Jiao's comment on this, "This is because somehow it parses (1<2) as expression list instead of
+using rule expr->(expr)". I wonder are we going to fix this?
+
+7. When dealing with the logic calculation, do we have "not"? like ~(1>2) or !(1>2), I see we have "!="
