@@ -1,3 +1,11 @@
+-- update 4/25 2pm by Xinyuan
+Finished
+X 4. Not sure about the function of "HIDETURTLE" and "SHOWTURTLE".
+Actrally, it's finished already.
+If you use eclipse, please make sure that logo_turtle.png
+is under project folder, not src or bin.
+If this still doesn't work, make copies under src and bin folder. 
+
 -- updated 4/25 11am by Kam –
 TODO List:
 4. Not sure about the function of "HIDETURTLE" and "SHOWTURTLE".
@@ -14,7 +22,7 @@ X 3. A new problem. Input:  Set i 1.
 
 Same when we input: FD 100.
 
-4. Not sure about the function of "HIDETURTLE" and "SHOWTURTLE".
+X 4. Not sure about the function of "HIDETURTLE" and "SHOWTURTLE".
 
 X 5. ERROR WITH "[FD 100]". I suppose maybe we can do this.
 
