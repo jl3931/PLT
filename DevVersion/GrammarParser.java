@@ -1,4 +1,4 @@
-// Generated from workspace\Logo++\src\Grammar.g by ANTLR 4.0
+// Generated from Grammar.g by ANTLR 4.0
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -27,8 +27,8 @@ public class GrammarParser extends Parser {
 		"'<='", "'&&'", "'||'", "'>'", "'/'", "'>='", "'-'", "'!'", "Forward", 
 		"Back", "Left", "Right", "Setx", "Sety", "Setxy", "Speed", "Print", "Clearscreen", 
 		"Origin", "Wrap", "Fence", "Getx", "Gety", "Getxy", "Penup", "Pendown", 
-		"Hideturtle", "Showturtle", "Set", "'if'", "'else'", "'('", "')'", "'['", 
-		"']'", "'while'", "'for'", "Repeat", "Function", "Challenge", "Match", 
+		"Hideturtle", "Showturtle", "Set", "'if'", "'else'", "'('", "')'", "'{'", 
+		"'}'", "'while'", "'for'", "Repeat", "Function", "Challenge", "Match", 
 		"Quit", "Number", "Identifier", "String", "WS"
 	};
 	public static final int

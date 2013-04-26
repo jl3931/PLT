@@ -13,7 +13,6 @@ public class LOGOCanvas extends JComponent {
 	final static public int DEFAULT_HEIGHT = 500;
 	
 	private String title = "untitled canvas";
-	public static BMP bmpGenerator = new BMP();
 	public HashMap<String, LOGOTurtle> turtlePool = new HashMap<String, LOGOTurtle>();
 	private LOGOTurtle curTurtle;
 	public boolean wrap = true;
@@ -136,7 +135,7 @@ public class LOGOCanvas extends JComponent {
 	 * @g
 	 */
 	public void paint(Graphics g) {
-		bmpGenerator.saveBMP(title+".bmp",bitmap);
+		BMPIO.saveBMP(title+".bmp",bitmap, null);
 		try {
 			File imageFile = new File(title+".bmp");
 			//////////FOR BITMAP COMPARISON TEST

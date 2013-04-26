@@ -19,7 +19,7 @@ class LOGOChallenge extends JComponent {
     public int getWidth() {return width;}
 
     public void loadChallenge(String path, LOGOPP window) {
-        bitmap = getBitmapFromBMP(path);
+        bitmap = BMPIO.getBitmapFromBMP(path);
         challengeOn = (bitmap != null);
         if (bitmap != null) {
             windowOn = window;
@@ -47,36 +47,8 @@ class LOGOChallenge extends JComponent {
         }
     }
 
-    /*
-     * Get a 2D-bitmap from BMP file
-     * @filename:  name of BMP file
-     * @return: 2D array of int values
-     *          origin seems to be left bottom corner
-     *          value = R|G<<8|B<<16|alpha<<24
-     */
-    public int[][] getBitmapFromBMP(String filename) {
-        try {
-            File imageFile = new File(filename);
-            BufferedImage image = ImageIO.read(imageFile);
-            int[][] ret = new int[image.getHeight()][image.getWidth()];
-            for (int y = 0; y < ret.length; y++)
-                for (int x = 0; x < ret[y].length; x++) {
-                    int rgb = image.getRGB(x, y) & 0x00FFFFFF;
-                    int red = (rgb & 0x00FF0000) >> 16;
-                    int green = (rgb & 0x0000FF00) >> 8;
-                    int blue = (rgb & 0x000000FF);
-                    ret[ret.length - 1 - y][x] = red|green<<8|blue<<16;
-                }
-            return ret;
-        }
-        catch (Exception e) {
-            LOGOPP.io.err("Fail to load file, please check the path");
-        }
-        return null;
-    }
-
     public void paint(Graphics g) {
-        LOGOCanvas.bmpGenerator.saveBMP("challenge.bmp",bitmap);
+        BMPIO.saveBMP("challenge.bmp",bitmap, null);
         try {
             File imageFile = new File("challenge.bmp");
             Image image = ImageIO.read(imageFile);
