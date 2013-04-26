@@ -6,10 +6,11 @@ public class LOGOStatementNode extends LOGONode{
 	}
 	
 	public Object run() {
+		Object ret = null;
 		if (id.equals("statement_list")) {
 			for (LOGONode node : children)
-					node.run();
+					ret = node.run();
 		}
-		return null;
+		return ret;
 	}
 }

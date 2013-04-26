@@ -282,11 +282,11 @@ RPAREN
 		;
 
 LBRACKET
-		: '['
+		: '{'
 		;
 
 RBRACKET
-		: ']'
+		: '}'
 		;
 		
 While
