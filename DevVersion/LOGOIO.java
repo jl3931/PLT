@@ -17,7 +17,8 @@ public class LOGOIO {
 			doc.insertString(doc.getLength(), str + "\n", set);
 		} 
 		catch (BadLocationException e) { 
-		} 
+		}
+		LOGOPP.prev.setCaretPosition(LOGOPP.prev.getText().length());
 	}
 
 	public void debug(String str) {
@@ -32,7 +33,8 @@ public class LOGOIO {
 			doc.insertString(doc.getLength(), "Error:" + str + "\n", set);
 		} 
 		catch (BadLocationException e) { 
-		} 
+		}
+		LOGOPP.prev.setCaretPosition(LOGOPP.prev.getText().length());
 	}
 	
 	public String in() {
