@@ -169,6 +169,13 @@ challenge returns [LOGONode node]
 		: Challenge String { LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("CHALLENGE", temp); System.out.println($String.text);}
 		| Match {$node = new LOGOChallengeNode("MATCH"); System.out.println("Match");}
 		| Quit {$node = new LOGOChallengeNode("QUIT"); System.out.println("quit");}
+        | Recordchallenge {$node = new LOGOChallengeNode("RECORD");}
+        | Hint {$node = new LOGOChallengeNode("SHOWHINT");}
+        | Hint '(' String ',' e1=expression ',' e2=expression ')' {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("WRITEHINT", temp, $e1.node, $e2.node);}
+        | Hint String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("WRITEHINT", temp);}
+        | Removehint Number {LOGONode temp = new LOGOLeaf($Number.text); $node = new LOGOChallengeNode("REMOVEHINT", temp);}
+        | Removehint {$node = new LOGOChallengeNode("REMOVEALLHINT");}
+        | Savechallenge String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("SAVE", temp);}
 		;
 
 catch[RecognitionException e] {throw e;}
@@ -314,8 +321,24 @@ Match
 		;
 
 Quit
-		: ('Challengequit' | 'CHALLENGEQUIT' | 'challengequit' | 'CQ' | 'Quit' | 'quit' | 'QUIT')
+		: ('Quitchallenge' | 'QUITCHALLENGE' | 'quitchallenge' | 'QuitChallenge' | 'QC' | 'Quit' | 'quit' | 'QUIT')
 		;
+
+Recordchallenge
+        : ('Recordchallenge' | 'RECORDCHALLENGE' | 'recordchallenge' | 'RecordChallenge' | 'RC' | 'Record' | 'RECORD' | 'record')
+        ;
+
+Hint
+        : ('Hint' | 'HINT' | 'hint')
+        ;
+
+Removehint
+        : ('Removehint' | 'REMOVEHINT' | 'removehint' | 'RemoveHint' | 'RH')
+        ;
+
+Savechallenge
+        : ('Savechallenge' | 'SAVECHALLENGE' | 'savechallenge' | 'SaveChallenge' | 'SC')
+        ;
 
 Number
         : ('0'..'9')+ ('.' ('0'..'9')+)?

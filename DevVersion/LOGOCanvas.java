@@ -155,6 +155,7 @@ public class LOGOCanvas extends JComponent {
         	LOGOTurtle tur = (LOGOTurtle)pairs.getValue();
         	tur.paint(g);
     	}
+    	LOGOPP.challenge.printHints(g);
 	}
 	
 

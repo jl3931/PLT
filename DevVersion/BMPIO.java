@@ -9,9 +9,9 @@ public class BMPIO {
 		return w * h * 3 + 2 * HEADER_SIZE;
 	}
 
-	public static void saveBMP(String filename, int [][] rgbValues, Object o) {
+	public static boolean saveBMP(String filename, int [][] rgbValues, Object o) {
 		BMPWriter bmpw = new BMPWriter();
-		bmpw.saveBMP(filename, rgbValues, o);
+		return bmpw.saveBMP(filename, rgbValues, o);
 	}
 
 	/*
@@ -36,6 +36,7 @@ public class BMPIO {
                     int blue = (rgb & 0x000000FF);
                     ret[h - 1 - y][x] = red|green<<8|blue<<16;
                 }
+            return ret;
         }
         catch (Exception e) {
             LOGOPP.io.err("Fail to load file, please check the path");
@@ -57,24 +58,23 @@ public class BMPIO {
                 LOGOPP.io.debug("get byte array!");
                 byte[] objectBytes = new byte[bytes.length - imageLength];
                 System.arraycopy(bytes, imageLength, objectBytes, 0, objectBytes.length);
-                ByteArrayInputStream bis = new ByteArrayInputStream(objectBytes);
-                ObjectInput in = null;
-                Object o = null;
-                try {
-                    in = new ObjectInputStream(bis);
-                    o = in.readObject(); 
-                    //LOGOPP.io.out((String)o);
-                } finally {
-                    bis.close();
-                    in.close();
-                }
+                /*for (byte b : objectBytes) {
+					System.out.println(b);
+				}*/
+                ByteArrayInputStream bi = new ByteArrayInputStream(objectBytes);
+                ObjectInputStream oi = new ObjectInputStream(bi);
+                Object o = oi.readObject();
+                bi.close();
+                oi.close();
                 return o;
             }
         }
         catch (Exception e) {
+			System.out.println("translation:"+e.getMessage());
         }
         return null;
     }
+
 
     public final static byte[] load(FileInputStream fin) {
         byte readBuf[] = new byte[512*1024];
@@ -99,7 +99,7 @@ class BMPWriter {
 	private final static int BMP_CODE = 19778;
 	byte [] bytes;
 	
-	public void saveBMP(String filename, int [][] rgbValues, Object o){
+	public boolean saveBMP(String filename, int [][] rgbValues, Object o){
 		try {
 			FileOutputStream fos = new FileOutputStream(new File(filename));
 			
@@ -112,26 +112,24 @@ class BMPWriter {
 
 			fos.write(bytes);
 			if (o != null) {
-				ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				ObjectOutput out = null;
-				try {
-					out = new ObjectOutputStream(bos);
-					out.writeObject(o);
-					byte[] myBytes = bos.toByteArray();
-					fos.write(myBytes);
-				} finally { 
-					out.close();
-					bos.close();
-				}
+				LOGOPP.io.debug("have something to hide");
+				ByteArrayOutputStream bo = new ByteArrayOutputStream();
+				ObjectOutputStream oo = new ObjectOutputStream(bo);
+				oo.writeObject(o);
+				byte[] myBytes = bo.toByteArray();
+				/*for (byte b : myBytes) {
+					System.out.println(b);
+				}*/
+				fos.write(myBytes);
+				bo.close();
+				oo.close();
 			}
 			fos.close();
-			
-		} catch (FileNotFoundException e) {
-			
-		} catch (IOException e) {
-			
+			return true;
+		} catch (Exception e) {
+			System.out.println("translation:"+e.getMessage());
+			return false;
 		}
-		
 	}
 
 	private void saveFileHeader() {
