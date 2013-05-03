@@ -65,7 +65,7 @@ public class LOGOOperatorNode extends LOGONode{
 			arg1 = runAndCheck(children.get(1));
 			if (LOGOPP.errorhandler.error())
 				return null;
-			if (arg0 == 0.) {
+			if (arg1 == 0.) {
 				LOGOPP.errorhandler.setRunTime(id, "devide by zero");
 				return null;
 			}

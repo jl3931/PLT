@@ -5,26 +5,37 @@ public class LOGOSymbolTable {
 	LOGOSymbolTable() {
 		st = new Stack<HashMap<String, Object> >();
 		st.push(new HashMap<String, Object>());
-		depth++;
+		depth = 1;
+	}
+
+	int checkname(String id) {
+		return 1;
 	}
 	
 	public void push() {
 		st.push(new HashMap<String, Object>());
+		depth++;
 	}
 
 	public void clearAll() {
 		while (!st.isEmpty())
 			st.pop();
 		push();
+		depth = 1;
 	}
 
 	public void pop() {
 		if (st.size() <= 1)
 			LOGOPP.errorhandler.setRunTime("Symbol Table", "Cannot pop");
 		st.pop();
+		depth--;
 	}
 	
 	public void set(String id, Object value) {
+		if (checkname(id) == 0) {
+			LOGOPP.errorhandler.setRunTime("SET", "invalid ID");
+			return;
+		}
 		HashMap<String, Object> hm = st.peek();
 		hm.put(id, value);
 		LOGOPP.io.debug("ST: " + id + " " + value);

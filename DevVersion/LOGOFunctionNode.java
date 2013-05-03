@@ -35,21 +35,20 @@ class LOGOFunction {
 		this.cmd = cmd;
 	}
 
-	void setArg(LOGOExprListNode args) {
+	void setArg(Object[] argList) {
 		LOGOPP.io.debug("function.setArg");
-		if (this.args == null && args == null)
+		if (this.args == null && argList == null)
 			return;
-		if (this.args != null && args == null) {
+		if (this.args != null && argList == null) {
 			LOGOPP.errorhandler.setRunTime(id, "unmatched number of arguments");
 			return;
 		}
-		if (this.args == null && args != null) {
+		if (this.args == null && argList != null) {
 			LOGOPP.errorhandler.setRunTime(id, "unmatched number of arguments");
 			return;
 		}
 		Object[] idList = this.args.getList();
 		LOGOPP.io.debug("size of args " + idList.length);
-		Object[] argList = (Object[])args.run();
 		LOGOPP.io.debug("size of input " + argList.length);
 		if (LOGOPP.errorhandler.error())
 			return;
@@ -66,8 +65,9 @@ class LOGOFunction {
 		LOGOPP.io.debug("function.run");
 		if (LOGOPP.errorhandler.error())
 			return null;
+		Object[] argList = (Object[])args.run();
 		LOGOPP.symboltable.push();
-		setArg(args);
+		setArg(argList);
 		if (LOGOPP.errorhandler.error()) {
 			LOGOPP.symboltable.pop();
 			return null;

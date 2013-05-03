@@ -188,9 +188,9 @@ public class LOGOPP extends JFrame implements KeyListener {
 	}
 
 	public static void execute(String str) {
-		/*if (errorhandler.error())
+		if (errorhandler.error())
 			errorhandler.errorOut();
-		errorhandler.reset();*/
+		errorhandler.reset();
 		try {
 			LOGONode root = interpreter.parse(str);
 			/*if (root == null) {
@@ -203,13 +203,19 @@ public class LOGOPP extends JFrame implements KeyListener {
 			LOGOPP.io.notify("Processing commands");
 			processingCmd = true;
 			root.run();
-			if (!hasAnimation) {
-				canvas.getCurTurtle().clearAllPending();
+			if (errorhandler.error()) {
+				errorhandler.errorOut();
+				errorhandler.reset();
 			}
 			else {
-				canvas.getCurTurtle().clearPending(true);
+				if (!hasAnimation) {
+					canvas.getCurTurtle().clearAllPending();
+				}
+				else {
+					canvas.getCurTurtle().clearPending(true);
+				}
+				canvas.repaint();
 			}
-			canvas.repaint();
 		}
 		catch (Exception e) {
 			//errorhandler.set(e.toString());
