@@ -137,7 +137,7 @@ public class LOGOTurtle{
 		double dis = Math.sqrt(restXPos * restXPos + restYPos * restYPos);
 		if (dis <= speed) {
 			moveTurtle(restXPos, restYPos, penDown);
-			System.out.println("stop!");
+			//System.out.println("stop!");
 			return true;
 		} else {
 			moveTurtle(speed * restXPos / dis, speed * restYPos / dis, penDown);
@@ -206,13 +206,9 @@ public class LOGOTurtle{
 			AffineTransform at = AffineTransform.getTranslateInstance(xPos, yPos);
 			at.rotate(Math.toRadians(angle + 90));
 			g2.setTransform(at);
-			//g2.setComposite(AlphaComposite.SrcAtop.derive(0.8f));//transparent
 			g2.drawImage(turtleImg.getImage(), -turtleImg.getIconWidth() / 2, -turtleImg.getIconHeight() / 2,
 					turtleImg.getIconWidth(), turtleImg.getIconHeight(), canvasOn);
-			//g2.drawImage(turtleImg.getImage(), 200,200,canvasOn);
-			System.out.println(xPos + " " + yPos);
 			g2.setTransform(saveAt);
-			//g2.setComposite(AlphaComposite.SrcAtop.derive(1.f));//transparent
 			g.drawString(name, (int)xPos -turtleImg.getIconWidth() / 2, 
 								(int)yPos - turtleImg.getIconHeight() / 2);
 		}
