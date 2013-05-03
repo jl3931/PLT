@@ -112,6 +112,28 @@ public class LOGOBasic {
 		}
 	}
 
+	public void setSpeed(LOGONode arg) {
+		Object ret = arg.run();
+		if (ret != null && ret instanceof Double) {
+			double value = ((Double)ret).doubleValue();
+			LOGOPP.canvas.getCurTurtle().setSpeed(value);
+		}
+	}
+
+	public void saveImage(LOGONode arg) {
+		Object ret = arg.run();
+		if (ret != null && ret instanceof String) {
+			BMPIO.saveBMP((String)ret, LOGOPP.canvas.bitmap, null);
+		}
+	}
+
+	public void changeColor(LOGONode arg) {
+		Object ret = arg.run();
+		if (ret != null && ret instanceof String) {
+			LOGOPP.canvas.getCurTurtle().changeColor((String)ret);
+		}
+	}
+
 	/*
 	 * Check LOGONode return value's type
 	 * In fact, we could check in functions, and let errorhandler

@@ -8,13 +8,15 @@ public class LOGOTurtle{
 	public static final double INIT_ANGLE = -90.;
 	public static final double CIRCLE_DEGREE = 360.;
 	public static final double ANGLE_RATIO = 1.;
+	private static final double MAX_SPEED = 20.;
+	private static final double MIN_SPEED = 1.;
 	private double xPos        = 0;
 	private double yPos        = 0;
 	private double angle       = INIT_ANGLE;
 	private double speed       = 10.;
 	private boolean penDown    = true;
 	private boolean showTurtle = true;
-	private int[] color = new int[] {0, 0, 255}; //{R,G,B}
+	private int[] color = new int[] {0, 0, 0}; //{R,G,B}
 	private String name;
 	public PendingMovements pendingMoves;
 	public LOGOCanvas canvasOn;
@@ -27,6 +29,31 @@ public class LOGOTurtle{
 	LOGOTurtle(String id) {
 		name = id;
 		pendingMoves = new PendingMovements(this);
+	}
+	private static final HashMap<String, int[]> colorValues = new HashMap<String, int[]>();
+	{
+		int[] red    = {255,   0,   0};
+		int[] blue   = {  0,   0, 255};
+		int[] green  = {  0, 255,   0};
+		int[] white  = {255, 255, 255};
+		int[] black  = {  0,   0,   0};
+		int[] yellow = {255, 255,   0};
+		int[] orange = {255, 165,   0};
+		int[] pink   = {255, 192, 203};
+		int[] purple = {160,  32, 240};
+		int[] brown  = {162,  42,  42};
+		int[] gray   = {190, 190, 190};
+		colorValues.put(   "RED",    red);
+		colorValues.put(  "BLUE",   blue);
+		colorValues.put( "GREEN",  green);
+		colorValues.put( "WHITE",  white);
+		colorValues.put( "BLACK",  black);
+		colorValues.put("YELLOW", yellow);
+		colorValues.put("ORANGE", orange);
+		colorValues.put(  "PINK",   pink);
+		colorValues.put("PURPLE", purple);
+		colorValues.put( "BROWN",  brown);
+		colorValues.put(  "GRAY",   gray);
 	}
 
 	// geters
@@ -42,7 +69,15 @@ public class LOGOTurtle{
 	public void setAngle(double a) {angle = a % CIRCLE_DEGREE;}
 	public void setPenDown(boolean p) {penDown = p;}
 	public void setShowTurtle(boolean s) {showTurtle = s;}
-	public void setSpeed(double s) {speed = s;}
+	public void setSpeed(double s) {
+		if (s < MIN_SPEED || s > MAX_SPEED) {
+			LOGOPP.io.err("Wrong value for speed, should be between "
+				+ new Integer((int)MIN_SPEED).toString() + " and " 
+				+ new Integer((int)MAX_SPEED).toString() + ".");
+			return;
+		}
+		speed = s;
+	}
 	public void setXPos(double x) {
 		if (null == canvasOn)
 			return;
@@ -79,6 +114,15 @@ public class LOGOTurtle{
 	 */
 	public int colorValue() {
 		return color[0]|color[1]<<8|color[2]<<16;
+	}
+
+	public void changeColor(String c) {
+		if (colorValues.containsKey(c.toUpperCase())) {
+			int [] targetColor = colorValues.get(c.toUpperCase());
+			color[0]=targetColor[0];
+			color[1]=targetColor[1];
+			color[2]=targetColor[2];
+		}
 	}
 
 	/*

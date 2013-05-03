@@ -40,6 +40,8 @@ command_noarg returns [LOGONode node]
 command_expr returns [LOGONode node]
 	:	command expression {$node = new LOGOCommandNode($command.text, $expression.node);}
     |   Setxy '(' a=expression ',' b=expression ')' {$node = new LOGOCommandNode("SETXY", $a.node, $b.node);}
+    |   Color String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("CHANGECOLOR", temp);}
+    |   Save String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("SAVEIMAGE", temp);}
 	;
 
 command returns [String text]
@@ -51,6 +53,7 @@ command returns [String text]
     |	Sety {$text = new String("SETY");}
     |	Speed {$text = new String("SPEED");}
     |	Print {$text = new String("PRINT");}
+    |   Setspeed {$text = new String("SETSPEED");}
 	;
 
 expression returns [LOGONode node]
@@ -258,6 +261,18 @@ Penup
 
 Pendown
         : ('Pendown' | 'PENDOWN' | 'PD')
+        ;
+
+Save
+        : ('Save' | 'save' | 'SAVE')
+        ;
+
+Color
+        : ('Color' | 'color' | 'COLOR')
+        ;
+
+Setspeed
+        : ('Setspeed' | 'SETSPEED' | 'SetSpeed' | 'SS')
         ;
 
 Hideturtle

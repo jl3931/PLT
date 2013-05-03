@@ -10,7 +10,7 @@ import java.io.*;
 public class LOGOPP extends JFrame implements KeyListener {
 	static JTextPane prev = new JTextPane();
 	static JTextArea cur = new JTextArea();
-	static JTextArea notification = new JTextArea();
+	static JTextArea noti = new JTextArea();
 	static JPanel pane = new JPanel();
 	static final int PREV_HEIGHT = 100;
 	static final int CHAR_HEIGHT = 20;
@@ -21,7 +21,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 	static final int ADDITIONAL_WIDTH = 10;
 	static final int TIMER_INTERVAL = 10;
 	static boolean hasAnimation = true;
-	static boolean flag = false;
+	static boolean processingCmd = false;
 	static ActionListener updateCanvas = new ActionListener() {
 		public void actionPerformed(ActionEvent evt) {
 			javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -72,6 +72,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 		LOGOTurtle tur2 = new LOGOTurtle("tur2");
 		canvas.putTurtle(tur2, canvas.getWidth() / 2, canvas.getHeight() / 2);
 		canvas.addHistory();
+		noti.setText("Welcome to LOGO++!");
 	
 	}
 
@@ -87,12 +88,13 @@ public class LOGOPP extends JFrame implements KeyListener {
 		KeyStroke enter = KeyStroke.getKeyStroke("ENTER");
 		cur.getInputMap().put(enter, "none");
 		prev.setEditable(false);
-		notification.setEditable(false);
+		noti.setEditable(false);
+		noti.setForeground(Color.GRAY);
 		JScrollPane scrollPane1 = new JScrollPane(prev);
 		scrollPane1.setPreferredSize(new Dimension(canvas.getWidth(), PREV_HEIGHT));
 		JScrollPane scrollPane2 = new JScrollPane(cur);
 		scrollPane2.setPreferredSize(new Dimension(canvas.getWidth(), CUR_HEIGHT));
-		JScrollPane scrollPane3 = new JScrollPane(notification);
+		JScrollPane scrollPane3 = new JScrollPane(noti);
 		scrollPane2.setPreferredSize(new Dimension(canvas.getWidth(), NOTI_HEIGHT));
 		canvas.setBounds(1,1,canvas.getWidth(), canvas.getHeight());
 		canvas.setWindow(this);
@@ -164,7 +166,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 			}
 			break;
 		case KeyEvent.VK_C:
-			if (e.getModifiers() == KeyEvent.CTRL_MASK) {
+			if (e.getModifiers() == KeyEvent.CTRL_MASK && processingCmd) {
 				hasAnimation = false;
 				LOGOPP.io.notify("Now finishing rest work, you may need to wait for a while.");
 			}
@@ -186,32 +188,40 @@ public class LOGOPP extends JFrame implements KeyListener {
 	}
 
 	public static void execute(String str) {
-		if (errorhandler.error())
+		/*if (errorhandler.error())
 			errorhandler.errorOut();
-		errorhandler.reset();
+		errorhandler.reset();*/
 		try {
 			LOGONode root = interpreter.parse(str);
-			if (root == null) {
+			/*if (root == null) {
 				if (errorhandler.error())
 					errorhandler.errorOut();
+				errorhandler.reset();
 				return;
-			}
+			}*/
 			
-			LOGOPP.io.notify("");
+			LOGOPP.io.notify("Processing commands");
+			processingCmd = true;
 			root.run();
 			if (!hasAnimation) {
 				canvas.getCurTurtle().clearAllPending();
-				LOGOPP.io.notify("finished!");
 			}
 			else {
 				canvas.getCurTurtle().clearPending(true);
 			}
 			canvas.repaint();
-			hasAnimation = true;
-			canvas.addHistory();
 		}
 		catch (Exception e) {
-			errorhandler.set(e.toString());
+			//errorhandler.set(e.toString());
+			errorhandler.set("Invalid command");
+			errorhandler.errorOut();
+			errorhandler.reset();
+		}
+		finally {
+			LOGOPP.io.notify("finished!");
+			processingCmd = false;
+			hasAnimation = true;
+			canvas.addHistory();
 		}
 	}
 }

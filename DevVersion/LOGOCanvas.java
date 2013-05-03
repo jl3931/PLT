@@ -11,6 +11,7 @@ public class LOGOCanvas extends JComponent {
 	final static public int WHITE_COLOR = 255|255<<8|255<<16;
 	final static public int DEFAULT_WIDTH = 500;
 	final static public int DEFAULT_HEIGHT = 500;
+	final static private String DISPLAY_IMG_POSTFIX = "_for_the_sake_of_output.bmp";
 	
 	private String title = "untitled canvas";
 	public HashMap<String, LOGOTurtle> turtlePool = new HashMap<String, LOGOTurtle>();
@@ -137,9 +138,9 @@ public class LOGOCanvas extends JComponent {
 	 * @g
 	 */
 	public void paint(Graphics g) {
-		BMPIO.saveBMP(title+".bmp",bitmap, null);
+		BMPIO.saveBMP(title + DISPLAY_IMG_POSTFIX, bitmap, null);
 		try {
-			File imageFile = new File(title+".bmp");
+			File imageFile = new File(title + DISPLAY_IMG_POSTFIX);
 			//////////FOR BITMAP COMPARISON TEST
 			//int[][] forTest = getBitmapFromBMP(title+".bmp");
 			//System.out.println(bitmapCompare(forTest, bitmap));

@@ -13,7 +13,10 @@ public class LOGOCommandNode extends LOGONode {
 
 	public Object run() {
 		if (children.size() != findCommand(id)) {
-			LOGOPP.io.err("Wrong number of arguments of command " + id + "\n"
+			if (findCommand(id) == -1)
+				LOGOPP.io.err("Cannot found command:" + id);
+			else
+				LOGOPP.io.err("Wrong number of arguments of command " + id + "\n"
 							 + "Expect to get " + findCommand(id)
 							 + ", but get " + children.size());
 		} else {
@@ -52,6 +55,12 @@ public class LOGOCommandNode extends LOGONode {
 					LOGOPP.basic.teleport(null, children.get(0), false, true);
 				else if (id.equals("PRINT"))
 					LOGOPP.basic.print(children.get(0));
+				else if (id.equals("SETSPEED"))
+					LOGOPP.basic.setSpeed(children.get(0));
+				else if (id.equals("SAVEIMAGE"))
+					LOGOPP.basic.saveImage(children.get(0));
+				else if (id.equals("CHANGECOLOR"))
+					LOGOPP.basic.changeColor(children.get(0));
 			} else if (children.size() == 2)
 				if (id.equals("SETXY"))
 					LOGOPP.basic.teleport(children.get(0), children.get(1), true, true);
@@ -65,7 +74,8 @@ public class LOGOCommandNode extends LOGONode {
 							"WRAP", "FENCE", "PENUP", "PENDOWN"}));
 	private final static HashSet<String> CommandList1 = new HashSet<String>(
 					Arrays.asList(new String[] {"FORWARD", "BACK", "LEFT", 
-							"RIGHT","SPEED", "SETX", "SETY", "PRINT"}));
+							"RIGHT", "SPEED", "SETX", "SETY", "PRINT", "SETSPEED",
+							"SAVEIMAGE", "CHANGECOLOR"}));
 	private final static HashSet<String> CommandList2 = new HashSet<String>(
 					Arrays.asList(new String[] {"SETXY"}));
 	

@@ -63,6 +63,6 @@ public class LOGOIO {
 	}
 
 	public void notify(String str) {
-		LOGOPP.notification.setText(str);
+		LOGOPP.noti.setText(str);
 	}
 }
