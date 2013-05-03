@@ -37,7 +37,28 @@ public class LOGOIO {
 		LOGOPP.prev.setCaretPosition(LOGOPP.prev.getText().length());
 	}
 	
-	public String in() {
+	/*public String in() {
 		return scanner.nextLine();
+	}*/
+
+	public void in() {
+		if (LOGOPP.cur.getText().length() >=5 && 
+			LOGOPP.cur.getText().substring(0,5).equals("tur2:")) {
+			LOGOPP.cmd = LOGOPP.cur.getText().substring(5);
+			LOGOPP.canvas.changeToTurtle("tur2");
+		} else {
+			LOGOPP.cmd = LOGOPP.cur.getText();
+			LOGOPP.canvas.changeToTurtle("local");
+		}
+		new Thread(){
+			public void run() {
+				LOGOPP.execute(LOGOPP.cmd);
+			}
+		}.start();
+		LOGOPP.commandHistory.add(LOGOPP.cur.getText());
+		LOGOPP.curCmdIndex = LOGOPP.commandHistory.size();
+		LOGOPP.io.out(">" + LOGOPP.cur.getText());
+		LOGOPP.cur.setText("");
+		LOGOPP.prev.setCaretPosition(LOGOPP.prev.getText().length());
 	}
 }

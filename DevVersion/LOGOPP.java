@@ -132,23 +132,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 			if (e.getModifiers() == KeyEvent.CTRL_MASK) {
 				cur.append("\n");
 			} else {
-				if (cur.getText().length() >=5 && cur.getText().substring(0,5).equals("tur2:")) {
-					cmd = cur.getText().substring(5);
-					canvas.changeToTurtle("tur2");
-				} else {
-					cmd = cur.getText();
-					canvas.changeToTurtle("local");
-				}
-				new Thread(){
-					public void run() {
-						execute(cmd);
-					}
-				}.start();
-				commandHistory.add(cur.getText());
-				curCmdIndex = commandHistory.size();
-				LOGOPP.io.out(">" + cur.getText());
-				cur.setText("");
-				prev.setCaretPosition(prev.getText().length());
+				LOGOPP.io.in();
 			}
 			break;
 		case KeyEvent.VK_UP:
