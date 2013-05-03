@@ -10,14 +10,17 @@ import java.io.*;
 public class LOGOPP extends JFrame implements KeyListener {
 	static JTextPane prev = new JTextPane();
 	static JTextArea cur = new JTextArea();
+	static JTextArea notification = new JTextArea();
 	static JPanel pane = new JPanel();
 	static final int PREV_HEIGHT = 100;
 	static final int CHAR_HEIGHT = 20;
 	static final int CUR_HEIGHT = 60;
+	static final int NOTI_HEIGHT = 20;
 	static final int MARGIN_HEIGHT = 5;
-	static final int ADDITIONAL_HEIGHT = 80;
+	static final int ADDITIONAL_HEIGHT = 100;
 	static final int ADDITIONAL_WIDTH = 10;
 	static final int TIMER_INTERVAL = 10;
+	static boolean hasAnimation = true;
 	static boolean flag = false;
 	static ActionListener updateCanvas = new ActionListener() {
 		public void actionPerformed(ActionEvent evt) {
@@ -68,6 +71,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 		///////////
 		LOGOTurtle tur2 = new LOGOTurtle("tur2");
 		canvas.putTurtle(tur2, canvas.getWidth() / 2, canvas.getHeight() / 2);
+		canvas.addHistory();
 	
 	}
 
@@ -83,19 +87,25 @@ public class LOGOPP extends JFrame implements KeyListener {
 		KeyStroke enter = KeyStroke.getKeyStroke("ENTER");
 		cur.getInputMap().put(enter, "none");
 		prev.setEditable(false);
+		notification.setEditable(false);
 		JScrollPane scrollPane1 = new JScrollPane(prev);
 		scrollPane1.setPreferredSize(new Dimension(canvas.getWidth(), PREV_HEIGHT));
 		JScrollPane scrollPane2 = new JScrollPane(cur);
 		scrollPane2.setPreferredSize(new Dimension(canvas.getWidth(), CUR_HEIGHT));
+		JScrollPane scrollPane3 = new JScrollPane(notification);
+		scrollPane2.setPreferredSize(new Dimension(canvas.getWidth(), NOTI_HEIGHT));
 		canvas.setBounds(1,1,canvas.getWidth(), canvas.getHeight());
 		canvas.setWindow(this);
 		canvas.repaint();
 		pane.add(scrollPane1);
 		pane.add(scrollPane2);
+		pane.add(scrollPane3);
 		pane.add(canvas);
 		scrollPane1.setBounds(1, canvas.getHeight() + MARGIN_HEIGHT, canvas.getWidth(), PREV_HEIGHT);
 		scrollPane2.setBounds(1, canvas.getHeight() + MARGIN_HEIGHT * 2 + PREV_HEIGHT, 
 				      canvas.getWidth(), CUR_HEIGHT);
+		scrollPane3.setBounds(1, canvas.getHeight() + MARGIN_HEIGHT * 3 + PREV_HEIGHT + CUR_HEIGHT,
+						canvas.getWidth(), NOTI_HEIGHT);
 		pane.revalidate();
 		this.repaint();
 	}
@@ -117,7 +127,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 	public void changeWindowSize(boolean isExpand) {
 		int width = canvas.getWidth() * (isExpand?2:1) + (isExpand?MARGIN_HEIGHT:0)
 			+ ADDITIONAL_WIDTH;
-		int height = canvas.getHeight() + LOGOPP.PREV_HEIGHT + LOGOPP.CUR_HEIGHT
+		int height = canvas.getHeight() + LOGOPP.PREV_HEIGHT + LOGOPP.CUR_HEIGHT + NOTI_HEIGHT
 			+ ADDITIONAL_HEIGHT;
 		setSize(width, height);
 	}
@@ -153,6 +163,22 @@ public class LOGOPP extends JFrame implements KeyListener {
 				}
 			}
 			break;
+		case KeyEvent.VK_C:
+			if (e.getModifiers() == KeyEvent.CTRL_MASK) {
+				hasAnimation = false;
+				LOGOPP.io.notify("Now finishing rest work, you may need to wait for a while.");
+			}
+			break;
+		case KeyEvent.VK_Z:
+			if (e.getModifiers() == KeyEvent.CTRL_MASK) {
+				canvas.undo();
+			}
+			break;
+		case KeyEvent.VK_Y:
+			if (e.getModifiers() == KeyEvent.CTRL_MASK) {
+				canvas.redo();
+			}
+			break;
 		}
 	}
      
@@ -170,9 +196,19 @@ public class LOGOPP extends JFrame implements KeyListener {
 					errorhandler.errorOut();
 				return;
 			}
+			
+			LOGOPP.io.notify("");
 			root.run();
-			canvas.getCurTurtle().clearPending(true);
+			if (!hasAnimation) {
+				canvas.getCurTurtle().clearAllPending();
+				LOGOPP.io.notify("finished!");
+			}
+			else {
+				canvas.getCurTurtle().clearPending(true);
+			}
 			canvas.repaint();
+			hasAnimation = true;
+			canvas.addHistory();
 		}
 		catch (Exception e) {
 			errorhandler.set(e.toString());

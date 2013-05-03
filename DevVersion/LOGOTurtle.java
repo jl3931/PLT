@@ -121,7 +121,7 @@ public class LOGOTurtle{
 	}
 
 	public void clearPending(boolean lastTime) {
-		if (pendingMoves.getRestSteps() >= speed || lastTime) {
+		if ((pendingMoves.getRestSteps() >= speed || lastTime) && LOGOPP.hasAnimation) {
 			LOGOPP.timer.start();
 			synchronized(LOGOPP.timer){
 				try {     
@@ -131,6 +131,10 @@ public class LOGOTurtle{
                 }  
 			}
 		}
+	}
+
+	public void clearAllPending() {
+		pendingMoves.clearAllPending();
 	}
 
 	public boolean moveForward(double restXPos, double restYPos) {
@@ -171,7 +175,8 @@ public class LOGOTurtle{
 		}
 		setXPos(tarX);
 		setYPos(tarY);
-		canvasOn.repaint();
+		if (LOGOPP.hasAnimation)
+			canvasOn.repaint();
 	}
 
 	public boolean turnTurtle(double deltaAngle) {
@@ -184,7 +189,8 @@ public class LOGOTurtle{
 			return false;
 		} else {
 			setAngle(angle - deltaAngle);
-			canvasOn.repaint();
+			if (LOGOPP.hasAnimation)
+				canvasOn.repaint();
 			return true;
 		}
 	}
@@ -192,7 +198,8 @@ public class LOGOTurtle{
 	public void teleport(double x, double y) {
 		setXPos(x);
 		setYPos(y);
-		canvasOn.repaint();
+		if (LOGOPP.hasAnimation)
+			canvasOn.repaint();
 	}
 
 	/*
@@ -287,6 +294,11 @@ class PendingMovements {
 			turtle.setXPos(args[0]);
 			turtle.setYPos(args[1]);
 		}
+	}
+
+	public void clearAllPending() {
+		clearPending(restSteps);
+		restSteps = 0.;
 	}
 
 	public boolean clearPending(double step) {

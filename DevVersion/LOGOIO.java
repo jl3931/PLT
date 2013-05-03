@@ -61,4 +61,8 @@ public class LOGOIO {
 		LOGOPP.cur.setText("");
 		LOGOPP.prev.setCaretPosition(LOGOPP.prev.getText().length());
 	}
+
+	public void notify(String str) {
+		LOGOPP.notification.setText(str);
+	}
 }

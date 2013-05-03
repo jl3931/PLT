@@ -69,6 +69,8 @@ public class LOGOCanvas extends JComponent {
 			title = name;
 		bitmap = new int[height][width];
 		clean();
+		hisNum = DEFAULT_HIS_NUM;
+		curHis = 0;
 	}
 
 	/*
@@ -157,6 +159,121 @@ public class LOGOCanvas extends JComponent {
     	}
     	LOGOPP.challenge.printHints(g);
 	}
-	
 
+
+
+
+	/////////////////////HITORY FOR UNDO AND REDO
+	private static final int DEFAULT_HIS_NUM = 10;
+	private int hisNum;
+	private int curHis;	//#previous history we have
+
+	class CanvasStatus {
+		public int[][] bitmap;
+		public HashMap<String, TurtlePosition> turtles;
+		public CanvasStatus(int[][] b, HashMap<String, LOGOTurtle> t) {
+			bitmap = copyBitmap(b);
+			turtles = new HashMap<String, TurtlePosition>();
+			Iterator it = t.entrySet().iterator();
+	    	while (it.hasNext()) {
+	        	Map.Entry pairs = (Map.Entry)it.next();
+	        	LOGOTurtle tur = (LOGOTurtle)pairs.getValue();
+	        	TurtlePosition tp = new TurtlePosition(tur.getXPos(), tur.getYPos(), tur.getAngle());
+	        	turtles.put(tur.getName(), tp);
+	   		}
+		}
+	}
+
+	class TurtlePosition {
+		double xPos;
+		double yPos;
+		double angle;
+		public TurtlePosition(double x, double y, double a) {
+			xPos = x;
+			yPos = y;
+			angle = a;
+		}
+	}
+
+	public static int[][] copyBitmap(int[][] b) {
+			int[][] res = new int[b.length][b[0].length];
+			for (int i = 0; i < b.length; i++) {
+				for (int j = 0; j < b[0].length; j++)
+					res[i][j] = b[i][j];
+			}
+			return res;
+		}
+
+	private ArrayList<CanvasStatus> history = new ArrayList<CanvasStatus>();
+
+	public void addHistory() {
+		LOGOPP.io.debug("add history");
+		addHistory(bitmap, turtlePool);
+	}
+
+	private void addHistory(int[][] b, HashMap<String, LOGOTurtle> t) {
+		CanvasStatus cs = new CanvasStatus(b, t);
+		if (curHis == history.size()) {
+			if (history.size() == hisNum) {
+				history.remove(0);
+				curHis--;
+			}
+		}
+		else {
+			for (int i = history.size(); i > curHis; i--) {
+				history.remove(i - 1);
+			}
+		}
+		curHis++;
+		history.add(cs);
+		System.out.println(history.size());
+	}
+
+	public void undo () {
+		LOGOPP.io.debug("undo");
+		if (curHis == 1) {
+			String noti = "Cannot undo further. ";
+			if (history.size() == hisNum)
+				noti += "LOGO++ only stores previous " + new Integer(hisNum).toString() + " steps.";
+			else
+				noti += "This is your initial canvas";
+			LOGOPP.io.notify(noti);
+			return;
+		}
+		curHis--;
+		loadHistory(curHis);
+		System.out.println(curHis + "/" + history.size());
+		LOGOPP.canvas.repaint();
+	}
+
+	public void redo () {
+		LOGOPP.io.debug("redo");
+		if (curHis == history.size()) {
+			String noti = "Cannot redo further. This is your newest version of canvas.";
+			LOGOPP.io.notify(noti);
+			return;
+		}
+		curHis++;
+		loadHistory(curHis);
+		System.out.println(curHis + "/" + history.size());
+		LOGOPP.canvas.repaint();
+	}
+
+	public void loadHistory(int index) {
+		if (index <= 0 || index > history.size())
+			return;
+		int i = index - 1;
+		bitmap = copyBitmap(history.get(i).bitmap);
+		Iterator it = turtlePool.entrySet().iterator();
+    	while (it.hasNext()) {
+        	Map.Entry pairs = (Map.Entry)it.next();
+        	LOGOTurtle tur = (LOGOTurtle)pairs.getValue();
+        	if (history.get(i).turtles.containsKey(tur.getName())) {
+	        	TurtlePosition tp = history.get(i).turtles.get(tur.getName());
+	        	tur.setXPos(tp.xPos);
+	        	tur.setYPos(tp.yPos);
+	        	tur.setAngle(tp.angle);
+	        }
+    	}
+	}
 }
