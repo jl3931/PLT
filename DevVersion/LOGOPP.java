@@ -172,12 +172,12 @@ public class LOGOPP extends JFrame implements KeyListener {
 			}
 			break;
 		case KeyEvent.VK_Z:
-			if (e.getModifiers() == KeyEvent.CTRL_MASK) {
+			if (e.getModifiers() == KeyEvent.CTRL_MASK && !processingCmd) {
 				canvas.undo();
 			}
 			break;
 		case KeyEvent.VK_Y:
-			if (e.getModifiers() == KeyEvent.CTRL_MASK) {
+			if (e.getModifiers() == KeyEvent.CTRL_MASK && !processingCmd) {
 				canvas.redo();
 			}
 			break;
