@@ -50,6 +50,8 @@ public class LOGOCommandNode extends LOGONode {
 					LOGOPP.basic.teleport(children.get(0), null, true, false);
 				else if (id.equals("SETY"))
 					LOGOPP.basic.teleport(null, children.get(0), false, true);
+				else if (id.equals("PRINT"))
+					LOGOPP.basic.print(children.get(0));
 			} else if (children.size() == 2)
 				if (id.equals("SETXY"))
 					LOGOPP.basic.teleport(children.get(0), children.get(1), true, true);
@@ -63,7 +65,7 @@ public class LOGOCommandNode extends LOGONode {
 							"WRAP", "FENCE", "PENUP", "PENDOWN"}));
 	private final static HashSet<String> CommandList1 = new HashSet<String>(
 					Arrays.asList(new String[] {"FORWARD", "BACK", "LEFT", 
-							"RIGHT","SPEED", "SETX", "SETY"}));
+							"RIGHT","SPEED", "SETX", "SETY", "PRINT"}));
 	private final static HashSet<String> CommandList2 = new HashSet<String>(
 					Arrays.asList(new String[] {"SETXY"}));
 	

@@ -17,7 +17,19 @@ public class LOGOPP extends JFrame implements KeyListener {
 	static final int MARGIN_HEIGHT = 5;
 	static final int ADDITIONAL_HEIGHT = 80;
 	static final int ADDITIONAL_WIDTH = 10;
-	String cmd;
+	static final int TIMER_INTERVAL = 10;
+	static boolean flag = false;
+	static ActionListener updateCanvas = new ActionListener() {
+		public void actionPerformed(ActionEvent evt) {
+			javax.swing.SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					LOGOPP.canvas.getCurTurtle().move();
+				}
+			});
+		}
+	};
+	static javax.swing.Timer timer = new javax.swing.Timer(TIMER_INTERVAL, updateCanvas);
+	static String cmd;
 	static LOGOIO io = new LOGOIO();
 	static LOGOSymbolTable symboltable = new LOGOSymbolTable();
 	static LOGOErrorHandler errorhandler = new LOGOErrorHandler(io);
@@ -27,7 +39,6 @@ public class LOGOPP extends JFrame implements KeyListener {
 
 	static ArrayList<String> commandHistory = new ArrayList<String>();
 	static int curCmdIndex = 0;
-
 	static LOGOChallenge challenge = new LOGOChallenge();
 
 
@@ -164,7 +175,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 	}
 
-	public void execute(String str) {
+	public static void execute(String str) {
 		if (errorhandler.error())
 			errorhandler.errorOut();
 		errorhandler.reset();
@@ -176,6 +187,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 				return;
 			}
 			root.run();
+			canvas.getCurTurtle().clearPending(true);
 			canvas.repaint();
 		}
 		catch (Exception e) {
