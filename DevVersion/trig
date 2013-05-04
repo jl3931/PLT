@@ -1,0 +1,22 @@
+function factorial(x){
+	 if (x = 0) {1}
+	 else {x*factorial(x-1)}
+}
+SET PI 3.1415926535897932384626433832795028841971693993751058
+function D2R(x){
+	 x/180*PI
+}
+function R2D(x){
+	 x/PI*180
+}
+function sin(x){
+	 x-(x ^ 3)/factorial(3)+(x ^ 5)/factorial(5)-(x ^ 7)/factorial(7)
+}
+function cos(x){
+	 (1-(sin(x)) ^ 2)^(1/2)
+}
+function tan(x){
+	 sin(x)/cos(x)
+}
+function inverse(f, o, min, max){
+}

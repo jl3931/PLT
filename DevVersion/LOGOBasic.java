@@ -1,5 +1,6 @@
-
-
+import java.util.Scanner;
+import java.io.IOException;
+import java.io.File;
 public class LOGOBasic {
 	/*
 	 * Move turtle forward/backward with arg0.run() length
@@ -131,6 +132,22 @@ public class LOGOBasic {
 		Object ret = arg.run();
 		if (ret != null && ret instanceof String) {
 			LOGOPP.canvas.getCurTurtle().changeColor((String)ret);
+		}
+	}
+	
+	public void load(LOGONode arg) {
+		Object ret = arg.run();
+		if (ret != null && ret instanceof String) {
+			String filestring = null;
+			try {
+				File file = new File((String)ret);
+				Scanner sc = new Scanner(file);
+				filestring = sc.useDelimiter("\\Z").next();
+			}
+			catch (IOException e) {
+				LOGOPP.errorhandler.setRunTime("LOAD", e.toString());
+			}
+			LOGOPP.execute(filestring);
 		}
 	}
 

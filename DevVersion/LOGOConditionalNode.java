@@ -29,20 +29,16 @@ public class LOGOConditionalNode extends LOGONode{
 		if (id.equals("if")) {
 			bool = runAndCheck(children.get(0));
 			if (bool == true_)
-				children.get(1).run();
+				return children.get(1).run();
 			return null;
 		}
 		if (id.equals("if_else")) {
 			bool = runAndCheck(children.get(0));
 			if (bool == true_)
-				children.get(1).run();
+				return children.get(1).run();
 			else
-				children.get(2).run();
-			return null;
+				return children.get(2).run();
 		}
-		return null;		
-
+		return null;
 	}
-	
-
 }

@@ -61,6 +61,9 @@ public class LOGOCommandNode extends LOGONode {
 					LOGOPP.basic.saveImage(children.get(0));
 				else if (id.equals("CHANGECOLOR"))
 					LOGOPP.basic.changeColor(children.get(0));
+				else if (id.equals("LOAD"))
+					LOGOPP.basic.load(children.get(0));
+
 			} else if (children.size() == 2)
 				if (id.equals("SETXY"))
 					LOGOPP.basic.teleport(children.get(0), children.get(1), true, true);
@@ -75,7 +78,7 @@ public class LOGOCommandNode extends LOGONode {
 	private final static HashSet<String> CommandList1 = new HashSet<String>(
 					Arrays.asList(new String[] {"FORWARD", "BACK", "LEFT", 
 							"RIGHT", "SPEED", "SETX", "SETY", "PRINT", "SETSPEED",
-							"SAVEIMAGE", "CHANGECOLOR"}));
+								    "SAVEIMAGE", "CHANGECOLOR", "LOAD"}));
 	private final static HashSet<String> CommandList2 = new HashSet<String>(
 					Arrays.asList(new String[] {"SETXY"}));
 	
