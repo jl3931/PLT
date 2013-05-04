@@ -98,6 +98,8 @@ public class LOGOCanvas extends JComponent {
 		tur.canvasOn = this;
 		tur.setXPos((double)x);
 		tur.setYPos((double)y);
+		tur.setXPosBack((double)x);
+		tur.setYPosBack((double)y);
 		turtlePool.put(tur.getName(), tur);
 		curTurtle = tur;
 	}

@@ -12,6 +12,9 @@ public class LOGOTurtle{
 	private static final double MIN_SPEED = 1.;
 	private double xPos        = 0;
 	private double yPos        = 0;
+	public double xPosBack	   = 0;
+	public double yPosBack 	   = 0;
+	public double angleBack    = INIT_ANGLE;
 	private double angle       = INIT_ANGLE;
 	private double speed       = 10.;
 	private boolean penDown    = true;
@@ -59,7 +62,10 @@ public class LOGOTurtle{
 	// geters
 	public double getXPos() {return xPos;}
 	public double getYPos() {return yPos;}
+	public double getXPosBack() {return xPosBack;}
+	public double getYPosBack() {return yPosBack;}
 	public double getAngle() {return angle;}
+	public double getAngleBack() {return angleBack;}
 	public boolean getPenDown() {return penDown;}
 	public boolean getShowTurtle() {return showTurtle;}
 	public double getSpeed() {return speed;}
@@ -67,6 +73,7 @@ public class LOGOTurtle{
 
 	// seters
 	public void setAngle(double a) {angle = a % CIRCLE_DEGREE;}
+	public void setAngleBack(double a) {angleBack = a % CIRCLE_DEGREE;}
 	public void setPenDown(boolean p) {penDown = p;}
 	public void setShowTurtle(boolean s) {showTurtle = s;}
 	public void setSpeed(double s) {
@@ -105,7 +112,33 @@ public class LOGOTurtle{
 			yPos = (y > (double)canvasOn.getHeight()) ? (double)canvasOn.getHeight() : yPos;
 		}
 	}
+	public void setXPosBack(double x) {
+		if (null == canvasOn)
+			return;
+		if (canvasOn.wrap) {
+			// Wrap Mode
+			xPosBack = x % canvasOn.getWidth();
+			xPosBack = (xPosBack < 0) ? xPosBack + (double)canvasOn.getWidth() : xPosBack;
+		} else {
+			// Fence Mode
+			xPosBack = (x < 0) ? 0 : x;
+			xPosBack = (x > (double)canvasOn.getWidth()) ? (double)canvasOn.getWidth() : xPosBack;
+		}
+	}
 
+	public void setYPosBack(double y) {
+		if (null == canvasOn)
+			return;
+		if (canvasOn.wrap) {
+			// Wrap Mode
+			yPosBack = y % canvasOn.getHeight();
+			yPosBack = (yPos < 0) ? yPosBack + (double)canvasOn.getHeight() : yPosBack;
+		} else {
+			// Fence Mode
+			yPosBack = (y < 0) ? 0 : y;
+			yPosBack = (y > (double)canvasOn.getHeight()) ? (double)canvasOn.getHeight() : yPosBack;
+		}
+	}
 	
 
 	/*
@@ -183,7 +216,7 @@ public class LOGOTurtle{
 
 	public boolean moveForward(double restXPos, double restYPos) {
 		double dis = Math.sqrt(restXPos * restXPos + restYPos * restYPos);
-		if (dis <= speed) {
+		if (dis <= speed || !LOGOPP.hasAnimation) {
 			moveTurtle(restXPos, restYPos, penDown);
 			//System.out.println("stop!");
 			return true;
@@ -224,18 +257,18 @@ public class LOGOTurtle{
 	}
 
 	public boolean turnTurtle(double deltaAngle) {
-		if (Math.abs(deltaAngle) > speed * ANGLE_RATIO) {
+		if (Math.abs(deltaAngle) <= speed * ANGLE_RATIO || !LOGOPP.hasAnimation) {
+			setAngle(angle - deltaAngle);
+			if (LOGOPP.hasAnimation)
+				canvasOn.repaint();
+			return true;
+		} else {
 			if (deltaAngle > 0)
 				setAngle(angle - speed * ANGLE_RATIO);
 			else
 				setAngle(angle + speed * ANGLE_RATIO);
 			canvasOn.repaint();
 			return false;
-		} else {
-			setAngle(angle - deltaAngle);
-			if (LOGOPP.hasAnimation)
-				canvasOn.repaint();
-			return true;
 		}
 	}
 
@@ -323,40 +356,67 @@ class PendingMovements {
 		if (type.equals("MOVE") && args.length == 2) {
 			Movements move = new Movements();
 			move.setMove(args[0], args[1]);
-			move.setCurPos(turtle.getXPos(), turtle.getYPos(), turtle.getAngle());
-			turtle.setXPos(turtle.getXPos() + args[0]);
-			turtle.setYPos(turtle.getYPos() + args[1]);
+			//move.setCurPos(turtle.getXPos(), turtle.getYPos(), turtle.getAngle());
+			//turtle.setXPos(turtle.getXPos() + args[0]);
+			//turtle.setYPos(turtle.getYPos() + args[1]);
+			move.setCurPos(turtle.xPosBack, turtle.yPosBack, turtle.angleBack);
+			turtle.setXPosBack(turtle.xPosBack + args[0]);
+			turtle.setYPosBack(turtle.yPosBack + args[1]);
 			movements.add(move);
 		}
 		else if (type.equals("TURN") && args.length == 1) {
 			Movements move = new Movements();
 			move.setTurn(args[0]);
-			move.setCurPos(turtle.getXPos(), turtle.getYPos(), turtle.getAngle());
-			turtle.setAngle(turtle.getAngle() - args[0]);
+			//move.setCurPos(turtle.getXPos(), turtle.getYPos(), turtle.getAngle());
+			//turtle.setAngle(turtle.getAngle() - args[0]);
+			move.setCurPos(turtle.xPosBack, turtle.yPosBack, turtle.angleBack);
+			turtle.setAngleBack(turtle.angleBack - args[0]);
 			movements.add(move);
 
 		}
 		else if (type.equals("TELE") && args.length == 2) {
 			Movements move = new Movements();
 			move.setTele(args[0], args[1]);
-			move.setCurPos(turtle.getXPos(), turtle.getYPos(), turtle.getAngle());
+			//move.setCurPos(turtle.getXPos(), turtle.getYPos(), turtle.getAngle());
+			//turtle.setXPos(args[0]);
+			//turtle.setYPos(args[1]);
+			move.setCurPos(turtle.xPosBack, turtle.yPosBack, turtle.angleBack);
+			turtle.setXPosBack(args[0]);
+			turtle.setYPosBack(args[1]);
 			movements.add(move);
-			turtle.setXPos(args[0]);
-			turtle.setYPos(args[1]);
+			
 		}
 		else if (type.equals("ORIGIN") && args.length == 0) {
 			Movements move = new Movements();
 			move.setOrigin();
-			move.setCurPos(turtle.getXPos(), turtle.getYPos(), turtle.getAngle());
+			//move.setCurPos(turtle.getXPos(), turtle.getYPos(), turtle.getAngle());
+			//turtle.setXPos((double)(LOGOPP.canvas.getWidth() / 2));
+			//turtle.setYPos((double)(LOGOPP.canvas.getHeight() / 2));
+			//turtle.setAngle(LOGOTurtle.INIT_ANGLE);
+			move.setCurPos(turtle.xPosBack, turtle.yPosBack, turtle.angleBack);
+			turtle.setXPosBack((double)(LOGOPP.canvas.getWidth() / 2));
+			turtle.setYPosBack((double)(LOGOPP.canvas.getHeight() / 2));
+			turtle.setAngleBack(LOGOTurtle.INIT_ANGLE);
 			movements.add(move);
-			turtle.setXPos((double)(LOGOPP.canvas.getWidth() / 2));
-			turtle.setYPos((double)(LOGOPP.canvas.getHeight() / 2));
-			turtle.setAngle(LOGOTurtle.INIT_ANGLE);
+			
 		}
 	}
 
 	public void clearAllPending() {
-		clearPending(Double.MAX_VALUE);
+		for (Movements move : movements) {
+			if (move.type == movementType.TELE) {
+				turtle.teleport(move.argX, move.argY);
+			} else if (move.type == movementType.ORIGIN) {
+				turtle.teleport((double)(LOGOPP.canvas.getWidth() / 2), 
+								(double)(LOGOPP.canvas.getHeight() / 2));
+				turtle.setAngle(LOGOTurtle.INIT_ANGLE);
+			} else if (move.type == movementType.MOVE) {
+				turtle.moveForward(move.argX, move.argY);
+			} else if (move.type == movementType.TURN) {
+				turtle.turnTurtle(move.argX);
+			}
+		}
+		movements.clear();
 		restSteps = 0.;
 	}
 
@@ -364,9 +424,9 @@ class PendingMovements {
 		double rest = step;
 		while (movements.size() > 0 && rest > LOGOTurtle.EPSILON) {
 			Movements move = movements.get(0);
-			turtle.setXPos(move.curX);
-			turtle.setYPos(move.curY);
-			turtle.setAngle(move.curAngle);
+			//turtle.setXPos(move.curX);
+			//turtle.setYPos(move.curY);
+			//turtle.setAngle(move.curAngle);
 			if (move.type == movementType.TELE) {
 				turtle.teleport(move.argX, move.argY);
 				rest -= turtle.getSpeed();

@@ -15,8 +15,8 @@ public class LOGOBasic {
 			System.out.println("step size:" + step);
 			//double startX = LOGOPP.canvas.getCurTurtle().getXPos();
 			//double startY = LOGOPP.canvas.getCurTurtle().getYPos();
-			double directX = Math.cos(Math.toRadians(LOGOPP.canvas.getCurTurtle().getAngle()));
-			double directY = Math.sin(Math.toRadians(LOGOPP.canvas.getCurTurtle().getAngle()));
+			double directX = Math.cos(Math.toRadians(LOGOPP.canvas.getCurTurtle().getAngleBack()));
+			double directY = Math.sin(Math.toRadians(LOGOPP.canvas.getCurTurtle().getAngleBack()));
 			LOGOPP.canvas.getCurTurtle().pendingMoves.add("MOVE", directX * step, directY * step);
 			LOGOPP.canvas.getCurTurtle().clearPending(false);
 			

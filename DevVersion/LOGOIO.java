@@ -18,7 +18,7 @@ public class LOGOIO {
 		} 
 		catch (BadLocationException e) { 
 		}
-		//LOGOPP.prev.setCaretPosition(LOGOPP.prev.getText().length()-1);
+		LOGOPP.prev.setCaretPosition(LOGOPP.prev.getDocument().getLength());
 	}
 
 	public void debug(String str) {
@@ -34,7 +34,7 @@ public class LOGOIO {
 		} 
 		catch (BadLocationException e) { 
 		}
-		//LOGOPP.prev.setCaretPosition(LOGOPP.prev.getText().length()-1);
+		LOGOPP.prev.setCaretPosition(LOGOPP.prev.getDocument().getLength());
 	}
 	
 	/*public String in() {
