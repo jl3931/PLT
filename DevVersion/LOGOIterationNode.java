@@ -27,16 +27,17 @@ public class LOGOIterationNode extends LOGONode{
 	public Object run() {
 		double bool;
 		double true_ = (double) 1;
+		Object ret = null;
+		int we_run_it = 0;
 		if (id.equals("while")) {
 			bool = runAndCheck(children.get(0));
 			while (bool == true_) {
-			//	bool = runAndCheck(children.get(0));
-			//	if (bool != true_ )
-			//		return children.get(1).run();
-				children.get(1).run();
+				we_run_it = 1;
+				ret = children.get(1).run();
 				bool = runAndCheck(children.get(0));
-				
 			}
+			if (we_run_it == 1)
+				return ret;
 			return null;
 		}
 		if (id.equals("repeat")) {
