@@ -42,6 +42,7 @@ command_expr returns [LOGONode node]
     |   Setxy '(' a=expression ',' b=expression ')' {$node = new LOGOCommandNode("SETXY", $a.node, $b.node);}
     |   Color String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("CHANGECOLOR", temp);}
     |   Save String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("SAVEIMAGE", temp);}
+    |   Print String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("PRINT", temp);}
 	;
 
 command returns [String text]
