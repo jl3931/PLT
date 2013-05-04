@@ -30,16 +30,24 @@ public class LOGOIterationNode extends LOGONode{
 		if (id.equals("while")) {
 			bool = runAndCheck(children.get(0));
 			while (bool == true_) {
+			//	bool = runAndCheck(children.get(0));
+			//	if (bool != true_ )
+			//		return children.get(1).run();
 				children.get(1).run();
 				bool = runAndCheck(children.get(0));
+				
 			}
 			return null;
 		}
 		if (id.equals("repeat")) {
 			double iterator = runAndCheck(children.get(0));
 			double i = 1;
-			for (; i <= iterator; i++)
+			for (; i <= iterator; i++) {
+				if (i + 1 > iterator)
+					return children.get(1).run();
 				children.get(1).run();
+				
+			}
 			return null;
 		}
 	
@@ -62,6 +70,8 @@ public class LOGOIterationNode extends LOGONode{
 			double iterator;
 			for (iterator = init; iterator <= fini; iterator += pace) {
 				LOGOPP.symboltable.set(children.get(0).id, iterator);
+				if (iterator + pace > fini)
+					return children.get(2).run();
 				children.get(2).run();
 			}
 			return null;
