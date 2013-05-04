@@ -18,7 +18,7 @@ public class LOGOIO {
 		} 
 		catch (BadLocationException e) { 
 		}
-		LOGOPP.prev.setCaretPosition(LOGOPP.prev.getText().length());
+		//LOGOPP.prev.setCaretPosition(LOGOPP.prev.getText().length()-1);
 	}
 
 	public void debug(String str) {
@@ -34,7 +34,7 @@ public class LOGOIO {
 		} 
 		catch (BadLocationException e) { 
 		}
-		LOGOPP.prev.setCaretPosition(LOGOPP.prev.getText().length());
+		//LOGOPP.prev.setCaretPosition(LOGOPP.prev.getText().length()-1);
 	}
 	
 	/*public String in() {
@@ -59,7 +59,9 @@ public class LOGOIO {
 		LOGOPP.curCmdIndex = LOGOPP.commandHistory.size();
 		LOGOPP.io.out(">" + LOGOPP.cur.getText());
 		LOGOPP.cur.setText("");
-		LOGOPP.prev.setCaretPosition(LOGOPP.prev.getText().length());
+		//LOGOPP.prev.setCaretPosition(LOGOPP.prev.getText().length()-1);
+
+
 	}
 
 	public void notify(String str) {

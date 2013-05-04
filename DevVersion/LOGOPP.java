@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.text.*;
 import java.util.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.*;
@@ -110,6 +111,10 @@ public class LOGOPP extends JFrame implements KeyListener {
 						canvas.getWidth(), NOTI_HEIGHT);
 		pane.revalidate();
 		this.repaint();
+		
+		
+		DefaultCaret caret = (DefaultCaret)prev.getCaret();  
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 	}
 
 	public void addChallenge() {
@@ -179,6 +184,11 @@ public class LOGOPP extends JFrame implements KeyListener {
 		case KeyEvent.VK_Y:
 			if (e.getModifiers() == KeyEvent.CTRL_MASK && !processingCmd) {
 				canvas.redo();
+			}
+			break;
+		case KeyEvent.VK_Q:
+			if (e.getModifiers() == KeyEvent.CTRL_MASK && !processingCmd) {
+				System.exit(0);
 			}
 			break;
 		}

@@ -91,9 +91,7 @@ public class LOGOBasic {
 	}
 	
 	public void origin() {
-		double x = (double)LOGOPP.canvas.getWidth() / 2;
-		double y = (double)LOGOPP.canvas.getHeight() / 2;
-		LOGOPP.canvas.getCurTurtle().pendingMoves.add("TELE", x, y);
+		LOGOPP.canvas.getCurTurtle().pendingMoves.add("ORIGIN");
 		LOGOPP.canvas.getCurTurtle().clearPending(false);
 	}
 

@@ -277,7 +277,7 @@ class PendingMovements {
 
 	private double restSteps;
 
-	private enum movementType {MOVE, TURN, TELE};
+	private enum movementType {MOVE, TURN, TELE, ORIGIN};
 
 	class Movements {
 		movementType type;	//Move 	Turn 	Tele
@@ -304,11 +304,17 @@ class PendingMovements {
 			argY = y;
 			restSteps += turtle.getSpeed();
 		}
+		public void setOrigin() {
+			type = movementType.ORIGIN;
+			restSteps += turtle.getSpeed();
+		}
 		public void setCurPos(double x, double y, double a) {
 			curX = x;
 			curY = y;
 			curAngle = a;
 		}
+
+
 	}
 
 	ArrayList<Movements> movements = new ArrayList<Movements>();
@@ -338,10 +344,19 @@ class PendingMovements {
 			turtle.setXPos(args[0]);
 			turtle.setYPos(args[1]);
 		}
+		else if (type.equals("ORIGIN") && args.length == 0) {
+			Movements move = new Movements();
+			move.setOrigin();
+			move.setCurPos(turtle.getXPos(), turtle.getYPos(), turtle.getAngle());
+			movements.add(move);
+			turtle.setXPos((double)(LOGOPP.canvas.getWidth() / 2));
+			turtle.setYPos((double)(LOGOPP.canvas.getHeight() / 2));
+			turtle.setAngle(LOGOTurtle.INIT_ANGLE);
+		}
 	}
 
 	public void clearAllPending() {
-		clearPending(restSteps);
+		clearPending(Double.MAX_VALUE);
 		restSteps = 0.;
 	}
 
@@ -354,6 +369,12 @@ class PendingMovements {
 			turtle.setAngle(move.curAngle);
 			if (move.type == movementType.TELE) {
 				turtle.teleport(move.argX, move.argY);
+				rest -= turtle.getSpeed();
+				movements.remove(0);
+			} else if (move.type == movementType.ORIGIN) {
+				turtle.teleport((double)(LOGOPP.canvas.getWidth() / 2), 
+								(double)(LOGOPP.canvas.getHeight() / 2));
+				turtle.setAngle(LOGOTurtle.INIT_ANGLE);
 				rest -= turtle.getSpeed();
 				movements.remove(0);
 			} else if (move.type == movementType.MOVE) {
