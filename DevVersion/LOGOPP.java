@@ -88,6 +88,12 @@ public class LOGOPP extends JFrame implements KeyListener {
 	private void addComponentsToPane() {
 		KeyStroke enter = KeyStroke.getKeyStroke("ENTER");
 		cur.getInputMap().put(enter, "none");
+		KeyStroke lParen = KeyStroke.getKeyStroke('(');
+		cur.getInputMap().put(lParen, "none");
+		KeyStroke lCB = KeyStroke.getKeyStroke('{');
+		cur.getInputMap().put(lCB, "none");
+		KeyStroke lB = KeyStroke.getKeyStroke('[');
+		cur.getInputMap().put(lB, "none");
 		prev.setEditable(false);
 		noti.setEditable(false);
 		noti.setForeground(Color.GRAY);
@@ -113,8 +119,8 @@ public class LOGOPP extends JFrame implements KeyListener {
 		this.repaint();
 		
 		
-		DefaultCaret caret = (DefaultCaret)prev.getCaret();  
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		//DefaultCaret caret = (DefaultCaret)cur.getCaret();  
+		//caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 	}
 
 	public void addChallenge() {
@@ -147,7 +153,13 @@ public class LOGOPP extends JFrame implements KeyListener {
 		case KeyEvent.VK_ENTER:
 			//////////////////////
 			if (e.getModifiers() == KeyEvent.CTRL_MASK) {
-				cur.append("\n");
+				int pos = cur.getCaretPosition();
+				String content = cur.getText();
+				if (pos == content.length())
+					cur.append("\n");
+				else
+					cur.setText(content.substring(0,pos) + "\n" + content.substring(pos));
+				cur.setCaretPosition(pos + 1);
 			} else {
 				LOGOPP.io.in();
 			}
@@ -189,6 +201,36 @@ public class LOGOPP extends JFrame implements KeyListener {
 		case KeyEvent.VK_Q:
 			if (e.getModifiers() == KeyEvent.CTRL_MASK && !processingCmd) {
 				System.exit(0);
+			}
+			break;
+		case KeyEvent.VK_9:
+			if (e.getModifiers() == KeyEvent.SHIFT_MASK && !processingCmd) {
+				int pos = cur.getCaretPosition();
+				String content = cur.getText();
+				if (pos == content.length())
+					cur.append("()");
+				else
+					cur.setText(content.substring(0,pos) + "()" + content.substring(pos));
+				cur.setCaretPosition(pos + 1);
+			}
+			break;
+		case KeyEvent.VK_OPEN_BRACKET :
+			if (e.getModifiers() == KeyEvent.SHIFT_MASK && !processingCmd) {
+				int pos = cur.getCaretPosition();
+				String content = cur.getText();
+				if (pos == content.length())
+					cur.append("{}");
+				else
+					cur.setText(content.substring(0,pos) + "{}" + content.substring(pos));
+				cur.setCaretPosition(pos + 1);
+			} else if (e.getModifiers() == 0 && !processingCmd) {
+				int pos = cur.getCaretPosition();
+				String content = cur.getText();
+				if (pos == content.length())
+					cur.append("[]");
+				else
+					cur.setText(content.substring(0,pos) + "[]" + content.substring(pos));
+				cur.setCaretPosition(pos + 1);
 			}
 			break;
 		}
