@@ -163,6 +163,16 @@ public class LOGOCanvas extends JComponent {
     	LOGOPP.challenge.printHints(g);
 	}
 
+	public void interrupt() {
+		Iterator it = turtlePool.entrySet().iterator();
+    	while (it.hasNext()) {
+        	Map.Entry pairs = (Map.Entry)it.next();
+        	LOGOTurtle tur = (LOGOTurtle)pairs.getValue();
+        	tur.setXPos(tur.getXPosBack());
+			tur.setYPos(tur.getYPosBack());
+			tur.setAngle(tur.getAngleBack());
+   		}
+	}
 
 
 

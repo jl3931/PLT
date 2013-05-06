@@ -17,8 +17,8 @@ public class LOGOBasic {
 			//double startY = LOGOPP.canvas.getCurTurtle().getYPos();
 			double directX = Math.cos(Math.toRadians(LOGOPP.canvas.getCurTurtle().getAngleBack()));
 			double directY = Math.sin(Math.toRadians(LOGOPP.canvas.getCurTurtle().getAngleBack()));
-			LOGOPP.canvas.getCurTurtle().pendingMoves.add("MOVE", directX * step, directY * step);
-			LOGOPP.canvas.getCurTurtle().clearPending(false);
+			LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "MOVE", directX * step, directY * step);
+			LOGOPP.eventQueue.clearPending(false);
 			
 			
 		} else {
@@ -37,8 +37,8 @@ public class LOGOBasic {
 			double turn = (isLeft) ? ((Double)ret).doubleValue() :
 									-((Double)ret).doubleValue();
 			//LOGOPP.canvas.getCurTurtle().setAngle(LOGOPP.canvas.getCurTurtle().getAngle() - turn);
-			LOGOPP.canvas.getCurTurtle().pendingMoves.add("TURN", turn);
-			LOGOPP.canvas.getCurTurtle().clearPending(false);
+			LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "TURN", turn);
+			LOGOPP.eventQueue.clearPending(false);
 			//System.out.println("basic:turn finished");	
 		} else {
 			LOGOPP.io.err("Incorrect type of argument of FD. Numeric value expected.");
@@ -62,8 +62,8 @@ public class LOGOBasic {
 				double valuex = ((Double)retx).doubleValue();
 				double valuey = ((Double)rety).doubleValue();
 				//LOGOPP.canvas.getCurTurtle().teleport(valuex, valuey);
-				LOGOPP.canvas.getCurTurtle().pendingMoves.add("TELE", valuex, valuey);
-				LOGOPP.canvas.getCurTurtle().clearPending(false);
+				LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "TELE", valuex, valuey);
+				LOGOPP.eventQueue.clearPending(false);
 			} else {
 
 			}
@@ -71,8 +71,8 @@ public class LOGOBasic {
 			Object ret = argx.run();
 			if (ret instanceof Double) {
 				double value = ((Double)ret).doubleValue();
-				LOGOPP.canvas.getCurTurtle().pendingMoves.add("TELE", value, LOGOPP.canvas.getCurTurtle().getYPos());
-				LOGOPP.canvas.getCurTurtle().clearPending(false);
+				LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "TELE", value, LOGOPP.canvas.getCurTurtle().getYPos());
+				LOGOPP.eventQueue.clearPending(false);
 				//LOGOPP.canvas.getCurTurtle().teleport(value, LOGOPP.canvas.getCurTurtle().getYPos());
 			} else {
 
@@ -81,8 +81,8 @@ public class LOGOBasic {
 			Object ret = argy.run();
 			if (ret instanceof Double) {
 				double value = ((Double)ret).doubleValue();
-				LOGOPP.canvas.getCurTurtle().pendingMoves.add("TELE", LOGOPP.canvas.getCurTurtle().getXPos(), value);
-				LOGOPP.canvas.getCurTurtle().clearPending(false);
+				LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "TELE", LOGOPP.canvas.getCurTurtle().getXPos(), value);
+				LOGOPP.eventQueue.clearPending(false);
 				//LOGOPP.canvas.getCurTurtle().teleport(value, LOGOPP.canvas.getCurTurtle().getYPos());
 			} else {
 
@@ -91,8 +91,8 @@ public class LOGOBasic {
 	}
 	
 	public void origin() {
-		LOGOPP.canvas.getCurTurtle().pendingMoves.add("ORIGIN");
-		LOGOPP.canvas.getCurTurtle().clearPending(false);
+		LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "ORIGIN");
+		LOGOPP.eventQueue.clearPending(false);
 	}
 
 	public void clearScreen() {

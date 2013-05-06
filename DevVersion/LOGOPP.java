@@ -20,14 +20,15 @@ public class LOGOPP extends JFrame implements KeyListener {
 	static final int MARGIN_HEIGHT = 5;
 	static final int ADDITIONAL_HEIGHT = 100;
 	static final int ADDITIONAL_WIDTH = 10;
-	static final int TIMER_INTERVAL = 10;
+	static final int TIMER_INTERVAL = 20;
 	static boolean hasAnimation = true;
 	static boolean processingCmd = false;
+	static boolean isInterrupted = false;
 	static ActionListener updateCanvas = new ActionListener() {
 		public void actionPerformed(ActionEvent evt) {
 			javax.swing.SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					LOGOPP.canvas.getCurTurtle().move();
+					LOGOPP.eventQueue.tick();
 				}
 			});
 		}
@@ -40,7 +41,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 	static LOGOCanvas canvas = new LOGOCanvas("LOGO++", 600, 400);
 	static LOGOInterpreter interpreter = new LOGOInterpreter();
 	static LOGOBasic basic = new LOGOBasic();
-
+	static LOGOEventQueue eventQueue = new LOGOEventQueue();
 	static ArrayList<String> commandHistory = new ArrayList<String>();
 	static int curCmdIndex = 0;
 	static LOGOChallenge challenge = new LOGOChallenge();
@@ -182,10 +183,16 @@ public class LOGOPP extends JFrame implements KeyListener {
 				}
 			}
 			break;
-		case KeyEvent.VK_C:
+		case KeyEvent.VK_G:
 			if (e.getModifiers() == KeyEvent.CTRL_MASK && processingCmd) {
 				hasAnimation = false;
 				LOGOPP.io.notify("Now finishing rest work, you may need to wait for a while.");
+			}
+			break;
+		case KeyEvent.VK_C:
+			if (e.getModifiers() == KeyEvent.CTRL_MASK && processingCmd) {
+				isInterrupted= true;
+				LOGOPP.io.notify("Processing interrupted!");
 			}
 			break;
 		case KeyEvent.VK_Z:
@@ -260,11 +267,16 @@ public class LOGOPP extends JFrame implements KeyListener {
 				errorhandler.reset();
 			}
 			else {
-				if (!hasAnimation) {
-					canvas.getCurTurtle().clearAllPending();
+				if (isInterrupted) {
+					LOGOPP.eventQueue.interrupt();
+					LOGOPP.canvas.interrupt();
+					isInterrupted = false;
+				}
+				else if (!hasAnimation) {
+					LOGOPP.eventQueue.clearAllPending();
 				}
 				else {
-					canvas.getCurTurtle().clearPending(true);
+					LOGOPP.eventQueue.clearPending(true);
 				}
 				canvas.repaint();
 			}

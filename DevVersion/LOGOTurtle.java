@@ -8,8 +8,8 @@ public class LOGOTurtle{
 	public static final double INIT_ANGLE = -90.;
 	public static final double CIRCLE_DEGREE = 360.;
 	public static final double ANGLE_RATIO = 1.;
-	private static final double MAX_SPEED = 20.;
-	private static final double MIN_SPEED = 1.;
+	public static final double MAX_SPEED = 20.;
+	public static final double MIN_SPEED = 1.;
 	private double xPos        = 0;
 	private double yPos        = 0;
 	public double xPosBack	   = 0;
@@ -21,18 +21,9 @@ public class LOGOTurtle{
 	private boolean showTurtle = true;
 	private int[] color = new int[] {0, 0, 0}; //{R,G,B}
 	private String name;
-	public PendingMovements pendingMoves;
 	public LOGOCanvas canvasOn;
 	//private static Image turtleImg = Toolkit.getDefaultToolkit().getImage("logo_turtle.png");
 	private static ImageIcon turtleImg = new ImageIcon("logo_turtle_color.png");
-	/*
-	 * Constructor
-	 * @id: name
-	 */
-	LOGOTurtle(String id) {
-		name = id;
-		pendingMoves = new PendingMovements(this);
-	}
 	private static final HashMap<String, int[]> colorValues = new HashMap<String, int[]>();
 	{
 		int[] red    = {255,   0,   0};
@@ -57,6 +48,14 @@ public class LOGOTurtle{
 		colorValues.put("PURPLE", purple);
 		colorValues.put( "BROWN",  brown);
 		colorValues.put(  "GRAY",   gray);
+	}
+
+	/*
+	 * Constructor
+	 * @id: name
+	 */
+	LOGOTurtle(String id) {
+		name = id;
 	}
 
 	// geters
@@ -184,36 +183,6 @@ public class LOGOTurtle{
 		canvasOn.bitmap[canvasOn.getHeight() - 1 - y][x] = colorValue();
 	}
 
-	public void move() {
-		if (pendingMoves.clearPending(speed)) {
-			LOGOPP.timer.stop();
-			synchronized(LOGOPP.timer){
-				try {     
-		            LOGOPP.timer.notify();  
-		        }
-		        catch (Exception e) {     
-		        }
-	    	}
-    	}
-	}
-
-	public void clearPending(boolean lastTime) {
-		if ((pendingMoves.getRestSteps() >= speed || lastTime) && LOGOPP.hasAnimation) {
-			LOGOPP.timer.start();
-			synchronized(LOGOPP.timer){
-				try {     
-                    LOGOPP.timer.wait();  
-                } 
-                catch (Exception e) {         
-                }  
-			}
-		}
-	}
-
-	public void clearAllPending() {
-		pendingMoves.clearAllPending();
-	}
-
 	public boolean moveForward(double restXPos, double restYPos) {
 		double dis = Math.sqrt(restXPos * restXPos + restYPos * restYPos);
 		if (dis <= speed || !LOGOPP.hasAnimation) {
@@ -297,181 +266,4 @@ public class LOGOTurtle{
 								(int)yPos - turtleImg.getIconHeight() / 2);
 		}
 	}
-}
-
-class PendingMovements {
-	LOGOTurtle turtle;
-	public PendingMovements(LOGOTurtle tur) {
-		turtle = tur;
-		restSteps = 0.;
-	}
-
-	public double getRestSteps() {return restSteps;}
-
-	private double restSteps;
-
-	private enum movementType {MOVE, TURN, TELE, ORIGIN};
-
-	class Movements {
-		movementType type;	//Move 	Turn 	Tele
-		double argX;		//restX restA	tarX
-		double argY;		//restY n/a 	tarY
-		double curX;
-		double curY;
-		double curAngle;
-		public void setMove(double x, double y) {
-			type = movementType.MOVE;
-			argX = x;
-			argY = y;
-			restSteps += Math.sqrt(x * x + y * y);
-		}
-		public void setTurn(double a) {
-			type = movementType.TURN;
-			argX = a;
-			
-			restSteps += Math.abs(a) / LOGOTurtle.ANGLE_RATIO;
-		}
-		public void setTele(double x, double y) {
-			type = movementType.TELE;
-			argX = x;
-			argY = y;
-			restSteps += turtle.getSpeed();
-		}
-		public void setOrigin() {
-			type = movementType.ORIGIN;
-			restSteps += turtle.getSpeed();
-		}
-		public void setCurPos(double x, double y, double a) {
-			curX = x;
-			curY = y;
-			curAngle = a;
-		}
-
-
-	}
-
-	ArrayList<Movements> movements = new ArrayList<Movements>();
-
-	public void add(String type, double... args) {
-		if (type.equals("MOVE") && args.length == 2) {
-			Movements move = new Movements();
-			move.setMove(args[0], args[1]);
-			//move.setCurPos(turtle.getXPos(), turtle.getYPos(), turtle.getAngle());
-			//turtle.setXPos(turtle.getXPos() + args[0]);
-			//turtle.setYPos(turtle.getYPos() + args[1]);
-			move.setCurPos(turtle.xPosBack, turtle.yPosBack, turtle.angleBack);
-			turtle.setXPosBack(turtle.xPosBack + args[0]);
-			turtle.setYPosBack(turtle.yPosBack + args[1]);
-			movements.add(move);
-		}
-		else if (type.equals("TURN") && args.length == 1) {
-			Movements move = new Movements();
-			move.setTurn(args[0]);
-			//move.setCurPos(turtle.getXPos(), turtle.getYPos(), turtle.getAngle());
-			//turtle.setAngle(turtle.getAngle() - args[0]);
-			move.setCurPos(turtle.xPosBack, turtle.yPosBack, turtle.angleBack);
-			turtle.setAngleBack(turtle.angleBack - args[0]);
-			movements.add(move);
-
-		}
-		else if (type.equals("TELE") && args.length == 2) {
-			Movements move = new Movements();
-			move.setTele(args[0], args[1]);
-			//move.setCurPos(turtle.getXPos(), turtle.getYPos(), turtle.getAngle());
-			//turtle.setXPos(args[0]);
-			//turtle.setYPos(args[1]);
-			move.setCurPos(turtle.xPosBack, turtle.yPosBack, turtle.angleBack);
-			turtle.setXPosBack(args[0]);
-			turtle.setYPosBack(args[1]);
-			movements.add(move);
-			
-		}
-		else if (type.equals("ORIGIN") && args.length == 0) {
-			Movements move = new Movements();
-			move.setOrigin();
-			//move.setCurPos(turtle.getXPos(), turtle.getYPos(), turtle.getAngle());
-			//turtle.setXPos((double)(LOGOPP.canvas.getWidth() / 2));
-			//turtle.setYPos((double)(LOGOPP.canvas.getHeight() / 2));
-			//turtle.setAngle(LOGOTurtle.INIT_ANGLE);
-			move.setCurPos(turtle.xPosBack, turtle.yPosBack, turtle.angleBack);
-			turtle.setXPosBack((double)(LOGOPP.canvas.getWidth() / 2));
-			turtle.setYPosBack((double)(LOGOPP.canvas.getHeight() / 2));
-			turtle.setAngleBack(LOGOTurtle.INIT_ANGLE);
-			movements.add(move);
-			
-		}
-	}
-
-	public void clearAllPending() {
-		for (Movements move : movements) {
-			if (move.type == movementType.TELE) {
-				turtle.teleport(move.argX, move.argY);
-			} else if (move.type == movementType.ORIGIN) {
-				turtle.teleport((double)(LOGOPP.canvas.getWidth() / 2), 
-								(double)(LOGOPP.canvas.getHeight() / 2));
-				turtle.setAngle(LOGOTurtle.INIT_ANGLE);
-			} else if (move.type == movementType.MOVE) {
-				turtle.moveForward(move.argX, move.argY);
-			} else if (move.type == movementType.TURN) {
-				turtle.turnTurtle(move.argX);
-			}
-		}
-		movements.clear();
-		restSteps = 0.;
-	}
-
-	public boolean clearPending(double step) {
-		double rest = step;
-		while (movements.size() > 0 && rest > LOGOTurtle.EPSILON) {
-			Movements move = movements.get(0);
-			//turtle.setXPos(move.curX);
-			//turtle.setYPos(move.curY);
-			//turtle.setAngle(move.curAngle);
-			if (move.type == movementType.TELE) {
-				turtle.teleport(move.argX, move.argY);
-				rest -= turtle.getSpeed();
-				movements.remove(0);
-			} else if (move.type == movementType.ORIGIN) {
-				turtle.teleport((double)(LOGOPP.canvas.getWidth() / 2), 
-								(double)(LOGOPP.canvas.getHeight() / 2));
-				turtle.setAngle(LOGOTurtle.INIT_ANGLE);
-				rest -= turtle.getSpeed();
-				movements.remove(0);
-			} else if (move.type == movementType.MOVE) {
-				if (turtle.moveForward(move.argX, move.argY)) { //clear this move
-					double dis = Math.sqrt(move.argX * move.argX + move.argY * move.argY);
-					rest -= dis;
-					movements.remove(0);
-				}
-				else {
-					double dis = Math.sqrt(move.argX * move.argX + move.argY * move.argY);
-					move.argX -= rest * move.argX / dis;
-					move.argY -= rest * move.argY / dis;
-					rest = 0.;
-					move.curX = turtle.getXPos();
-					move.curY = turtle.getYPos();
-				}
-			} else if (move.type == movementType.TURN) {
-				if (turtle.turnTurtle(move.argX)) {//clear this move
-					rest -= Math.abs(move.argX) / LOGOTurtle.ANGLE_RATIO;
-					movements.remove(0);
-				}
-				else {
-					rest = 0.;
-					if (move.argX > 0)
-						move.argX -= turtle.getSpeed() * LOGOTurtle.ANGLE_RATIO;
-					else
-						move.argX += turtle.getSpeed() * LOGOTurtle.ANGLE_RATIO;
-					move.curAngle = turtle.getAngle();
-				}
-			}
-		}
-		restSteps -= step - rest;
-		if (movements.size() == 0) {
-			restSteps = 0.;
-			return true;
-		}
-		return false;
-	}
-
 }
