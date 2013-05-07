@@ -12,6 +12,8 @@ public class LOGOCommandNode extends LOGONode {
 	}
 
 	public Object run() {
+		if (LOGOPP.errorhandler.error())
+			return null;
 		if (children.size() != findCommand(id)) {
 			if (findCommand(id) == -1)
 				LOGOPP.io.err("Cannot found command:" + id);

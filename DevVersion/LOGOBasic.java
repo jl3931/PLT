@@ -8,22 +8,16 @@ public class LOGOBasic {
 	 * @isForward: true for forward, flase for backward
 	 */
 	public void forward(LOGONode arg0, boolean isForward) {
-		Object ret = arg0.run();
-		if (ret instanceof Double) {
-			double step = (isForward) ? ((Double)ret).doubleValue() :
-										-((Double)ret).doubleValue();
-			System.out.println("step size:" + step);
-			//double startX = LOGOPP.canvas.getCurTurtle().getXPos();
-			//double startY = LOGOPP.canvas.getCurTurtle().getYPos();
-			double directX = Math.cos(Math.toRadians(LOGOPP.canvas.getCurTurtle().getAngleBack()));
-			double directY = Math.sin(Math.toRadians(LOGOPP.canvas.getCurTurtle().getAngleBack()));
-			LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "MOVE", directX * step, directY * step);
-			LOGOPP.eventQueue.clearPending(false);
-			
-			
-		} else {
-			LOGOPP.io.err("Incorrect type of argument of FD. Numeric value expected.");
-		}
+		Double ret = runAndCheckDouble(arg0, (isForward?"FORWARD":"BACK"));
+		if (LOGOPP.errorhandler.error())
+			return;
+		double step = (isForward) ? ret.doubleValue() :
+									-(ret.doubleValue());
+		System.out.println("step size:" + step);
+		double directX = Math.cos(Math.toRadians(LOGOPP.canvas.getCurTurtle().getAngleBack()));
+		double directY = Math.sin(Math.toRadians(LOGOPP.canvas.getCurTurtle().getAngleBack()));
+		LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "MOVE", directX * step, directY * step);
+		LOGOPP.eventQueue.clearPending(false);
 	}
 
 	/*
@@ -32,17 +26,13 @@ public class LOGOBasic {
 	 * @isLeft: true for turning left, false for turning right
 	 */
 	public void turn(LOGONode arg0, boolean isLeft) {
-		Object ret = arg0.run();
-		if (ret instanceof Double) {
-			double turn = (isLeft) ? ((Double)ret).doubleValue() :
-									-((Double)ret).doubleValue();
-			//LOGOPP.canvas.getCurTurtle().setAngle(LOGOPP.canvas.getCurTurtle().getAngle() - turn);
-			LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "TURN", turn);
-			LOGOPP.eventQueue.clearPending(false);
-			//System.out.println("basic:turn finished");	
-		} else {
-			LOGOPP.io.err("Incorrect type of argument of FD. Numeric value expected.");
-		}
+		Double ret = runAndCheckDouble(arg0, (isLeft?"TURN LEFT":"TURN RIGHT"));
+		if (LOGOPP.errorhandler.error())
+			return;
+		double turn = (isLeft) ? ret.doubleValue() :
+								-(ret.doubleValue());
+		LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "TURN", turn);
+		LOGOPP.eventQueue.clearPending(false);
 	}
 
 	/*
@@ -56,37 +46,32 @@ public class LOGOBasic {
 		if (!setX && !setY)
 			return;
 		if (setX && setY) {
-			Object retx = argx.run();
-			Object rety = argy.run();
-			if (retx instanceof Double && rety instanceof Double) {
-				double valuex = ((Double)retx).doubleValue();
-				double valuey = ((Double)rety).doubleValue();
-				//LOGOPP.canvas.getCurTurtle().teleport(valuex, valuey);
-				LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "TELE", valuex, valuey);
-				LOGOPP.eventQueue.clearPending(false);
-			} else {
-
-			}
-		} else if (setX) {
-			Object ret = argx.run();
-			if (ret instanceof Double) {
-				double value = ((Double)ret).doubleValue();
-				LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "TELE", value, LOGOPP.canvas.getCurTurtle().getYPos());
-				LOGOPP.eventQueue.clearPending(false);
-				//LOGOPP.canvas.getCurTurtle().teleport(value, LOGOPP.canvas.getCurTurtle().getYPos());
-			} else {
-
-			}
-		} else { //setY
-			Object ret = argy.run();
-			if (ret instanceof Double) {
-				double value = ((Double)ret).doubleValue();
-				LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "TELE", LOGOPP.canvas.getCurTurtle().getXPos(), value);
-				LOGOPP.eventQueue.clearPending(false);
-				//LOGOPP.canvas.getCurTurtle().teleport(value, LOGOPP.canvas.getCurTurtle().getYPos());
-			} else {
-
-			}
+			Double retx = runAndCheckDouble(argx, "SETXY");
+			if (LOGOPP.errorhandler.error())
+				return;
+			Double rety = runAndCheckDouble(argy, "SETXY");
+			if (LOGOPP.errorhandler.error())
+				return;
+			double valuex = retx.doubleValue();
+			double valuey = rety.doubleValue();
+			LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "TELE", valuex, valuey);
+			LOGOPP.eventQueue.clearPending(false);
+		}
+		else if (setX) {
+			Double ret = runAndCheckDouble(argx, "SETX");
+			if (LOGOPP.errorhandler.error())
+				return;
+			double value = ret.doubleValue();
+			LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "TELE", value, LOGOPP.canvas.getCurTurtle().getYPos());
+			LOGOPP.eventQueue.clearPending(false);
+		}
+		else { //setY
+			Double ret = runAndCheckDouble(argy, "SETY");
+			if (LOGOPP.errorhandler.error())
+				return;
+			double value = ret.doubleValue();
+			LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "TELE", LOGOPP.canvas.getCurTurtle().getXPos(), value);
+			LOGOPP.eventQueue.clearPending(false);
 		}
 	}
 	
@@ -101,73 +86,103 @@ public class LOGOBasic {
 	}
 
 	public void print(LOGONode arg) {
-		Object ret = arg.run();
-		if (ret == null) {
-			LOGOPP.io.err("Cannot print the expressions, please check what you want to print");
-		} else if (ret instanceof Double) {
-			LOGOPP.io.out(((Double)ret).toString());
-		} else if (ret instanceof String){
-			LOGOPP.io.out((String)ret);
-		}
+		String ret = runAndCheckString(arg, "PRINT", false);
+		if (LOGOPP.errorhandler.error())
+			return;
+		LOGOPP.io.out(ret);
 	}
 
 	public void setSpeed(LOGONode arg) {
-		Object ret = arg.run();
-		if (ret != null && ret instanceof Double) {
-			double value = ((Double)ret).doubleValue();
-			LOGOPP.canvas.getCurTurtle().setSpeed(value);
-		}
+		Double ret = runAndCheckDouble(arg, "SET SPEED");
+		if (LOGOPP.errorhandler.error())
+			return;
+		double value = ret.doubleValue();
+		LOGOPP.canvas.getCurTurtle().setSpeed(value);
 	}
 
 	public void saveImage(LOGONode arg) {
-		Object ret = arg.run();
-		if (ret != null && ret instanceof String) {
-			BMPIO.saveBMP((String)ret, LOGOPP.canvas.bitmap, null);
-		}
+		String ret = runAndCheckString(arg, "SAVE IMAGE", true);
+		if (LOGOPP.errorhandler.error())
+			return;
+		BMPIO.saveBMP(ret, LOGOPP.canvas.bitmap, null);
 	}
 
 	public void changeColor(LOGONode arg) {
-		Object ret = arg.run();
-		if (ret != null && ret instanceof String) {
-			LOGOPP.canvas.getCurTurtle().changeColor((String)ret);
-		}
+		String ret = runAndCheckString(arg, "COLOR", true);
+		if (LOGOPP.errorhandler.error())
+			return;
+		LOGOPP.canvas.getCurTurtle().changeColor(ret);
 	}
 	
 	public void load(LOGONode arg) {
-		Object ret = arg.run();
-		if (ret != null && ret instanceof String) {
-			String filestring = null;
-			try {
-				File file = new File((String)ret);
-				Scanner sc = new Scanner(file);
-				filestring = sc.useDelimiter("\\Z").next();
-			}
-			catch (IOException e) {
-				LOGOPP.errorhandler.setRunTime("LOAD", e.toString());
-			}
+		String ret = runAndCheckString(arg, "LOAD", true);
+		if (LOGOPP.errorhandler.error())
+			return;
+		String filestring = null;
+		try {
+			File file = new File((String)ret);
+			Scanner sc = new Scanner(file);
+			filestring = sc.useDelimiter("\\Z").next();
 			LOGOPP.execute(filestring);
+		}
+		catch (IOException e) {
+			LOGOPP.errorhandler.setRunTime("LOAD", e.toString());
 		}
 	}
 
-	/*
-	 * Check LOGONode return value's type
-	 * In fact, we could check in functions, and let errorhandler
-	 * print the error messages, so this function could be ignored
-	 * @arg0: target node for checking
-	 * @checkclass: an instance of expected class
-	 * @return: if correct, return object returned by node
-	 * 			if not, return null
-	 */
-	public Object checkType(LOGONode arg0, Object checkclass) {
-		Object var = arg0.run();
-		try {
-			if (var.getClass().equals(checkclass.getClass()))
-				return var;
-			System.out.println("Expected type:" + checkclass.getClass().getName() + 
-						"but given type:" + var.getClass().getName());
-		} catch (Exception e) {
-			
+	Double runAndCheckDouble(LOGONode node, String id) {
+		if (LOGOPP.errorhandler.error())
+			return null;
+		if (LOGOPP.isInterrupted) {
+			LOGOPP.errorhandler.setRunTime(id, "Execution interrupted here.");
+			return null;
 		}
-		return null;
-	} 
+		if (node == null) {
+			LOGOPP.errorhandler.setRunTime(id, "no argument");
+			return null;
+		}
+		Object nodeVal = node.run();
+		if (LOGOPP.errorhandler.error())
+			return null;
+		if (nodeVal == null) {
+			LOGOPP.errorhandler.setRunTime(id, "null argument");
+			return null;
+		}
+		if (!(nodeVal instanceof Double)) {
+			LOGOPP.errorhandler.setRunTime(id, "wrong argument type");
+			return null;
+		}
+		return (Double) nodeVal;
+	}
+
+	String runAndCheckString(LOGONode node, String id, boolean onlyString) {
+		if (LOGOPP.errorhandler.error())
+			return null;
+		if (node == null) {
+			LOGOPP.errorhandler.setRunTime(id, "no argument");
+			return null;
+		}
+		if (LOGOPP.isInterrupted) {
+			LOGOPP.errorhandler.setRunTime(id, "Execution interrupted here.");
+			return null;
+		}
+		Object nodeVal = node.run();
+		if (LOGOPP.errorhandler.error())
+			return null;
+		if (nodeVal == null) {
+			LOGOPP.errorhandler.setRunTime(id, "null argument");
+			return null;
+		}
+		boolean isString = (nodeVal instanceof String);
+		boolean isDouble = (nodeVal instanceof Double);
+		if (!isString && !isDouble || !isString && onlyString) {
+			LOGOPP.errorhandler.setRunTime(id, "wrong argument type");
+			return null;
+		}
+		if (isDouble) {
+			return ((Double)nodeVal).toString();
+		}
+		return (String) nodeVal;
+	}
+	
 }

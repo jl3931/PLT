@@ -10,9 +10,10 @@ public class LOGOChallengeNode extends LOGONode {
 	}
 
 	public Object run() {
+		if (LOGOPP.errorhandler.error())
+			return null;
 		if (id.equals("CHALLENGE") && children.size() == 1)
-			LOGOPP.challenge.loadChallenge((String)(children.get(0).run()),
-										LOGOPP.canvas.getWindow());
+			LOGOPP.challenge.loadChallenge(children.get(0), LOGOPP.canvas.getWindow());
 		else if (id.equals("MATCH") && children.size() == 0)
 			LOGOPP.challenge.match();
 		else if (id.equals("QUIT") && children.size() == 0)
@@ -22,12 +23,11 @@ public class LOGOChallengeNode extends LOGONode {
 		else if (id.equals("SHOWHINT") && children.size() == 0)
 			LOGOPP.challenge.showHint();
 		else if (id.equals("SAVE") && children.size() == 1)
-			LOGOPP.challenge.saveChallenge((String)children.get(0).run());
+			LOGOPP.challenge.saveChallenge(children.get(0));
 		else if (id.equals("WRITEHINT") && children.size() == 1 )
-			LOGOPP.challenge.writeHint((String)children.get(0).run());
+			LOGOPP.challenge.writeHint(children.get(0));
 		else if (id.equals("WRITEHINT") && children.size() == 3 )
-			LOGOPP.challenge.writeHint((String)children.get(0).run(),
-					children.get(1), children.get(2));
+			LOGOPP.challenge.writeHint(children.get(0), children.get(1), children.get(2));
 		else if (id.equals("REMOVEHINT") && children.size() == 1 )
 			LOGOPP.challenge.removeHint(children.get(0));
 		else if (id.equals("REMOVEALLHINT") && children.size() == 0)

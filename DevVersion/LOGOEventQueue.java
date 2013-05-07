@@ -97,8 +97,17 @@ class LOGOEventQueue {
 	}
 
 	public void tick() {
-		if (movements.size() == 0)
+		if (LOGOPP.errorhandler.error() || movements.size() == 0) {
+			LOGOPP.timer.stop();
+			synchronized(LOGOPP.timer){
+				try {     
+		            LOGOPP.timer.notify();  
+		        }
+		        catch (Exception e) {     
+		        }
+	    	}
 			return;
+		}
 		double speed = movements.get(0).turtle.getSpeed();
 		if (move(speed)) {
 			LOGOPP.timer.stop();
@@ -110,6 +119,7 @@ class LOGOEventQueue {
 		        }
 	    	}
     	}
+    	LOGOPP.io.showState();
 	}
 
 	public void clearAllPending() {

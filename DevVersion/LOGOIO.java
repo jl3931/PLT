@@ -64,7 +64,30 @@ public class LOGOIO {
 
 	}
 
-	public void notify(String str) {
-		LOGOPP.noti.setText(str);
+	private String challengeStatus = "";
+	private String status = "";
+
+	public void setChallengeStatus(String str) {
+		if (null == str)
+			return;
+		challengeStatus = str;
+	}
+	public void setStatus(String str) {
+		if (null == str)
+			return;
+		status = str;
+	}
+	public void showState() {
+		LOGOPP.noti.setText("");
+		String content = "[Current Turtle: " +
+						LOGOPP.canvas.getCurTurtle().getName() +
+						", X:" + Integer.toString((int)(LOGOPP.canvas.getCurTurtle().getXPos())) +
+						", Y:" + Integer.toString((int)(LOGOPP.canvas.getCurTurtle().getYPos())) +
+						", Angle: " + Integer.toString((int)(LOGOPP.canvas.getCurTurtle().getAngle())) +
+						"]\n";
+		if (challengeStatus != null && !challengeStatus.equals(""))
+			content += "[CHALLENGE: " + challengeStatus+ "]";
+		content += status;
+		LOGOPP.noti.setText(content);
 	}
 }

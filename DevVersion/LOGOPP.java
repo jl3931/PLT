@@ -16,7 +16,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 	static final int PREV_HEIGHT = 100;
 	static final int CHAR_HEIGHT = 20;
 	static final int CUR_HEIGHT = 60;
-	static final int NOTI_HEIGHT = 20;
+	static final int NOTI_HEIGHT = 40;
 	static final int MARGIN_HEIGHT = 5;
 	static final int ADDITIONAL_HEIGHT = 100;
 	static final int ADDITIONAL_WIDTH = 10;
@@ -68,14 +68,15 @@ public class LOGOPP extends JFrame implements KeyListener {
 		logoPP.setVisible(true);
 		logoPP.changeWindowSize(false);
 		//        logoPP.setResizable(false);
-		LOGOTurtle tur = new LOGOTurtle("local");
-		canvas.putTurtle(tur, canvas.getWidth() / 2, canvas.getHeight() / 2);
+		
 		///////////
 		LOGOTurtle tur2 = new LOGOTurtle("tur2");
 		canvas.putTurtle(tur2, canvas.getWidth() / 2, canvas.getHeight() / 2);
 		canvas.addHistory();
-		noti.setText("Welcome to LOGO++!");
-	
+		LOGOTurtle tur = new LOGOTurtle("local");
+		canvas.putTurtle(tur, canvas.getWidth() / 2, canvas.getHeight() / 2);
+		LOGOPP.io.setStatus("Welcome to LOGO++!");
+		LOGOPP.io.showState();
 	}
 
 	private void initComponents() {
@@ -186,13 +187,15 @@ public class LOGOPP extends JFrame implements KeyListener {
 		case KeyEvent.VK_G:
 			if (e.getModifiers() == KeyEvent.CTRL_MASK && processingCmd) {
 				hasAnimation = false;
-				LOGOPP.io.notify("Now finishing rest work, you may need to wait for a while.");
+				LOGOPP.io.setStatus("Now finishing rest work, you may need to wait for a while.");
+				LOGOPP.io.showState();
 			}
 			break;
 		case KeyEvent.VK_C:
 			if (e.getModifiers() == KeyEvent.CTRL_MASK && processingCmd) {
 				isInterrupted= true;
-				LOGOPP.io.notify("Processing interrupted!");
+				LOGOPP.io.setStatus("Processing interrupted!");
+				LOGOPP.io.showState();
 			}
 			break;
 		case KeyEvent.VK_Z:
@@ -258,8 +261,8 @@ public class LOGOPP extends JFrame implements KeyListener {
 				errorhandler.reset();
 				return;
 			}*/
-			
-			LOGOPP.io.notify("Processing commands");
+			LOGOPP.io.setStatus("Processing commands");
+			LOGOPP.io.showState();
 			processingCmd = true;
 			root.run();
 			if (errorhandler.error()) {
@@ -288,7 +291,8 @@ public class LOGOPP extends JFrame implements KeyListener {
 			errorhandler.reset();
 		}
 		finally {
-			LOGOPP.io.notify("finished!");
+			LOGOPP.io.setStatus("finished!");
+			LOGOPP.io.showState();
 			processingCmd = false;
 			hasAnimation = true;
 			canvas.addHistory();

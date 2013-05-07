@@ -24,65 +24,98 @@ public class LOGOChallenge extends JComponent {
 
     /*******************FOR RECORDING**********************/
     public void record() {
-        if (status == challengeType.CHLG_RECORD) 
-            LOGOPP.io.err("You're already recording a challenge");
+        if (LOGOPP.errorhandler.error())
+            return;
+        if (status == challengeType.CHLG_RECORD)
+            LOGOPP.errorhandler.setRunTime("CHALLENGE", 
+                "You're already recording a challenge");
         else if (status == challengeType.CHLG_PLAY)
-            LOGOPP.io.err("Cannot record a challenge during playing challenge");
+            LOGOPP.errorhandler.setRunTime("CHALLENGE", "Cannot record a challenge during playing challenge.");
         else {
             status = challengeType.CHLG_RECORD;
             hintList = new LOGOHintList();
             LOGOPP.io.out("Now start recording you challenge.");
+            LOGOPP.io.setChallengeStatus("RECORDING");
+            LOGOPP.io.showState();
         }
     }
 
-    public void writeHint(String content) {
-        if (status != challengeType.CHLG_RECORD)
+    public void writeHint(LOGONode arg) {
+        if (status != challengeType.CHLG_RECORD) {
+            LOGOPP.errorhandler.setRunTime("WRITE HINT", 
+                "You can only write hint during recording a challenge.");
             return;
-        hintList.addHint(content, (int)(LOGOPP.canvas.getCurTurtle().getXPos()),
-                            (int)(LOGOPP.canvas.getCurTurtle().getYPos()));
+        }
+        String ret = runAndCheckString(arg, "WRITE HINT");
+        if (LOGOPP.errorhandler.error())
+            return;
+        hintList.addHint(ret, (int)(LOGOPP.canvas.getCurTurtle().getXPos()),
+                                (int)(LOGOPP.canvas.getCurTurtle().getYPos()));
     }
 
-    public void writeHint(String content, LOGONode argx, LOGONode argy) {
-        if (status != challengeType.CHLG_RECORD)
+    public void writeHint(LOGONode args, LOGONode argx, LOGONode argy) {
+        if (status != challengeType.CHLG_RECORD) {
+            LOGOPP.errorhandler.setRunTime("WRITE HINT", 
+                "You can only write hints during recording a challenge.");
             return;
-        Object objx = argx.run();
-        Object objy = argy.run();
-        if (objx != null && objy != null && objx instanceof Double && objy instanceof Double) {
-            int x = (int)(((Double)objx).doubleValue());
-            int y = (int)(((Double)objy).doubleValue());
-            hintList.addHint(content, x, y);
         }
+        String content = runAndCheckString(args, "WRITE HINT");
+        if (LOGOPP.errorhandler.error())
+            return;
+        Double retx = runAndCheckDouble(argx, "WRITE HINT");
+        if (LOGOPP.errorhandler.error())
+            return;
+        Double rety = runAndCheckDouble(argy, "WRITE HINT");
+        if (LOGOPP.errorhandler.error())
+            return;
+        int x = (int)(retx.doubleValue());
+        int y = (int)(rety.doubleValue());
+        hintList.addHint(content, x, y);
     }
 
     public void removeHint(LOGONode arg) {
-        if (status != challengeType.CHLG_RECORD)
+        if (status != challengeType.CHLG_RECORD) {
+            LOGOPP.errorhandler.setRunTime("REMOVE HINT", 
+                "You can only remove hints during recording a challenge.");
             return;
-        Object ret = arg.run();
-        if (ret != null && ret instanceof Double) {
-            int index = (int)(((Double)ret).doubleValue());
-            hintList.removeHint(index);
-            LOGOPP.canvas.repaint();
         }
+        Double ret = runAndCheckDouble(arg, "WRITE HINT");
+        if (LOGOPP.errorhandler.error())
+            return;
+        int index = (int)(ret.doubleValue());
+        hintList.removeHint(index);
+        LOGOPP.canvas.repaint();
     }
 
     public void removeAllHint() {
-        if (status != challengeType.CHLG_RECORD)
+        if (LOGOPP.errorhandler.error())
             return;
+        if (status != challengeType.CHLG_RECORD) {
+            LOGOPP.errorhandler.setRunTime("REMOVE HINT", 
+                "You can only remove hints during recording a challenge.");
+            return;
+        }
         hintList.clear();
         LOGOPP.canvas.repaint();
     }
 
-    public void saveChallenge(String filename) {
-        if (status != challengeType.CHLG_RECORD)
+    public void saveChallenge(LOGONode arg) {
+        if (status != challengeType.CHLG_RECORD) {
+            LOGOPP.errorhandler.setRunTime("SAVE CHALLENGE", 
+                "You can only save challenge recording one.");
             return;
-        LOGOPP.io.debug("saving challenge!");
+        }
+        String filename = runAndCheckString(arg, "SAVE CHALLENGE");
+        if (LOGOPP.errorhandler.error())
+            return;
+        //LOGOPP.io.debug("saving challenge!");
         LOGOHintList hl = hintList;
         if (hintList.hintNumber() == 0)
             hl = null;
         if (BMPIO.saveBMP(filename, LOGOPP.canvas.getBitmap(), hl)) {
-            LOGOPP.io.out("challenge saved!");
+            LOGOPP.io.out("Challenge saved!");
         } else {
-            LOGOPP.io.err("Failed to save challenge!");
+             LOGOPP.errorhandler.setRunTime("SAVE CHALLENGE", "Failed to save challenge!");
         }
     }
 
@@ -95,13 +128,18 @@ public class LOGOChallenge extends JComponent {
 
     /*******************FOR PLAYING**********************/
       public void showHint() {
+        if (LOGOPP.errorhandler.error())
+            return;
         if (status == challengeType.CHLG_PLAY) {
             isShowingHint = !isShowingHint;
             repaint();
         }
     }
 
-    public void loadChallenge(String path, LOGOPP window) {
+    public void loadChallenge(LOGONode arg, LOGOPP window) {
+        String path = runAndCheckString(arg, "LOAD CHALLENGE");
+        if (LOGOPP.errorhandler.error())
+            return;
         bitmap = BMPIO.getBitmapFromBMP(path);
         if (bitmap != null) {
             Object o = BMPIO.getHiddenObject(path);
@@ -119,24 +157,38 @@ public class LOGOChallenge extends JComponent {
             this.repaint();
             windowOn.addChallenge();
             windowOn.changeWindowSize(true);
+            LOGOPP.io.setChallengeStatus("PLAYING");
+            LOGOPP.io.showState();
+        }
+        else {
+            LOGOPP.errorhandler.setRunTime("LOAD CHALLENGE", "Failed to load challenge!");
         }
     }
 
     public void match() {
+        if (LOGOPP.errorhandler.error())
+            return;
         if (status == challengeType.CHLG_PLAY) {
             LOGOPP.io.out("Matching score is: " + 
                 LOGOCanvas.bitmapCompare(bitmap, LOGOPP.canvas.getBitmap())*100
                 + "%");
         }
+        else {
+             LOGOPP.errorhandler.setRunTime("MATCH", "You need to load a challenge first.");
+        }
     }
 
     public void closeChallenge() {
+        if (LOGOPP.errorhandler.error())
+            return;
         if (status == challengeType.CHLG_PLAY) {
             windowOn.changeWindowSize(false);
             windowOn.removeChallenge();
         }
         status = challengeType.CHLG_OFF;
         hintList = null;
+        LOGOPP.io.setChallengeStatus("");
+        LOGOPP.io.showState();
     }
 
     public void paint(Graphics g) {
@@ -153,5 +205,55 @@ public class LOGOChallenge extends JComponent {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    Double runAndCheckDouble(LOGONode node, String id) {
+        if (LOGOPP.errorhandler.error())
+            return null;
+        if (LOGOPP.isInterrupted) {
+            LOGOPP.errorhandler.setRunTime(id, "Execution interrupted here.");
+            return null;
+        }
+        if (node == null) {
+            LOGOPP.errorhandler.setRunTime(id, "no argument");
+            return null;
+        }
+        Object nodeVal = node.run();
+        if (LOGOPP.errorhandler.error())
+            return null;
+        if (nodeVal == null) {
+            LOGOPP.errorhandler.setRunTime(id, "null argument");
+            return null;
+        }
+        if (!(nodeVal instanceof Double)) {
+            LOGOPP.errorhandler.setRunTime(id, "wrong argument type");
+            return null;
+        }
+        return (Double) nodeVal;
+    }
+
+    String runAndCheckString(LOGONode node, String id) {
+        if (LOGOPP.errorhandler.error())
+            return null;
+        if (LOGOPP.isInterrupted) {
+            LOGOPP.errorhandler.setRunTime(id, "Execution interrupted here.");
+            return null;
+        }
+        if (node == null) {
+            LOGOPP.errorhandler.setRunTime(id, "no argument");
+            return null;
+        }
+        Object nodeVal = node.run();
+        if (LOGOPP.errorhandler.error())
+            return null;
+        if (nodeVal == null) {
+            LOGOPP.errorhandler.setRunTime(id, "null argument");
+            return null;
+        }
+        if (!(nodeVal instanceof String)) {
+            LOGOPP.errorhandler.setRunTime(id, "wrong argument type");
+            return null;
+        }
+        return (String) nodeVal;
     }
 }

@@ -250,7 +250,8 @@ public class LOGOCanvas extends JComponent {
 				noti += "LOGO++ only stores previous " + new Integer(hisNum).toString() + " steps.";
 			else
 				noti += "This is your initial canvas";
-			LOGOPP.io.notify(noti);
+			LOGOPP.io.setStatus(noti);
+			LOGOPP.io.showState();
 			return;
 		}
 		curHis--;
@@ -263,7 +264,8 @@ public class LOGOCanvas extends JComponent {
 		LOGOPP.io.debug("redo");
 		if (curHis == history.size()) {
 			String noti = "Cannot redo further. This is your newest version of canvas.";
-			LOGOPP.io.notify(noti);
+			LOGOPP.io.setStatus(noti);
+			LOGOPP.io.showState();
 			return;
 		}
 		curHis++;
