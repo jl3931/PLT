@@ -43,12 +43,12 @@ class LOGOEventQueue {
 		public void setSpeed(double s) {
 			type = movementType.SPEED;
 			argX = s;
-			restSteps += LOGOTurtle.MAX_SPEED;
+			restSteps += 0.;
 		}
 		public void setColor(String color) {
 			type = movementType.COLOR;
 			argS = color;
-			restSteps += LOGOTurtle.MAX_SPEED;
+			restSteps += 0.;
 		}
 		public void setDisplay(boolean show) {
 			type = movementType.DISPLAY;
@@ -67,7 +67,7 @@ class LOGOEventQueue {
 		}
 		public void setTurtle() {
 			type = movementType.TURTLE;
-			restSteps += LOGOTurtle.MAX_SPEED;
+			restSteps += 0.;
 		}
 	}
 
@@ -97,7 +97,7 @@ class LOGOEventQueue {
 			tur.setYPosBack((double)(LOGOPP.canvas.getHeight() / 2));
 			tur.setAngleBack(LOGOTurtle.INIT_ANGLE);
 		}
-		else if (type.equals("SPEED") && args.length == 0) {
+		else if (type.equals("SPEED") && args.length == 1) {
 			move.setSpeed(args[0]);
 		}
 		else if (type.equals("TURTLE") && args.length == 0) {
@@ -105,6 +105,7 @@ class LOGOEventQueue {
 		}
 		else {
 			LOGOPP.io.debug("Wrong arg type for event queue.");
+			return;
 		}
 		movements.add(move);
 	}
@@ -266,12 +267,12 @@ class LOGOEventQueue {
 			}
 			else if (move.type == movementType.SPEED) {
 				move.turtle.setSpeed(move.argX);
-				rest -= LOGOTurtle.MAX_SPEED;
+				rest -= 0.;
 				movements.remove(0);
 			}
 			else if (move.type == movementType.COLOR) {
 				move.turtle.changeColor(move.argS);
-				rest -= LOGOTurtle.MAX_SPEED;
+				rest -= 0.;
 				movements.remove(0);
 			}
 			else if (move.type == movementType.DISPLAY) {
@@ -290,7 +291,7 @@ class LOGOEventQueue {
 				movements.remove(0);
 			}
 			else if (move.type == movementType.TURTLE) {
-				rest -= LOGOTurtle.MAX_SPEED;
+				rest -= 0.;
 				movements.remove(0);
 			}
 		}

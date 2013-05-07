@@ -8,7 +8,7 @@ public class LOGOTurtle{
 	public static final double INIT_ANGLE = 270.;
 	public static final double CIRCLE_DEGREE = 360.;
 	public static final double ANGLE_RATIO = 1.;
-	public static final double MAX_SPEED = 20.;
+	public static final double MAX_SPEED = 200.;
 	public static final double MIN_SPEED = 1.;
 	private double xPos        = 0;
 	private double yPos        = 0;
@@ -16,7 +16,7 @@ public class LOGOTurtle{
 	public double yPosBack 	   = 0;
 	public double angleBack    = INIT_ANGLE;
 	private double angle       = INIT_ANGLE;
-	private double speed       = 10.;
+	private double speed       = 20.;
 	private boolean penDown    = true;
 	private boolean showTurtle = true;
 	private int[] color = new int[] {0, 0, 0}; //{R,G,B}

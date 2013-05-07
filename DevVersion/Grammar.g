@@ -275,7 +275,7 @@ Color
         ;
 
 Setspeed
-        : ('Speed' | 'SPEED' | 'speed')
+        : ('SetSpeed' | 'SETSPEED' | 'setspeed' | 'Setspeed' | 'SS')
         ;
 
 Hideturtle

@@ -19,7 +19,6 @@ public class LOGOBasic {
 			return;
 		double step = (isForward) ? ret.doubleValue() :
 									-(ret.doubleValue());
-		System.out.println("step size:" + step);
 		double directX = Math.cos(Math.toRadians(LOGOPP.canvas.getCurTurtle().getAngleBack()));
 		double directY = Math.sin(Math.toRadians(LOGOPP.canvas.getCurTurtle().getAngleBack()));
 		LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "MOVE", directX * step, directY * step);

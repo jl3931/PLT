@@ -21,7 +21,7 @@ public class LOGOIO {
 	}
 
 	public void debug(String str) {
-		System.out.println(str);
+		//System.out.println(str);
 	}
 
 	public void err(String str) {
