@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class LOGOTurtle{
 	public static final double EPSILON = 0.001;
-	public static final double INIT_ANGLE = -90.;
+	public static final double INIT_ANGLE = 270.;
 	public static final double CIRCLE_DEGREE = 360.;
 	public static final double ANGLE_RATIO = 1.;
 	public static final double MAX_SPEED = 20.;
@@ -71,13 +71,21 @@ public class LOGOTurtle{
 	public String getName() {return name;}
 
 	// seters
-	public void setAngle(double a) {angle = a % CIRCLE_DEGREE;}
-	public void setAngleBack(double a) {angleBack = a % CIRCLE_DEGREE;}
+	public void setAngle(double a) {
+		angle = a % CIRCLE_DEGREE;
+		if (angle < 0.)
+			angle += CIRCLE_DEGREE;
+	}
+	public void setAngleBack(double a) {
+		angleBack = a % CIRCLE_DEGREE;
+		if (angleBack < 0.)
+			angleBack += CIRCLE_DEGREE;
+	}
 	public void setPenDown(boolean p) {penDown = p;}
 	public void setShowTurtle(boolean s) {showTurtle = s;}
 	public void setSpeed(double s) {
 		if (s < MIN_SPEED || s > MAX_SPEED) {
-			LOGOPP.io.err("Wrong value for speed, should be between "
+			LOGOPP.errorhandler.setRunTime("SET SPEED", "Wrong value for speed, should be between "
 				+ new Integer((int)MIN_SPEED).toString() + " and " 
 				+ new Integer((int)MAX_SPEED).toString() + ".");
 			return;
@@ -138,7 +146,6 @@ public class LOGOTurtle{
 			yPosBack = (y > (double)canvasOn.getHeight()) ? (double)canvasOn.getHeight() : yPosBack;
 		}
 	}
-	
 
 	/*
 	 * get color value of current color for BMP file
@@ -154,6 +161,9 @@ public class LOGOTurtle{
 			color[0]=targetColor[0];
 			color[1]=targetColor[1];
 			color[2]=targetColor[2];
+		}
+		else {
+			LOGOPP.errorhandler.setRunTime("COLOR", "Invalid content of color.");
 		}
 	}
 

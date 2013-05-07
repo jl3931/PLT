@@ -68,8 +68,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 		logoPP.setVisible(true);
 		logoPP.changeWindowSize(false);
 		//        logoPP.setResizable(false);
-		
-		///////////
+
 		LOGOTurtle tur2 = new LOGOTurtle("tur2");
 		canvas.putTurtle(tur2, canvas.getWidth() / 2, canvas.getHeight() / 2);
 		canvas.addHistory();
@@ -94,7 +93,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 		cur.getInputMap().put(lParen, "none");
 		KeyStroke lCB = KeyStroke.getKeyStroke('{');
 		cur.getInputMap().put(lCB, "none");
-		KeyStroke lB = KeyStroke.getKeyStroke('[');
+		KeyStroke lB = KeyStroke.getKeyStroke('"');
 		cur.getInputMap().put(lB, "none");
 		prev.setEditable(false);
 		noti.setEditable(false);
@@ -119,10 +118,6 @@ public class LOGOPP extends JFrame implements KeyListener {
 						canvas.getWidth(), NOTI_HEIGHT);
 		pane.revalidate();
 		this.repaint();
-		
-		
-		//DefaultCaret caret = (DefaultCaret)cur.getCaret();  
-		//caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 	}
 
 	public void addChallenge() {
@@ -233,13 +228,16 @@ public class LOGOPP extends JFrame implements KeyListener {
 				else
 					cur.setText(content.substring(0,pos) + "{}" + content.substring(pos));
 				cur.setCaretPosition(pos + 1);
-			} else if (e.getModifiers() == 0 && !processingCmd) {
+			}
+			break;
+		case KeyEvent.VK_QUOTE :
+			if (e.getModifiers() == KeyEvent.SHIFT_MASK && !processingCmd) {
 				int pos = cur.getCaretPosition();
 				String content = cur.getText();
 				if (pos == content.length())
-					cur.append("[]");
+					cur.append("\"\"");
 				else
-					cur.setText(content.substring(0,pos) + "[]" + content.substring(pos));
+					cur.setText(content.substring(0,pos) + "\"\"" + content.substring(pos));
 				cur.setCaretPosition(pos + 1);
 			}
 			break;
@@ -292,7 +290,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 		}
 		finally {
 			LOGOPP.io.setStatus("finished!");
-			LOGOPP.io.showState();
+			//LOGOPP.io.showState();
 			processingCmd = false;
 			hasAnimation = true;
 			canvas.addHistory();

@@ -6,16 +6,16 @@ class LOGOEventQueue {
 
 	private double restSteps = 0.;
 
-	private enum movementType {MOVE, TURN, TELE, ORIGIN};
+	private enum movementType {MOVE, TURN, TELE, ORIGIN, SPEED, COLOR, DISPLAY, DRAW, WRAP, TURTLE};
 
 	class Movements {
 		LOGOTurtle turtle;
-		movementType type;	//Move 	Turn 	Tele
-		double argX;		//restX restA	tarX
-		double argY;		//restY n/a 	tarY
-		double curX;
-		double curY;
-		double curAngle;
+		movementType type;
+		double argX = (double)(LOGOPP.canvas.getWidth() / 2);
+		double argY = (double)(LOGOPP.canvas.getHeight() / 2);
+		String argS = "";
+		boolean argB = true;
+		double curAngle = LOGOTurtle.INIT_ANGLE;
 		public Movements(LOGOTurtle tur) {
 			turtle = tur;
 		}
@@ -40,44 +40,105 @@ class LOGOEventQueue {
 			type = movementType.ORIGIN;
 			restSteps += LOGOTurtle.MAX_SPEED;
 		}
-		public void setCurPos(double x, double y, double a) {
-			curX = x;
-			curY = y;
-			curAngle = a;
+		public void setSpeed(double s) {
+			type = movementType.SPEED;
+			argX = s;
+			restSteps += LOGOTurtle.MAX_SPEED;
+		}
+		public void setColor(String color) {
+			type = movementType.COLOR;
+			argS = color;
+			restSteps += LOGOTurtle.MAX_SPEED;
+		}
+		public void setDisplay(boolean show) {
+			type = movementType.DISPLAY;
+			argB = show;
+			restSteps += LOGOTurtle.MAX_SPEED;
+		}
+		public void setDraw(boolean draw) {
+			type = movementType.DRAW;
+			argB = draw;
+			restSteps += LOGOTurtle.MAX_SPEED;
+		}
+		public void setWrap(boolean wrap) {
+			type = movementType.WRAP;
+			argB = wrap;
+			restSteps += LOGOTurtle.MAX_SPEED;
+		}
+		public void setTurtle() {
+			type = movementType.TURTLE;
+			restSteps += LOGOTurtle.MAX_SPEED;
 		}
 	}
 
 	ArrayList<Movements> movements = new ArrayList<Movements>();
 
 	public void add(LOGOTurtle tur, String type, double... args) {
+		if (null == tur || null == type)
+			return;
+		Movements move = new Movements(tur);
 		if (type.equals("MOVE") && args.length == 2) {
-			Movements move = new Movements(tur);
 			move.setMove(args[0], args[1]);
 			tur.setXPosBack(tur.xPosBack + args[0]);
 			tur.setYPosBack(tur.yPosBack + args[1]);
-			movements.add(move);
 		}
 		else if (type.equals("TURN") && args.length == 1) {
-			Movements move = new Movements(tur);
 			move.setTurn(args[0]);
 			tur.setAngleBack(tur.angleBack - args[0]);
-			movements.add(move);
 		}
 		else if (type.equals("TELE") && args.length == 2) {
-			Movements move = new Movements(tur);
 			move.setTele(args[0], args[1]);
 			tur.setXPosBack(args[0]);
 			tur.setYPosBack(args[1]);
-			movements.add(move);
 		}
 		else if (type.equals("ORIGIN") && args.length == 0) {
-			Movements move = new Movements(tur);
 			move.setOrigin();
 			tur.setXPosBack((double)(LOGOPP.canvas.getWidth() / 2));
 			tur.setYPosBack((double)(LOGOPP.canvas.getHeight() / 2));
 			tur.setAngleBack(LOGOTurtle.INIT_ANGLE);
+		}
+		else if (type.equals("SPEED") && args.length == 0) {
+			move.setSpeed(args[0]);
+		}
+		else if (type.equals("TURTLE") && args.length == 0) {
+			move.setTurtle();
+		}
+		else {
+			LOGOPP.io.debug("Wrong arg type for event queue.");
+		}
+		movements.add(move);
+	}
+
+	public void add(LOGOTurtle tur, String type, String arg) {
+		if (null == tur || null == type || arg == null)
+			return;
+		if (type.equals("COLOR")) {
+			Movements move = new Movements(tur);
+			move.setColor(arg);
 			movements.add(move);
 		}
+		else
+			LOGOPP.io.debug("Wrong arg type for event queue.");
+	}
+
+	public void add(LOGOTurtle tur, String type, boolean arg) {
+		if (null == tur || null == type)
+			return;
+		Movements move = new Movements(tur);
+		if (type.equals("DISPLAY")) {
+			move.setDisplay(arg);
+		}
+		else if (type.equals("DRAW")) {
+			move.setDraw(arg);
+		}
+		else if (type.equals("WRAP")) {
+			move.setWrap(arg);
+		}
+		else {
+			LOGOPP.io.debug("Wrong arg type for event queue.");
+			return;
+		}
+		movements.add(move);
 	}
 
 	public void clearPending(boolean lastTime) {
@@ -124,16 +185,39 @@ class LOGOEventQueue {
 
 	public void clearAllPending() {
 		for (Movements move : movements) {
+			if (LOGOPP.errorhandler.error())
+				break;
 			if (move.type == movementType.TELE) {
 				move.turtle.teleport(move.argX, move.argY);
-			} else if (move.type == movementType.ORIGIN) {
+			}
+			else if (move.type == movementType.ORIGIN) {
 				move.turtle.teleport((double)(LOGOPP.canvas.getWidth() / 2), 
 								(double)(LOGOPP.canvas.getHeight() / 2));
 				move.turtle.setAngle(LOGOTurtle.INIT_ANGLE);
-			} else if (move.type == movementType.MOVE) {
+			}
+			else if (move.type == movementType.MOVE) {
 				move.turtle.moveForward(move.argX, move.argY);
-			} else if (move.type == movementType.TURN) {
+			}
+			else if (move.type == movementType.TURN) {
 				move.turtle.turnTurtle(move.argX);
+			}
+			else if (move.type == movementType.SPEED) {
+				move.turtle.setSpeed(move.argX);
+			}
+			else if (move.type == movementType.COLOR) {
+				move.turtle.changeColor(move.argS);
+			}
+			else if (move.type == movementType.DISPLAY) {
+				move.turtle.setShowTurtle(move.argB);
+			}
+			else if (move.type == movementType.DRAW) {
+				move.turtle.setPenDown(move.argB);
+			}
+			else if (move.type == movementType.WRAP) {
+				LOGOPP.canvas.wrap = move.argB;
+			}
+			else if (move.type == movementType.TURTLE) {
+				//do nothing here
 			}
 		}
 		movements.clear();
@@ -144,6 +228,7 @@ class LOGOEventQueue {
 		double rest = step;
 		while (movements.size() > 0 && rest > LOGOTurtle.EPSILON) {
 			Movements move = movements.get(0);
+			LOGOPP.canvas.changeToTurtle(move.turtle.getName());
 			if (move.type == movementType.TELE) {
 				move.turtle.teleport(move.argX, move.argY);
 				rest -= LOGOTurtle.MAX_SPEED;
@@ -178,6 +263,35 @@ class LOGOEventQueue {
 					else
 						move.argX += move.turtle.getSpeed() * LOGOTurtle.ANGLE_RATIO;
 				}
+			}
+			else if (move.type == movementType.SPEED) {
+				move.turtle.setSpeed(move.argX);
+				rest -= LOGOTurtle.MAX_SPEED;
+				movements.remove(0);
+			}
+			else if (move.type == movementType.COLOR) {
+				move.turtle.changeColor(move.argS);
+				rest -= LOGOTurtle.MAX_SPEED;
+				movements.remove(0);
+			}
+			else if (move.type == movementType.DISPLAY) {
+				move.turtle.setShowTurtle(move.argB);
+				rest -= LOGOTurtle.MAX_SPEED;
+				movements.remove(0);
+			}
+			else if (move.type == movementType.DRAW) {
+				move.turtle.setPenDown(move.argB);
+				rest -= LOGOTurtle.MAX_SPEED;
+				movements.remove(0);
+			}
+			else if (move.type == movementType.WRAP) {
+				LOGOPP.canvas.wrap = move.argB;
+				rest -= LOGOTurtle.MAX_SPEED;
+				movements.remove(0);
+			}
+			else if (move.type == movementType.TURTLE) {
+				rest -= LOGOTurtle.MAX_SPEED;
+				movements.remove(0);
 			}
 		}
 		restSteps -= step - rest;

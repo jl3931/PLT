@@ -1,6 +1,12 @@
 import java.util.Scanner;
 import java.io.IOException;
 import java.io.File;
+
+/*
+ * Functions for basic commands, which are:
+ * FORWARD, BACK, LEFT, RIGHT, HOME, LOAD, SPEED, COLOR
+ * These commands are not actually executed, but put to event queue
+ */
 public class LOGOBasic {
 	/*
 	 * Move turtle forward/backward with arg0.run() length
@@ -75,16 +81,19 @@ public class LOGOBasic {
 		}
 	}
 	
-	public void origin() {
-		LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "ORIGIN");
+	/*
+	 * Put a turtle to origin
+	 * @tur: target turtle
+	 */
+	public void origin(LOGOTurtle tur) {
+		LOGOPP.eventQueue.add(tur, "ORIGIN");
 		LOGOPP.eventQueue.clearPending(false);
 	}
 
-	public void clearScreen() {
-		LOGOPP.canvas.clean();
-		origin();
-	}
-
+	/*
+	 * Print out an expression/string
+	 * @arg: LOGONode containing the content to print
+	 */
 	public void print(LOGONode arg) {
 		String ret = runAndCheckString(arg, "PRINT", false);
 		if (LOGOPP.errorhandler.error())
@@ -97,7 +106,8 @@ public class LOGOBasic {
 		if (LOGOPP.errorhandler.error())
 			return;
 		double value = ret.doubleValue();
-		LOGOPP.canvas.getCurTurtle().setSpeed(value);
+		LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "SPEED", value);
+		LOGOPP.eventQueue.clearPending(false);
 	}
 
 	public void saveImage(LOGONode arg) {
@@ -111,7 +121,8 @@ public class LOGOBasic {
 		String ret = runAndCheckString(arg, "COLOR", true);
 		if (LOGOPP.errorhandler.error())
 			return;
-		LOGOPP.canvas.getCurTurtle().changeColor(ret);
+		LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "COLOR", ret);
+		LOGOPP.eventQueue.clearPending(false);
 	}
 	
 	public void load(LOGONode arg) {
@@ -120,7 +131,7 @@ public class LOGOBasic {
 			return;
 		String filestring = null;
 		try {
-			File file = new File((String)ret);
+			File file = new File(ret);
 			Scanner sc = new Scanner(file);
 			filestring = sc.useDelimiter("\\Z").next();
 			LOGOPP.execute(filestring);
@@ -130,7 +141,18 @@ public class LOGOBasic {
 		}
 	}
 
-	Double runAndCheckDouble(LOGONode node, String id) {
+	public void changeTurtle(LOGONode arg) {
+		String ret = runAndCheckString(arg, "TURTLE", true);
+		if (LOGOPP.errorhandler.error())
+			return;
+		LOGOPP.canvas.changeToTurtle(ret);
+		if (LOGOPP.errorhandler.error())
+			return;
+		LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "TURTLE");
+		LOGOPP.eventQueue.clearPending(false);
+	}
+
+	private static Double runAndCheckDouble(LOGONode node, String id) {
 		if (LOGOPP.errorhandler.error())
 			return null;
 		if (LOGOPP.isInterrupted) {
@@ -155,7 +177,7 @@ public class LOGOBasic {
 		return (Double) nodeVal;
 	}
 
-	String runAndCheckString(LOGONode node, String id, boolean onlyString) {
+	private static String runAndCheckString(LOGONode node, String id, boolean onlyString) {
 		if (LOGOPP.errorhandler.error())
 			return null;
 		if (node == null) {

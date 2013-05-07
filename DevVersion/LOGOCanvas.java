@@ -79,13 +79,14 @@ public class LOGOCanvas extends JComponent {
 	 * @name: name of turtle to switch to
 	 * @return: true if switch successfully
 	 */
-	public boolean changeToTurtle(String name) {
+	public void changeToTurtle(String name) {
 		if (turtlePool.containsKey(name)) {
 			curTurtle = turtlePool.get(name);
-			return true;
 		}
-		else
-			return false;
+		else {
+			LOGOPP.errorhandler.setRunTime("TURTLE", "Cannot find turtle with name:" + name);
+		}
+			
 	}
 
 	/*
@@ -171,6 +172,16 @@ public class LOGOCanvas extends JComponent {
         	tur.setXPos(tur.getXPosBack());
 			tur.setYPos(tur.getYPosBack());
 			tur.setAngle(tur.getAngleBack());
+   		}
+	}
+
+	public void clearScreen() {
+		clean();
+		Iterator it = turtlePool.entrySet().iterator();
+		while (it.hasNext()) {
+        	Map.Entry pairs = (Map.Entry)it.next();
+        	LOGOTurtle tur = (LOGOTurtle)pairs.getValue();
+        	LOGOPP.basic.origin(tur);
    		}
 	}
 

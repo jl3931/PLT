@@ -25,21 +25,40 @@ public class LOGOCommandNode extends LOGONode {
 			if (children.size() == 0) {
 			// commands with 0 arguments
 				if (id.equals("ORIGIN"))
-					LOGOPP.basic.origin();
-				else if (id.equals("CLEARSCREEN"))
-					LOGOPP.basic.clearScreen();
-				else if (id.equals("SHOWTURTLE"))
-					LOGOPP.canvas.getCurTurtle().setShowTurtle(true);
-				else if (id.equals("HIDETURTLE"))
-					LOGOPP.canvas.getCurTurtle().setShowTurtle(false);
-				else if (id.equals("WRAP"))
-					LOGOPP.canvas.wrap = true;
-				else if (id.equals("FENCE"))
-					LOGOPP.canvas.wrap = false;
-				else if (id.equals("PENUP"))
-					LOGOPP.canvas.getCurTurtle().setPenDown(false);
-				else if (id.equals("PENDOWN"))
-					LOGOPP.canvas.getCurTurtle().setPenDown(true);
+					LOGOPP.basic.origin(LOGOPP.canvas.getCurTurtle());
+				else if (id.equals("CLEARSCREEN")) {
+					LOGOPP.canvas.clearScreen();
+				}
+				else if (id.equals("SHOWTURTLE")) {
+					LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "DISPLAY", true);
+					LOGOPP.eventQueue.clearPending(false);
+				}
+				//LOGOPP.canvas.getCurTurtle().setShowTurtle(true);
+				else if (id.equals("HIDETURTLE")) {
+					LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "DISPLAY", false);
+					LOGOPP.eventQueue.clearPending(false);
+				}
+				//LOGOPP.canvas.getCurTurtle().setShowTurtle(false);
+				else if (id.equals("WRAP")) {
+					LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "WRAP", true);
+					LOGOPP.eventQueue.clearPending(false);
+				}
+				//LOGOPP.canvas.wrap = true;
+				else if (id.equals("FENCE")) {
+					LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "WRAP", false);
+					LOGOPP.eventQueue.clearPending(false);
+				}
+				//LOGOPP.canvas.wrap = false;
+				else if (id.equals("PENUP")) {
+					LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "DRAW", false);
+					LOGOPP.eventQueue.clearPending(false);
+				}
+				//LOGOPP.canvas.getCurTurtle().setPenDown(false);
+				else if (id.equals("PENDOWN")) {
+					LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "DRAW", true);
+					LOGOPP.eventQueue.clearPending(false);
+				}
+				//LOGOPP.canvas.getCurTurtle().setPenDown(true);
 
 			} else if (children.size() == 1) {
 				// command with 1 arguments
@@ -65,6 +84,8 @@ public class LOGOCommandNode extends LOGONode {
 					LOGOPP.basic.changeColor(children.get(0));
 				else if (id.equals("LOAD"))
 					LOGOPP.basic.load(children.get(0));
+				else if (id.equals("CHANGETURTLE"))
+					LOGOPP.basic.changeTurtle(children.get(0));
 
 			} else if (children.size() == 2)
 				if (id.equals("SETXY"))
@@ -80,7 +101,7 @@ public class LOGOCommandNode extends LOGONode {
 	private final static HashSet<String> CommandList1 = new HashSet<String>(
 					Arrays.asList(new String[] {"FORWARD", "BACK", "LEFT", 
 							"RIGHT", "SPEED", "SETX", "SETY", "PRINT", "SETSPEED",
-								    "SAVEIMAGE", "CHANGECOLOR", "LOAD"}));
+								    "SAVEIMAGE", "CHANGECOLOR", "LOAD", "CHANGETURTLE"}));
 	private final static HashSet<String> CommandList2 = new HashSet<String>(
 					Arrays.asList(new String[] {"SETXY"}));
 	

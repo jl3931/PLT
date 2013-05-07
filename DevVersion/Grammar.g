@@ -44,6 +44,7 @@ command_expr returns [LOGONode node]
     |   Save String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("SAVEIMAGE", temp);}
     |   Print String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("PRINT", temp);}
     |   Load String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("LOAD", temp);}
+    |   Turtle String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("CHANGETURTLE", temp);}
 	;
 
 command returns [String text]
@@ -274,7 +275,7 @@ Color
         ;
 
 Setspeed
-        : ('Setspeed' | 'SETSPEED' | 'SetSpeed' | 'SS')
+        : ('Speed' | 'SPEED' | 'speed')
         ;
 
 Hideturtle
@@ -287,6 +288,10 @@ Showturtle
 
 Load
 		: ('Load' | 'LOAD' | 'load')
+        ;
+
+Turtle
+        : ('Turtle' | 'TURTLE' | 'turtle')
         ;
 
 Set
