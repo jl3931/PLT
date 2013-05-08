@@ -20,6 +20,8 @@ public class LOGOChallengeNode extends LOGONode {
 			LOGOPP.challenge.closeChallenge();
 		else if (id.equals("RECORD") && children.size() == 0)
 			LOGOPP.challenge.record();
+		else if (id.equals("RECORD") && children.size() == 1)
+			LOGOPP.challenge.resume(children.get(0));
 		else if (id.equals("SHOWHINT") && children.size() == 0)
 			LOGOPP.challenge.showHint();
 		else if (id.equals("SAVE") && children.size() == 1)

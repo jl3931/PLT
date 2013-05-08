@@ -7,7 +7,6 @@ line returns [LOGONode node]
 statement_list returns [LOGONode node]
 		: n=statement_list statement  {$n.node.children.add($statement.node); $node = $n.node; LOGOPP.io.debug("stmt_list->stmt_list");}
 		| statement {$node = $statement.node; LOGOPP.io.debug("stmt_list->stmt");}
-		| challenge {$node = $challenge.node;}
 		;
 
 statement returns [LOGONode node]
@@ -21,6 +20,7 @@ statement returns [LOGONode node]
 commands returns [LOGONode node]
         : command_noarg {$node = $command_noarg.node;}
 		| command_expr {$node = $command_expr.node;}
+        | challenge {$node = $challenge.node;}
 		;
 
 command_noarg returns [LOGONode node]
@@ -176,6 +176,7 @@ challenge returns [LOGONode node]
 		| Match {$node = new LOGOChallengeNode("MATCH"); System.out.println("Match");}
 		| Quit {$node = new LOGOChallengeNode("QUIT"); System.out.println("quit");}
         | Recordchallenge {$node = new LOGOChallengeNode("RECORD");}
+        | Recordchallenge String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("RECORD", temp);}
         | Hint {$node = new LOGOChallengeNode("SHOWHINT");}
         | Hint '(' String ',' e1=expression ',' e2=expression ')' {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("WRITEHINT", temp, $e1.node, $e2.node);}
         | Hint String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("WRITEHINT", temp);}

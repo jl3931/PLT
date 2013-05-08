@@ -29,6 +29,7 @@ public class LOGOCanvas extends JComponent {
 	public LOGOPP getWindow() {return windowOn;}
 	public void setWindow(LOGOPP window) {windowOn = window;}
 	public int[][] getBitmap() {return bitmap;}
+	public void setBitmap(int[][] b) {bitmap = b;}
 
 	/*
 	 * Constructor using default size

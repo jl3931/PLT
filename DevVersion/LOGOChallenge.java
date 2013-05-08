@@ -27,16 +27,47 @@ public class LOGOChallenge extends JComponent {
         if (LOGOPP.errorhandler.error())
             return;
         if (status == challengeType.CHLG_RECORD)
-            LOGOPP.errorhandler.setRunTime("CHALLENGE", 
+            LOGOPP.errorhandler.setRunTime("RECORD CHALLENGE", 
                 "You're already recording a challenge");
         else if (status == challengeType.CHLG_PLAY)
-            LOGOPP.errorhandler.setRunTime("CHALLENGE", "Cannot record a challenge during playing challenge.");
+            LOGOPP.errorhandler.setRunTime("RECORD CHALLENGE", 
+                "Cannot record a challenge during playing challenge.");
         else {
             status = challengeType.CHLG_RECORD;
             hintList = new LOGOHintList();
-            LOGOPP.io.out("Now start recording you challenge.");
+            LOGOPP.io.out("Now start recording your challenge.");
             LOGOPP.io.setChallengeStatus("RECORDING");
             LOGOPP.io.showState();
+        }
+    }
+
+    public void resume(LOGONode arg) {
+        if (status != challengeType.CHLG_OFF) {
+            LOGOPP.errorhandler.setRunTime("RECORD CHALLENGE", 
+                "You can only resume to record a challenge when you are not in challenge mode.");
+            return;
+        }
+        String path = runAndCheckString(arg, "RECORD CHALLENGE");
+        if (LOGOPP.errorhandler.error())
+            return;
+        int[][] map = BMPIO.getBitmapFromBMP(path);
+        if (map != null) {
+            Object o = BMPIO.getHiddenObject(path);
+            if (o instanceof LOGOHintList) {
+                hintList = (LOGOHintList)o;
+                hintList.debugHint();
+            }
+            else
+                hintList = new LOGOHintList();
+            status = challengeType.CHLG_RECORD;
+            LOGOPP.canvas.setBitmap(map);
+            LOGOPP.io.out("Now continue recording challenge.");
+            LOGOPP.io.setChallengeStatus("RECORDING");
+            LOGOPP.io.showState();
+            LOGOPP.canvas.repaint();
+        }
+        else {
+            LOGOPP.errorhandler.setRunTime("RECORD CHALLENGE", "Failed to resume challenge!");
         }
     }
 
