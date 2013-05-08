@@ -79,22 +79,23 @@ public class LOGOIO {
 			angleString = "W";
 		}
 		else if (a > 270 && a < 360) {
-			angleString = "NtoE" + Integer.toString(a - 270) + "o";
+			angleString = "N " + Integer.toString(a - 270) + " E";
 		}
 		else if (a > 180 && a < 270) {
-			angleString = "NtoW" + Integer.toString(270 - a) + "o";
+			angleString = "N " + Integer.toString(270 - a) + " W";
 		}
 		else if (a > 90 && a < 180) {
-			angleString = "StoW" + Integer.toString(a - 90) + "o";
+			angleString = "S " + Integer.toString(a - 90) + " W";
 		}
 		else if (a > 0 && a < 90) {
-			angleString = "StoE" + Integer.toString(90 - a) + "o";
+			angleString = "S " + Integer.toString(90 - a) + " E";
 		}
 		String content = "[Current Turtle: " +
 						LOGOPP.canvas.getCurTurtle().getName() +
 						", X:" + Integer.toString((int)(LOGOPP.canvas.getCurTurtle().getXPos())) +
 						", Y:" + Integer.toString((int)(LOGOPP.canvas.getCurTurtle().getYPos())) +
 						", Angle: " + angleString +
+						", Speed: " + Integer.toString((int)(LOGOPP.canvas.getCurTurtle().getSpeed())) +
 						"]\n";
 
 		if (challengeStatus != null && !challengeStatus.equals(""))

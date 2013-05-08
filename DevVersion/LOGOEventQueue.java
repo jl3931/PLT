@@ -99,6 +99,7 @@ class LOGOEventQueue {
 		}
 		else if (type.equals("SPEED") && args.length == 1) {
 			move.setSpeed(args[0]);
+			tur.setSpeedBack(args[0]);
 		}
 		else if (type.equals("TURTLE") && args.length == 0) {
 			move.setTurtle();

@@ -40,6 +40,22 @@ public class LOGOBasic {
 		LOGOPP.eventQueue.clearPending(false);
 	}
 
+	public void front() {
+		double turn = 0.;
+		double angle = LOGOPP.canvas.getCurTurtle().getAngleBack();
+		if (angle > 90. && angle < 270.) {
+			turn = angle - 270.;
+		}
+		else if (angle > 270.) {
+			turn = angle - 270.;
+		}
+		else if (angle <= 90.){
+			turn  = angle + 90.;
+		}
+		LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "TURN", turn);
+		LOGOPP.eventQueue.clearPending(false);
+	}
+
 	/*
 	 * Directly move target to a certain place
 	 * @arg0: LOGONode returning coordinate(s) of target position

@@ -10,13 +10,17 @@ public class LOGOTurtle{
 	public static final double ANGLE_RATIO = 1.;
 	public static final double MAX_SPEED = 200.;
 	public static final double MIN_SPEED = 1.;
+
 	private double xPos        = 0;
 	private double yPos        = 0;
+	private double angle       = INIT_ANGLE;
 	public double xPosBack	   = 0;
 	public double yPosBack 	   = 0;
 	public double angleBack    = INIT_ANGLE;
-	private double angle       = INIT_ANGLE;
+
 	private double speed       = 20.;
+	private double speedBack   = 20.;
+
 	private boolean penDown    = true;
 	private boolean showTurtle = true;
 	private int[] color = new int[] {0, 0, 0}; //{R,G,B}
@@ -59,16 +63,17 @@ public class LOGOTurtle{
 	}
 
 	// geters
-	public double getXPos() {return xPos;}
-	public double getYPos() {return yPos;}
-	public double getXPosBack() {return xPosBack;}
-	public double getYPosBack() {return yPosBack;}
-	public double getAngle() {return angle;}
-	public double getAngleBack() {return angleBack;}
-	public boolean getPenDown() {return penDown;}
-	public boolean getShowTurtle() {return showTurtle;}
-	public double getSpeed() {return speed;}
-	public String getName() {return name;}
+	public double  getXPos() 		{return xPos;}
+	public double  getYPos() 		{return yPos;}
+	public double  getXPosBack() 	{return xPosBack;}
+	public double  getYPosBack() 	{return yPosBack;}
+	public double  getAngle() 		{return angle;}
+	public double  getAngleBack() 	{return angleBack;}
+	public boolean getPenDown() 	{return penDown;}
+	public boolean getShowTurtle() 	{return showTurtle;}
+	public double  getSpeed() 		{return speed;}
+	public double  getSpeedBack() 	{return speedBack;}
+	public String  getName() 		{return name;}
 
 	// seters
 	public void setAngle(double a) {
@@ -76,13 +81,13 @@ public class LOGOTurtle{
 		if (angle < 0.)
 			angle += CIRCLE_DEGREE;
 	}
+
 	public void setAngleBack(double a) {
 		angleBack = a % CIRCLE_DEGREE;
 		if (angleBack < 0.)
 			angleBack += CIRCLE_DEGREE;
 	}
-	public void setPenDown(boolean p) {penDown = p;}
-	public void setShowTurtle(boolean s) {showTurtle = s;}
+
 	public void setSpeed(double s) {
 		if (s < MIN_SPEED || s > MAX_SPEED) {
 			LOGOPP.errorhandler.setRunTime("SET SPEED", "Wrong value for speed, should be between "
@@ -92,6 +97,12 @@ public class LOGOTurtle{
 		}
 		speed = s;
 	}
+	public void setSpeedBack(double s) {
+		if (s < MIN_SPEED || s > MAX_SPEED)
+			return;
+		speedBack = s;
+	}
+
 	public void setXPos(double x) {
 		if (null == canvasOn)
 			return;
@@ -146,6 +157,9 @@ public class LOGOTurtle{
 			yPosBack = (y > (double)canvasOn.getHeight()) ? (double)canvasOn.getHeight() : yPosBack;
 		}
 	}
+
+	public void setPenDown(boolean p) {penDown = p;}
+	public void setShowTurtle(boolean s) {showTurtle = s;}
 
 	/*
 	 * get color value of current color for BMP file

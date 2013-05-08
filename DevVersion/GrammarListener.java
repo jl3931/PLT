@@ -1,4 +1,4 @@
-// Generated from workspace\Logo++\src\Grammar.g by ANTLR 4.0
+// Generated from Grammar.g by ANTLR 4.0
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
@@ -39,6 +39,9 @@ public interface GrammarListener extends ParseTreeListener {
 	void enterUnary_expression(GrammarParser.Unary_expressionContext ctx);
 	void exitUnary_expression(GrammarParser.Unary_expressionContext ctx);
 
+	void enterPlay_challenge(GrammarParser.Play_challengeContext ctx);
+	void exitPlay_challenge(GrammarParser.Play_challengeContext ctx);
+
 	void enterCommand(GrammarParser.CommandContext ctx);
 	void exitCommand(GrammarParser.CommandContext ctx);
 
@@ -72,9 +75,6 @@ public interface GrammarListener extends ParseTreeListener {
 	void enterFor_expression(GrammarParser.For_expressionContext ctx);
 	void exitFor_expression(GrammarParser.For_expressionContext ctx);
 
-	void enterChallenge(GrammarParser.ChallengeContext ctx);
-	void exitChallenge(GrammarParser.ChallengeContext ctx);
-
 	void enterUnary_operator(GrammarParser.Unary_operatorContext ctx);
 	void exitUnary_operator(GrammarParser.Unary_operatorContext ctx);
 
@@ -86,4 +86,7 @@ public interface GrammarListener extends ParseTreeListener {
 
 	void enterIteration_statement(GrammarParser.Iteration_statementContext ctx);
 	void exitIteration_statement(GrammarParser.Iteration_statementContext ctx);
+
+	void enterRecord_challenge(GrammarParser.Record_challengeContext ctx);
+	void exitRecord_challenge(GrammarParser.Record_challengeContext ctx);
 }

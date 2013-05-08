@@ -2,7 +2,7 @@ grammar Grammar;
 
 line returns [LOGONode node]
 		: statement_list EOF {$node = $statement_list.node; LOGOPP.io.debug("line->stmt_list");}
-		| challenge EOF {$node = $challenge.node;}
+		| play_challenge EOF {$node = $play_challenge.node;}
 		| Import String EOF
 		;
 		
@@ -22,13 +22,14 @@ statement returns [LOGONode node]
 commands returns [LOGONode node]
         : command_noarg {$node = $command_noarg.node;}
 		| command_expr {$node = $command_expr.node;}
+        | record_challenge {$node = $record_challenge.node;}
 		;
 
 command_noarg returns [LOGONode node]
     :   Getxy {$node =  new LOGOCommandNode("GETXY");}
     |   Clearscreen {$node =  new LOGOCommandNode("CLEARSCREEN");}
     |   Origin {$node =  new LOGOCommandNode("ORIGIN");}
-    |	Front
+    |	Front {$node = new LOGOCommandNode("FRONT");}
     |	Wrap {$node =  new LOGOCommandNode("WRAP");}
     |	Fence {$node =  new LOGOCommandNode("FENCE");}
     |	Penup {$node =  new LOGOCommandNode("PENUP");}
@@ -54,9 +55,8 @@ command returns [String text]
 	|	Right {$text = new String("RIGHT");}
 	|	Setx {$text = new String("SETX");}
     |	Sety {$text = new String("SETY");}
-    |	Speed {$text = new String("SPEED");}
+    |	Speed {$text = new String("SETSPEED");}
     |	Print {$text = new String("PRINT");}
-    |   Setspeed {$text = new String("SETSPEED");}
 	;
 
 expression returns [LOGONode node]
@@ -112,9 +112,9 @@ unary_operator returns [String text]
         
 postfix_expression returns [LOGONode node]
 		: n=postfix_expression '(' expression_list ')'  {$node = new LOGOFunctionNode($n.node, "execute", $expression_list.node); LOGOPP.io.debug("funcall test");}
-		| Getx
-		| Gety
-		| Getspeed
+		| Getx {$node = new LOGOCommandNode("GETX");}
+		| Gety {$node = new LOGOCommandNode("GETY");}
+		| Getspeed {$node = new LOGOCommandNode("GETSPEED");}
 		| primary_expression {$node = $primary_expression.node; LOGOPP.io.debug("postfix->primary " + $node.id);}
 		;
 
@@ -174,19 +174,22 @@ funcall returns [LOGONode node]
 		;
         
 /* -------------------------- challenge ---------------------------*/
-challenge returns [LOGONode node]
-		: Challenge String { LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("CHALLENGE", temp); System.out.println($String.text);}
-		| Match {$node = new LOGOChallengeNode("MATCH"); System.out.println("Match");}
-		| Quit {$node = new LOGOChallengeNode("QUIT"); System.out.println("quit");}
+record_challenge returns [LOGONode node]
+		: Quit {$node = new LOGOChallengeNode("QUIT"); System.out.println("quit");}
         | Recordchallenge {$node = new LOGOChallengeNode("RECORD");}
         | Recordchallenge String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("RECORD", temp);}
-        | Hint {$node = new LOGOChallengeNode("SHOWHINT");}
         | Hint '(' String ',' e1=expression ',' e2=expression ')' {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("WRITEHINT", temp, $e1.node, $e2.node);}
         | Hint String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("WRITEHINT", temp);}
         | Removehint Number {LOGONode temp = new LOGOLeaf($Number.text); $node = new LOGOChallengeNode("REMOVEHINT", temp);}
         | Removehint {$node = new LOGOChallengeNode("REMOVEALLHINT");}
         | Savechallenge String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("SAVE", temp);}
 		;
+
+play_challenge returns [LOGONode node]
+        :Challenge String { LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("CHALLENGE", temp); System.out.println($String.text);}
+        | Match {$node = new LOGOChallengeNode("MATCH"); System.out.println("Match");}
+        | Hint {$node = new LOGOChallengeNode("SHOWHINT");}
+        ;
 
 catch[RecognitionException e] {throw e;}
 
