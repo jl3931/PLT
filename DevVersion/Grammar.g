@@ -2,6 +2,8 @@ grammar Grammar;
 
 line returns [LOGONode node]
 		: statement_list EOF {$node = $statement_list.node; LOGOPP.io.debug("line->stmt_list");}
+		| challenge EOF {$node = $challenge.node;}
+		| Import String EOF
 		;
 		
 statement_list returns [LOGONode node]
@@ -20,15 +22,13 @@ statement returns [LOGONode node]
 commands returns [LOGONode node]
         : command_noarg {$node = $command_noarg.node;}
 		| command_expr {$node = $command_expr.node;}
-        | challenge {$node = $challenge.node;}
 		;
 
 command_noarg returns [LOGONode node]
-    :   Getx {$node =  new LOGOCommandNode("GETX");}
-    |   Gety {$node =  new LOGOCommandNode("GETY");}
-    |   Getxy {$node =  new LOGOCommandNode("GETXY");}
+    :   Getxy {$node =  new LOGOCommandNode("GETXY");}
     |   Clearscreen {$node =  new LOGOCommandNode("CLEARSCREEN");}
     |   Origin {$node =  new LOGOCommandNode("ORIGIN");}
+    |	Front
     |	Wrap {$node =  new LOGOCommandNode("WRAP");}
     |	Fence {$node =  new LOGOCommandNode("FENCE");}
     |	Penup {$node =  new LOGOCommandNode("PENUP");}
@@ -112,6 +112,9 @@ unary_operator returns [String text]
         
 postfix_expression returns [LOGONode node]
 		: n=postfix_expression '(' expression_list ')'  {$node = new LOGOFunctionNode($n.node, "execute", $expression_list.node); LOGOPP.io.debug("funcall test");}
+		| Getx
+		| Gety
+		| Getspeed
 		| primary_expression {$node = $primary_expression.node; LOGOPP.io.debug("postfix->primary " + $node.id);}
 		;
 
@@ -138,15 +141,15 @@ assignment_expression returns [LOGONode node]
 
 /* -------------- conditional and iterations (implementation still in progress) -----*/
 conditional_statement returns [LOGONode node]
-		: If LPAREN expression RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOConditionalNode("if", $expression.node, $statement_list.node); LOGOPP.io.debug("if" + $node.id);}
-		| If LPAREN expression RPAREN LBRACKET n = statement_list RBRACKET Else LBRACKET m = statement_list RBRACKET{$node = new LOGOConditionalNode("if_else", $expression.node, $n.node, $m.node); LOGOPP.io.debug("if_else" + $node.id);}
+		: If LPAREN expression RPAREN LBRACE statement_list RBRACE {$node = new LOGOConditionalNode("if", $expression.node, $statement_list.node); LOGOPP.io.debug("if" + $node.id);}
+		| If LPAREN expression RPAREN LBRACE n = statement_list RBRACE Else LBRACE m = statement_list RBRACE{$node = new LOGOConditionalNode("if_else", $expression.node, $n.node, $m.node); LOGOPP.io.debug("if_else" + $node.id);}
 		;
 
 iteration_statement returns [LOGONode node]
-        : While LPAREN expression RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOIterationNode("while", $expression.node, $statement_list.node); LOGOPP.io.debug("while" + $node.id);}
-        | For id '=' for_expression LBRACKET statement_list RBRACKET {$node = new LOGOIterationNode("for", $id.node, $for_expression.node, $statement_list.node); LOGOPP.io.debug("for" + $node.id);}
-        | For LPAREN id '=' for_expression RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOIterationNode("for", $id.node, $for_expression.node, $statement_list.node); LOGOPP.io.debug("for" + $node.id);}
-        | Repeat expression LBRACKET statement_list RBRACKET {$node = new LOGOIterationNode("repeat", $expression.node, $statement_list.node); LOGOPP.io.debug("repeat" + $node.id);}
+        : While LPAREN expression RPAREN LBRACE statement_list RBRACE {$node = new LOGOIterationNode("while", $expression.node, $statement_list.node); LOGOPP.io.debug("while" + $node.id);}
+        | For id '=' for_expression LBRACE statement_list RBRACE {$node = new LOGOIterationNode("for", $id.node, $for_expression.node, $statement_list.node); LOGOPP.io.debug("for" + $node.id);}
+        | For LPAREN id '=' for_expression RPAREN LBRACE statement_list RBRACE {$node = new LOGOIterationNode("for", $id.node, $for_expression.node, $statement_list.node); LOGOPP.io.debug("for" + $node.id);}
+        | Repeat expression LBRACE statement_list RBRACE {$node = new LOGOIterationNode("repeat", $expression.node, $statement_list.node); LOGOPP.io.debug("repeat" + $node.id);}
         ;
 
 for_expression returns [LOGONode node]
@@ -157,8 +160,8 @@ for_expression returns [LOGONode node]
 /* ----------------------- function------------------------ */
 
 function_definition returns [LOGONode node]
-		: Function id LPAREN RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOFunctionNode($id.node, "define",  null, $statement_list.node);LOGOPP.io.debug("func_noarg");}
-		| Function id LPAREN identifier_list RPAREN LBRACKET statement_list RBRACKET {$node = new LOGOFunctionNode($id.node, "define", $identifier_list.list, $statement_list.node);LOGOPP.io.debug("func_arg");}
+		: Function id LPAREN RPAREN LBRACE statement_list RBRACE {$node = new LOGOFunctionNode($id.node, "define",  null, $statement_list.node);LOGOPP.io.debug("func_noarg");}
+		| Function id LPAREN identifier_list RPAREN LBRACE statement_list RBRACE {$node = new LOGOFunctionNode($id.node, "define", $identifier_list.list, $statement_list.node);LOGOPP.io.debug("func_arg");}
     	;
 
 identifier_list returns [LOGOIdList list]
@@ -239,6 +242,10 @@ Origin
         : ('Origin' | 'ORIGIN' | 'Home' | 'HOME')
         ;
 
+Front
+		: ('Front' | 'FRONT' | 'front' | 'FaceFront' | 'FACEFRONT' | 'facefront' | 'Facefront' | 'FF')
+		;
+
 Wrap
         : ('Wrap' | 'WRAP')
         ;
@@ -254,6 +261,10 @@ Getx
 Gety
         : ('Gety' | 'GETY')
         ;
+
+Getspeed
+		: ('GetSpeed' | 'GS' | 'GETSPEED' | 'getspeed' | 'Getspeed')
+		;
 
 Getxy
         : ('Getxy' | 'GETXY' | 'GPS')
@@ -315,11 +326,11 @@ RPAREN
 		: ')'
 		;
 
-LBRACKET
+LBRACE
 		: '{'
 		;
 
-RBRACKET
+RBRACE
 		: '}'
 		;
 		
@@ -338,6 +349,10 @@ Repeat
 Function
     	: ('FUNCTION' | 'function')
     	;
+    	
+Import
+		: ('IMPORT' | 'Import' | 'import')
+		;
     	
 Challenge
 		: ('Challenge' | 'CHALLENGE' | 'challenge')
