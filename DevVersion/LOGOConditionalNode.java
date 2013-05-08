@@ -26,19 +26,43 @@ public class LOGOConditionalNode extends LOGONode{
 	public Object run() {
 		double bool;
 		double true_ = (double) 1;
+		Object ret = null;
+		int we_run_it = 0;
 		if (id.equals("if")) {
 			bool = runAndCheck(children.get(0));
-			if (bool == true_)
-				return children.get(1).run();
+			if (LOGOPP.errorhandler.error())
+				return null;
+			if (bool == true_) {
+				we_run_it = 1;
+				ret = children.get(1).run();
+				if (LOGOPP.errorhandler.error())
+					return null;
+			}
+			if (we_run_it == 1) {
+				return ret;
+			}
 			return null;
 		}
 		if (id.equals("if_else")) {
 			bool = runAndCheck(children.get(0));
-			if (bool == true_)
-				return children.get(1).run();
-			else
-				return children.get(2).run();
+			if (LOGOPP.errorhandler.error())
+				return null;
+			if (bool == true_) {
+				we_run_it = 1;
+				ret = children.get(1).run();
+				if (LOGOPP.errorhandler.error())
+					return null;
+			} else {
+				we_run_it = 1;
+				ret = children.get(2).run();
+				if (LOGOPP.errorhandler.error())
+					return null;
+			}
+			if (we_run_it == 1) {
+				return ret;
+			}
 		}
+		LOGOPP.errorhandler.setRunTime(id, "unrecognised condition command");
 		return null;
 	}
 }
