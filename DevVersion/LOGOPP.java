@@ -219,7 +219,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 		}
 		catch (Exception e) {
 			//errorhandler.set(e.toString());
-			errorhandler.set("Invalid command");
+			errorhandler.set(e.toString());
 			errorhandler.errorOut();
 			errorhandler.reset();
 		}

@@ -65,7 +65,9 @@ class LOGOFunction {
 		LOGOPP.io.debug("function.run");
 		if (LOGOPP.errorhandler.error())
 			return null;
-		Object[] argList = (Object[])args.run();
+		Object[] argList = null;
+		if (args != null)
+			argList = (Object[])args.run();
 		LOGOPP.symboltable.push();
 		setArg(argList);
 		if (LOGOPP.errorhandler.error()) {
