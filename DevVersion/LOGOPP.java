@@ -188,8 +188,8 @@ public class LOGOPP extends JFrame implements KeyListener {
 			break;
 		case KeyEvent.VK_C:
 			if (e.getModifiers() == KeyEvent.CTRL_MASK && processingCmd) {
-				isInterrupted= true;
-				LOGOPP.io.setStatus("Processing interrupted!");
+				isInterrupted = true;
+				LOGOPP.io.setStatus("Process interrupted!");
 				LOGOPP.io.showState();
 			}
 			break;
@@ -266,14 +266,15 @@ public class LOGOPP extends JFrame implements KeyListener {
 			if (errorhandler.error()) {
 				errorhandler.errorOut();
 				errorhandler.reset();
-			}
-			else {
 				if (isInterrupted) {
 					LOGOPP.eventQueue.interrupt();
 					LOGOPP.canvas.interrupt();
 					isInterrupted = false;
+					System.out.println("interrupt");
 				}
-				else if (!hasAnimation) {
+			}
+			else {
+				if (!hasAnimation) {
 					LOGOPP.eventQueue.clearAllPending();
 				}
 				else {
@@ -283,19 +284,15 @@ public class LOGOPP extends JFrame implements KeyListener {
 			}
 		}
 		catch (Exception e) {
-			//errorhandler.set(e.toString());
-<<<<<<< HEAD
-			errorhandler.set(e.toString());
-=======
 			if (!errorhandler.error())
 				errorhandler.set("Invalid command");
->>>>>>> 8cbb5df4681209f357aa4bc83cfed021765e5522
 			errorhandler.errorOut();
 			errorhandler.reset();
 		}
 		finally {
 			LOGOPP.io.setStatus("finished!");
 			//LOGOPP.io.showState();
+			isInterrupted = false;
 			processingCmd = false;
 			hasAnimation = true;
 			canvas.addHistory();
