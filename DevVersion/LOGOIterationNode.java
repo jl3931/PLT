@@ -27,19 +27,36 @@ public class LOGOIterationNode extends LOGONode{
 	public Object run() {
 		double bool;
 		double true_ = (double) 1;
+		Object ret = null;
+		int we_run_it = 0;
 		if (id.equals("while")) {
 			bool = runAndCheck(children.get(0));
+			if (LOGOPP.errorhandler.error())
+				return null;
 			while (bool == true_) {
-				children.get(1).run();
+				we_run_it = 1;
+				ret = children.get(1).run();
 				bool = runAndCheck(children.get(0));
+				if (LOGOPP.errorhandler.error())
+					return null;
 			}
+			if (we_run_it == 1)
+				return ret;
 			return null;
 		}
 		if (id.equals("repeat")) {
 			double iterator = runAndCheck(children.get(0));
+			if (LOGOPP.errorhandler.error())
+				return null;
 			double i = 1;
-			for (; i <= iterator; i++)
-				children.get(1).run();
+			for (; i <= iterator; i++) {
+				we_run_it = 1;
+				ret = children.get(1).run();
+				if (LOGOPP.errorhandler.error())
+					return null;
+			}
+			if (we_run_it == 1)
+				return ret;
 			return null;
 		}
 	
@@ -58,15 +75,23 @@ public class LOGOIterationNode extends LOGONode{
 			} else {
 				LOGOPP.errorhandler.setRunTime(id, "Wrong condition in for loop");
 			}
-			//int num_of_iteration = (int) ((fini - init) / pace) + 1;
+			if (LOGOPP.errorhandler.error())
+				return null;
 			double iterator;
 			for (iterator = init; iterator <= fini; iterator += pace) {
 				LOGOPP.symboltable.set(children.get(0).id, iterator);
-				children.get(2).run();
+				if (LOGOPP.errorhandler.error())
+					return null;
+				we_run_it = 1;
+				ret = children.get(2).run();
+				if (LOGOPP.errorhandler.error())
+					return null;
 			}
+			if (we_run_it == 1)
+				return ret;
 			return null;
 		}
-		
+		LOGOPP.errorhandler.setRunTime(id, "unrecognised iteration command");
 		return null;		
 
 	}

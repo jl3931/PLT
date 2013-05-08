@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.text.*;
 import java.util.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.*;
@@ -15,18 +16,19 @@ public class LOGOPP extends JFrame implements KeyListener {
 	static final int PREV_HEIGHT = 100;
 	static final int CHAR_HEIGHT = 20;
 	static final int CUR_HEIGHT = 60;
-	static final int NOTI_HEIGHT = 20;
+	static final int NOTI_HEIGHT = 40;
 	static final int MARGIN_HEIGHT = 5;
 	static final int ADDITIONAL_HEIGHT = 100;
 	static final int ADDITIONAL_WIDTH = 10;
-	static final int TIMER_INTERVAL = 10;
+	static final int TIMER_INTERVAL = 20;
 	static boolean hasAnimation = true;
 	static boolean processingCmd = false;
+	static boolean isInterrupted = false;
 	static ActionListener updateCanvas = new ActionListener() {
 		public void actionPerformed(ActionEvent evt) {
 			javax.swing.SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					LOGOPP.canvas.getCurTurtle().move();
+					LOGOPP.eventQueue.tick();
 				}
 			});
 		}
@@ -39,7 +41,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 	static LOGOCanvas canvas = new LOGOCanvas("LOGO++", 600, 400);
 	static LOGOInterpreter interpreter = new LOGOInterpreter();
 	static LOGOBasic basic = new LOGOBasic();
-
+	static LOGOEventQueue eventQueue = new LOGOEventQueue();
 	static ArrayList<String> commandHistory = new ArrayList<String>();
 	static int curCmdIndex = 0;
 	static LOGOChallenge challenge = new LOGOChallenge();
@@ -66,14 +68,14 @@ public class LOGOPP extends JFrame implements KeyListener {
 		logoPP.setVisible(true);
 		logoPP.changeWindowSize(false);
 		//        logoPP.setResizable(false);
-		LOGOTurtle tur = new LOGOTurtle("local");
-		canvas.putTurtle(tur, canvas.getWidth() / 2, canvas.getHeight() / 2);
-		///////////
+
 		LOGOTurtle tur2 = new LOGOTurtle("tur2");
 		canvas.putTurtle(tur2, canvas.getWidth() / 2, canvas.getHeight() / 2);
 		canvas.addHistory();
-		noti.setText("Welcome to LOGO++!");
-	
+		LOGOTurtle tur = new LOGOTurtle("local");
+		canvas.putTurtle(tur, canvas.getWidth() / 2, canvas.getHeight() / 2);
+		LOGOPP.io.setStatus("Welcome to LOGO++!");
+		LOGOPP.io.showState();
 	}
 
 	private void initComponents() {
@@ -87,6 +89,12 @@ public class LOGOPP extends JFrame implements KeyListener {
 	private void addComponentsToPane() {
 		KeyStroke enter = KeyStroke.getKeyStroke("ENTER");
 		cur.getInputMap().put(enter, "none");
+		KeyStroke lParen = KeyStroke.getKeyStroke('(');
+		cur.getInputMap().put(lParen, "none");
+		KeyStroke lCB = KeyStroke.getKeyStroke('{');
+		cur.getInputMap().put(lCB, "none");
+		KeyStroke lB = KeyStroke.getKeyStroke('"');
+		cur.getInputMap().put(lB, "none");
 		prev.setEditable(false);
 		noti.setEditable(false);
 		noti.setForeground(Color.GRAY);
@@ -142,7 +150,13 @@ public class LOGOPP extends JFrame implements KeyListener {
 		case KeyEvent.VK_ENTER:
 			//////////////////////
 			if (e.getModifiers() == KeyEvent.CTRL_MASK) {
-				cur.append("\n");
+				int pos = cur.getCaretPosition();
+				String content = cur.getText();
+				if (pos == content.length())
+					cur.append("\n");
+				else
+					cur.setText(content.substring(0,pos) + "\n" + content.substring(pos));
+				cur.setCaretPosition(pos + 1);
 			} else {
 				LOGOPP.io.in();
 			}
@@ -165,10 +179,18 @@ public class LOGOPP extends JFrame implements KeyListener {
 				}
 			}
 			break;
-		case KeyEvent.VK_C:
+		case KeyEvent.VK_G:
 			if (e.getModifiers() == KeyEvent.CTRL_MASK && processingCmd) {
 				hasAnimation = false;
-				LOGOPP.io.notify("Now finishing rest work, you may need to wait for a while.");
+				LOGOPP.io.setStatus("Now finishing rest work, you may need to wait for a while.");
+				LOGOPP.io.showState();
+			}
+			break;
+		case KeyEvent.VK_C:
+			if (e.getModifiers() == KeyEvent.CTRL_MASK && processingCmd) {
+				isInterrupted= true;
+				LOGOPP.io.setStatus("Processing interrupted!");
+				LOGOPP.io.showState();
 			}
 			break;
 		case KeyEvent.VK_Z:
@@ -179,6 +201,44 @@ public class LOGOPP extends JFrame implements KeyListener {
 		case KeyEvent.VK_Y:
 			if (e.getModifiers() == KeyEvent.CTRL_MASK && !processingCmd) {
 				canvas.redo();
+			}
+			break;
+		case KeyEvent.VK_Q:
+			if (e.getModifiers() == KeyEvent.CTRL_MASK && !processingCmd) {
+				System.exit(0);
+			}
+			break;
+		case KeyEvent.VK_9:
+			if (e.getModifiers() == KeyEvent.SHIFT_MASK && !processingCmd) {
+				int pos = cur.getCaretPosition();
+				String content = cur.getText();
+				if (pos == content.length())
+					cur.append("()");
+				else
+					cur.setText(content.substring(0,pos) + "()" + content.substring(pos));
+				cur.setCaretPosition(pos + 1);
+			}
+			break;
+		case KeyEvent.VK_OPEN_BRACKET :
+			if (e.getModifiers() == KeyEvent.SHIFT_MASK && !processingCmd) {
+				int pos = cur.getCaretPosition();
+				String content = cur.getText();
+				if (pos == content.length())
+					cur.append("{}");
+				else
+					cur.setText(content.substring(0,pos) + "{}" + content.substring(pos));
+				cur.setCaretPosition(pos + 1);
+			}
+			break;
+		case KeyEvent.VK_QUOTE :
+			if (e.getModifiers() == KeyEvent.SHIFT_MASK && !processingCmd) {
+				int pos = cur.getCaretPosition();
+				String content = cur.getText();
+				if (pos == content.length())
+					cur.append("\"\"");
+				else
+					cur.setText(content.substring(0,pos) + "\"\"" + content.substring(pos));
+				cur.setCaretPosition(pos + 1);
 			}
 			break;
 		}
@@ -199,8 +259,8 @@ public class LOGOPP extends JFrame implements KeyListener {
 				errorhandler.reset();
 				return;
 			}*/
-			
-			LOGOPP.io.notify("Processing commands");
+			LOGOPP.io.setStatus("Processing commands");
+			LOGOPP.io.showState();
 			processingCmd = true;
 			root.run();
 			if (errorhandler.error()) {
@@ -208,23 +268,34 @@ public class LOGOPP extends JFrame implements KeyListener {
 				errorhandler.reset();
 			}
 			else {
-				if (!hasAnimation) {
-					canvas.getCurTurtle().clearAllPending();
+				if (isInterrupted) {
+					LOGOPP.eventQueue.interrupt();
+					LOGOPP.canvas.interrupt();
+					isInterrupted = false;
+				}
+				else if (!hasAnimation) {
+					LOGOPP.eventQueue.clearAllPending();
 				}
 				else {
-					canvas.getCurTurtle().clearPending(true);
+					LOGOPP.eventQueue.clearPending(true);
 				}
 				canvas.repaint();
 			}
 		}
 		catch (Exception e) {
 			//errorhandler.set(e.toString());
+<<<<<<< HEAD
 			errorhandler.set(e.toString());
+=======
+			if (!errorhandler.error())
+				errorhandler.set("Invalid command");
+>>>>>>> 8cbb5df4681209f357aa4bc83cfed021765e5522
 			errorhandler.errorOut();
 			errorhandler.reset();
 		}
 		finally {
-			LOGOPP.io.notify("finished!");
+			LOGOPP.io.setStatus("finished!");
+			//LOGOPP.io.showState();
 			processingCmd = false;
 			hasAnimation = true;
 			canvas.addHistory();

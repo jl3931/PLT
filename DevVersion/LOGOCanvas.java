@@ -29,6 +29,7 @@ public class LOGOCanvas extends JComponent {
 	public LOGOPP getWindow() {return windowOn;}
 	public void setWindow(LOGOPP window) {windowOn = window;}
 	public int[][] getBitmap() {return bitmap;}
+	public void setBitmap(int[][] b) {bitmap = b;}
 
 	/*
 	 * Constructor using default size
@@ -79,13 +80,14 @@ public class LOGOCanvas extends JComponent {
 	 * @name: name of turtle to switch to
 	 * @return: true if switch successfully
 	 */
-	public boolean changeToTurtle(String name) {
+	public void changeToTurtle(String name) {
 		if (turtlePool.containsKey(name)) {
 			curTurtle = turtlePool.get(name);
-			return true;
 		}
-		else
-			return false;
+		else {
+			LOGOPP.errorhandler.setRunTime("TURTLE", "Cannot find turtle with name:" + name);
+		}
+			
 	}
 
 	/*
@@ -98,6 +100,8 @@ public class LOGOCanvas extends JComponent {
 		tur.canvasOn = this;
 		tur.setXPos((double)x);
 		tur.setYPos((double)y);
+		tur.setXPosBack((double)x);
+		tur.setYPosBack((double)y);
 		turtlePool.put(tur.getName(), tur);
 		curTurtle = tur;
 	}
@@ -161,6 +165,26 @@ public class LOGOCanvas extends JComponent {
     	LOGOPP.challenge.printHints(g);
 	}
 
+	public void interrupt() {
+		Iterator it = turtlePool.entrySet().iterator();
+    	while (it.hasNext()) {
+        	Map.Entry pairs = (Map.Entry)it.next();
+        	LOGOTurtle tur = (LOGOTurtle)pairs.getValue();
+        	tur.setXPos(tur.getXPosBack());
+			tur.setYPos(tur.getYPosBack());
+			tur.setAngle(tur.getAngleBack());
+   		}
+	}
+
+	public void clearScreen() {
+		clean();
+		Iterator it = turtlePool.entrySet().iterator();
+		while (it.hasNext()) {
+        	Map.Entry pairs = (Map.Entry)it.next();
+        	LOGOTurtle tur = (LOGOTurtle)pairs.getValue();
+        	LOGOPP.basic.origin(tur);
+   		}
+	}
 
 
 
@@ -238,7 +262,8 @@ public class LOGOCanvas extends JComponent {
 				noti += "LOGO++ only stores previous " + new Integer(hisNum).toString() + " steps.";
 			else
 				noti += "This is your initial canvas";
-			LOGOPP.io.notify(noti);
+			LOGOPP.io.setStatus(noti);
+			LOGOPP.io.showState();
 			return;
 		}
 		curHis--;
@@ -251,7 +276,8 @@ public class LOGOCanvas extends JComponent {
 		LOGOPP.io.debug("redo");
 		if (curHis == history.size()) {
 			String noti = "Cannot redo further. This is your newest version of canvas.";
-			LOGOPP.io.notify(noti);
+			LOGOPP.io.setStatus(noti);
+			LOGOPP.io.showState();
 			return;
 		}
 		curHis++;

@@ -7,7 +7,6 @@ line returns [LOGONode node]
 statement_list returns [LOGONode node]
 		: n=statement_list statement  {$n.node.children.add($statement.node); $node = $n.node; LOGOPP.io.debug("stmt_list->stmt_list");}
 		| statement {$node = $statement.node; LOGOPP.io.debug("stmt_list->stmt");}
-		| challenge {$node = $challenge.node;}
 		;
 
 statement returns [LOGONode node]
@@ -21,6 +20,7 @@ statement returns [LOGONode node]
 commands returns [LOGONode node]
         : command_noarg {$node = $command_noarg.node;}
 		| command_expr {$node = $command_expr.node;}
+        | challenge {$node = $challenge.node;}
 		;
 
 command_noarg returns [LOGONode node]
@@ -42,7 +42,9 @@ command_expr returns [LOGONode node]
     |   Setxy '(' a=expression ',' b=expression ')' {$node = new LOGOCommandNode("SETXY", $a.node, $b.node);}
     |   Color String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("CHANGECOLOR", temp);}
     |   Save String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("SAVEIMAGE", temp);}
+    |   Print String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("PRINT", temp);}
     |   Load String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("LOAD", temp);}
+    |   Turtle String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("CHANGETURTLE", temp);}
 	;
 
 command returns [String text]
@@ -174,6 +176,7 @@ challenge returns [LOGONode node]
 		| Match {$node = new LOGOChallengeNode("MATCH"); System.out.println("Match");}
 		| Quit {$node = new LOGOChallengeNode("QUIT"); System.out.println("quit");}
         | Recordchallenge {$node = new LOGOChallengeNode("RECORD");}
+        | Recordchallenge String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("RECORD", temp);}
         | Hint {$node = new LOGOChallengeNode("SHOWHINT");}
         | Hint '(' String ',' e1=expression ',' e2=expression ')' {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("WRITEHINT", temp, $e1.node, $e2.node);}
         | Hint String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("WRITEHINT", temp);}
@@ -273,7 +276,7 @@ Color
         ;
 
 Setspeed
-        : ('Setspeed' | 'SETSPEED' | 'SetSpeed' | 'SS')
+        : ('SetSpeed' | 'SETSPEED' | 'setspeed' | 'Setspeed' | 'SS')
         ;
 
 Hideturtle
@@ -286,6 +289,10 @@ Showturtle
 
 Load
 		: ('Load' | 'LOAD' | 'load')
+        ;
+
+Turtle
+        : ('Turtle' | 'TURTLE' | 'turtle')
         ;
 
 Set
