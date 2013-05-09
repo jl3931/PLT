@@ -1,0 +1,37 @@
+FUNCTION fillFunc (d, r, offset) {
+	HOME
+	FD d RT 90
+	REPEAT offset {
+		FD d*r RT 1
+	}
+	REPEAT 10 {
+		REPEAT 36 {FD d*r RT 1}
+		FILL
+	}
+}
+
+CS
+TURTLE "tur2"
+HT
+TURTLE "local"
+HT
+COLOR "BLACK"
+SPEED 50
+PD
+REPEAT 10 {
+	REPEAT 360 {FD 1 RT 1}
+	RT 36
+}
+PU
+SET radius 1.7 / 100
+
+COLOR "RED"
+fillFunc(110, radius, 20)
+COLOR "ORANGE"
+fillFunc(100, radius, 1)
+COLOR "YELLOW"
+fillFunc(80, radius, 20)
+COLOR "GREEN"
+fillFunc(40, radius, 1)
+COLOR "BLUE"
+fillFunc(10, radius, 20)

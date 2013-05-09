@@ -291,7 +291,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 		}
 		finally {
 			LOGOPP.io.setStatus("finished!");
-			//LOGOPP.io.showState();
+			LOGOPP.io.showState();
 			isInterrupted = false;
 			processingCmd = false;
 			hasAnimation = true;

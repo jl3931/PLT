@@ -190,7 +190,8 @@ public class LOGOTurtle{
 
 	public void fill() {
 		int oldColor = canvasOn.getBitmap()[canvasOn.getHeight() - 1 - (int)yPos][(int)xPos];
-		System.out.println(oldColor);
+		if (oldColor == color)
+			return;
 		floodFill((int)xPos, (int)yPos, oldColor);
 	}
 
@@ -224,7 +225,6 @@ public class LOGOTurtle{
 		double dis = Math.sqrt(restXPos * restXPos + restYPos * restYPos);
 		if (dis <= step || !LOGOPP.hasAnimation) {
 			moveTurtle(restXPos, restYPos, penDown);
-			//System.out.println("stop!");
 			return true;
 		} else {
 			moveTurtle(step * restXPos / dis, step * restYPos / dis, penDown);
@@ -276,6 +276,23 @@ public class LOGOTurtle{
 	public void teleport(double x, double y) {
 		setXPos(x);
 		setYPos(y);
+	}
+
+	public void reset() {
+		setXPos((double)(canvasOn.getWidth() / 2));
+		setYPos((double)(canvasOn.getHeight() / 2));
+		setAngle(INIT_ANGLE);
+		setSpeed(INIT_SPEED);
+		setPenDown(true);
+		setShowTurtle(true);
+		setColor(0);
+	}
+
+	public void resetBack() {
+		setXPosBack((double)(canvasOn.getWidth() / 2));
+		setYPosBack((double)(canvasOn.getHeight() / 2));
+		setAngleBack(INIT_ANGLE);
+		setSpeedBack(INIT_SPEED);
 	}
 
 	/*

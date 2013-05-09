@@ -188,9 +188,13 @@ public class LOGOCanvas extends JComponent {
         	LOGOTurtle tur = (LOGOTurtle)pairs.getValue();
         	if (tur.getName().equals(curTur.getName()))
         		continue;
-        	LOGOPP.basic.origin(tur);
+        	tur.resetBack();
+        	LOGOPP.eventQueue.add(tur, "RESET");
+			
    		}
-   		LOGOPP.basic.origin(curTur);
+   		curTur.resetBack();
+   		LOGOPP.eventQueue.add(curTur, "RESET");
+   		LOGOPP.eventQueue.clearPending(false);
 	}
 
 

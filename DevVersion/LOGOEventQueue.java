@@ -213,6 +213,19 @@ class LOGOEventQueue {
 		}
 	}
 
+	class ResetEvent extends Events {
+		public ResetEvent(LOGOTurtle tur) {
+			super(tur);
+			rest = 0.;
+			restSteps += rest;
+		}
+		public double execute(double step) {
+			turtle.reset();
+			rest = 0.;
+			return 0.;
+		}
+	}
+
 	Queue<Events> queue = new LinkedList<Events>();
 
 	public void add(LOGOTurtle tur, String type, double... args) {
@@ -248,6 +261,9 @@ class LOGOEventQueue {
 		}
 		else if (type.equals("FILL") && args.length == 0) {
 			event = new FillEvent(tur);
+		}
+		else if (type.equals("RESET") && args.length == 0) {
+			event = new ResetEvent(tur);
 		}
 		else {
 			LOGOPP.io.debug("Wrong arg type for event queue.");
@@ -348,8 +364,6 @@ class LOGOEventQueue {
 				queue.poll();
 			if (LOGOPP.hasAnimation)
 				LOGOPP.canvas.repaint();
-			System.out.println(LOGOPP.canvas.getCurTurtle().getName() +
-							":" +LOGOPP.canvas.getCurTurtle().getPenDown());
 		}
 		restSteps -= step - rest;
 		if (queue.size() == 0) {
