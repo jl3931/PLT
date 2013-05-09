@@ -65,17 +65,18 @@ public class LOGOTurtle{
 	}
 
 	// geters
+	public String  getName() 		{return name;}
 	public double  getXPos() 		{return xPos;}
 	public double  getYPos() 		{return yPos;}
 	public double  getXPosBack() 	{return xPosBack;}
 	public double  getYPosBack() 	{return yPosBack;}
 	public double  getAngle() 		{return angle;}
 	public double  getAngleBack() 	{return angleBack;}
-	public boolean getPenDown() 	{return penDown;}
-	public boolean getShowTurtle() 	{return showTurtle;}
 	public double  getSpeed() 		{return speed;}
 	public double  getSpeedBack() 	{return speedBack;}
-	public String  getName() 		{return name;}
+	public int     getColor()		{return color;}
+	public boolean getPenDown() 	{return penDown;}
+	public boolean getShowTurtle() 	{return showTurtle;}
 
 	// seters
 	public void setXPos(double x) 		 { xPos = calXPos(x);}
@@ -86,9 +87,9 @@ public class LOGOTurtle{
 	public void setAngleBack(double a) 	 { angleBack = calAngle(a);}
 	public void setSpeed(double s) 		 { if (calSpeed(s) > 0.) speed = s;}
 	public void setSpeedBack(double s) 	 { if (calSpeed(s) > 0.) speedBack = s;}
+	public void setColor(int c) 		 { color = c;}
 	public void setPenDown(boolean p) 	 { penDown = p;}
 	public void setShowTurtle(boolean s) { showTurtle = s;}
-	public void setColor(int c) 		 { color = c;}
 
 	private double calXPos(double x) {
 		if (null == canvasOn)

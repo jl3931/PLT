@@ -292,6 +292,7 @@ class LOGOEventQueue {
                 }  
 			}
 		}
+		LOGOPP.io.showState();
 	}
 
 	public void tick() {
@@ -318,6 +319,7 @@ class LOGOEventQueue {
 		}
 		queue.clear();
 		restSteps = 0.;
+		LOGOPP.io.showState();
 	}
 
 	public boolean move(double step) {
@@ -342,5 +344,6 @@ class LOGOEventQueue {
 	public void interrupt() {
 		restSteps = 0.;
 		queue.clear();
+		LOGOPP.io.showState();
 	}
 }

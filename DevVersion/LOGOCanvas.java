@@ -170,9 +170,9 @@ public class LOGOCanvas extends JComponent {
     	while (it.hasNext()) {
         	Map.Entry pairs = (Map.Entry)it.next();
         	LOGOTurtle tur = (LOGOTurtle)pairs.getValue();
-        	tur.setXPos(tur.getXPosBack());
-			tur.setYPos(tur.getYPosBack());
-			tur.setAngle(tur.getAngleBack());
+        	tur.setXPosBack(tur.getXPos());
+			tur.setYPosBack(tur.getYPos());
+			tur.setAngleBack(tur.getAngle());
    		}
 	}
 
@@ -195,28 +195,40 @@ public class LOGOCanvas extends JComponent {
 
 	class CanvasStatus {
 		public int[][] bitmap;
-		public HashMap<String, TurtlePosition> turtles;
-		public CanvasStatus(int[][] b, HashMap<String, LOGOTurtle> t) {
+		public HashMap<String, TurtleStatus> turtles;
+		public boolean wrap;
+
+		public CanvasStatus(int[][] b, HashMap<String, LOGOTurtle> t, boolean w) {
+			wrap = w;
 			bitmap = copyBitmap(b);
-			turtles = new HashMap<String, TurtlePosition>();
+			turtles = new HashMap<String, TurtleStatus>();
 			Iterator it = t.entrySet().iterator();
 	    	while (it.hasNext()) {
 	        	Map.Entry pairs = (Map.Entry)it.next();
 	        	LOGOTurtle tur = (LOGOTurtle)pairs.getValue();
-	        	TurtlePosition tp = new TurtlePosition(tur.getXPos(), tur.getYPos(), tur.getAngle());
+	        	TurtleStatus tp = new TurtleStatus(tur.getXPos(), tur.getYPos(), tur.getAngle(), tur.getSpeed(),
+	        										tur.getColor(), tur.getPenDown(), tur.getShowTurtle());
 	        	turtles.put(tur.getName(), tp);
 	   		}
 		}
 	}
 
-	class TurtlePosition {
+	class TurtleStatus {
 		double xPos;
 		double yPos;
 		double angle;
-		public TurtlePosition(double x, double y, double a) {
+		double speed;
+		int color;
+		boolean pendown;
+		boolean showturtle;
+		public TurtleStatus(double x, double y, double a, double s, int c, boolean pd, boolean st) {
 			xPos = x;
 			yPos = y;
 			angle = a;
+			speed = s;
+			color = c;
+			pendown = pd;
+			showturtle = st;
 		}
 	}
 
@@ -233,11 +245,11 @@ public class LOGOCanvas extends JComponent {
 
 	public void addHistory() {
 		LOGOPP.io.debug("add history");
-		addHistory(bitmap, turtlePool);
+		addHistory(bitmap, turtlePool, wrap);
 	}
 
-	private void addHistory(int[][] b, HashMap<String, LOGOTurtle> t) {
-		CanvasStatus cs = new CanvasStatus(b, t);
+	private void addHistory(int[][] b, HashMap<String, LOGOTurtle> t, boolean w) {
+		CanvasStatus cs = new CanvasStatus(b, t, w);
 		if (curHis == history.size()) {
 			if (history.size() == hisNum) {
 				history.remove(0);
@@ -291,15 +303,24 @@ public class LOGOCanvas extends JComponent {
 			return;
 		int i = index - 1;
 		bitmap = copyBitmap(history.get(i).bitmap);
+		wrap = history.get(i).wrap;
 		Iterator it = turtlePool.entrySet().iterator();
     	while (it.hasNext()) {
         	Map.Entry pairs = (Map.Entry)it.next();
         	LOGOTurtle tur = (LOGOTurtle)pairs.getValue();
         	if (history.get(i).turtles.containsKey(tur.getName())) {
-	        	TurtlePosition tp = history.get(i).turtles.get(tur.getName());
+	        	TurtleStatus tp = history.get(i).turtles.get(tur.getName());
 	        	tur.setXPos(tp.xPos);
 	        	tur.setYPos(tp.yPos);
 	        	tur.setAngle(tp.angle);
+	        	tur.setXPosBack(tp.xPos);
+	        	tur.setYPosBack(tp.yPos);
+	        	tur.setAngleBack(tp.angle);
+	        	tur.setSpeed(tp.speed);
+	        	tur.setSpeedBack(tp.speed);
+	        	tur.setColor(tp.color);
+	        	tur.setPenDown(tp.pendown);
+	        	tur.setShowTurtle(tp.showturtle);
 	        }
     	}
 	}
