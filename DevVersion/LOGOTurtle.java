@@ -8,8 +8,9 @@ public class LOGOTurtle{
 	public static final double INIT_ANGLE = 270.;
 	public static final double CIRCLE_DEGREE = 360.;
 	public static final double ANGLE_RATIO = 1.;
-	public static final double MAX_SPEED = 200.;
+	public static final double MAX_SPEED = 50.;
 	public static final double MIN_SPEED = 1.;
+	public static final double INIT_SPEED = 20.;
 
 	private double xPos        = 0;
 	private double yPos        = 0;
@@ -18,18 +19,19 @@ public class LOGOTurtle{
 	public double yPosBack 	   = 0;
 	public double angleBack    = INIT_ANGLE;
 
-	private double speed       = 20.;
-	private double speedBack   = 20.;
+	private double speed       = INIT_SPEED;
+	private double speedBack   = INIT_SPEED;
 
 	private boolean penDown    = true;
 	private boolean showTurtle = true;
-	private int[] color = new int[] {0, 0, 0}; //{R,G,B}
+	private int color = 0;
 	private String name;
 	public LOGOCanvas canvasOn;
 	//private static Image turtleImg = Toolkit.getDefaultToolkit().getImage("logo_turtle.png");
 	private static ImageIcon turtleImg = new ImageIcon("logo_turtle_color.png");
 	private static final HashMap<String, int[]> colorValues = new HashMap<String, int[]>();
 	{
+		//				R    G    B
 		int[] red    = {255,   0,   0};
 		int[] blue   = {  0,   0, 255};
 		int[] green  = {  0, 255,   0};
@@ -76,105 +78,81 @@ public class LOGOTurtle{
 	public String  getName() 		{return name;}
 
 	// seters
-	public void setAngle(double a) {
-		angle = a % CIRCLE_DEGREE;
-		if (angle < 0.)
-			angle += CIRCLE_DEGREE;
+	public void setXPos(double x) 		 { xPos = calXPos(x);}
+	public void setXPosBack(double x) 	 { xPosBack = calXPos(x);}
+	public void setYPos(double y) 		 { yPos = calYPos(y);}
+	public void setYPosBack(double y) 	 { yPosBack = calYPos(y);}
+	public void setAngle(double a) 		 { angle = calAngle(a);}
+	public void setAngleBack(double a) 	 { angleBack = calAngle(a);}
+	public void setSpeed(double s) 		 { if (calSpeed(s) > 0.) speed = s;}
+	public void setSpeedBack(double s) 	 { if (calSpeed(s) > 0.) speedBack = s;}
+	public void setPenDown(boolean p) 	 { penDown = p;}
+	public void setShowTurtle(boolean s) { showTurtle = s;}
+	public void setColor(int c) 		 { color = c;}
+
+	private double calXPos(double x) {
+		if (null == canvasOn)
+			return 0.;
+		double ret;
+		if (canvasOn.wrap) {
+			// Wrap Mode
+			ret = x % canvasOn.getWidth();
+			ret = (ret < 0) ? ret + (double)canvasOn.getWidth() : ret;
+		} else {
+			// Fence Mode
+			ret = (x < 0) ? 0 : x;
+			ret = (x > (double)canvasOn.getWidth()) ? (double)canvasOn.getWidth() : ret;
+		}
+		return ret;
 	}
 
-	public void setAngleBack(double a) {
-		angleBack = a % CIRCLE_DEGREE;
-		if (angleBack < 0.)
-			angleBack += CIRCLE_DEGREE;
+	private double calYPos(double y) {
+		if (null == canvasOn)
+			return 0.;
+		double ret;
+		if (canvasOn.wrap) {
+			// Wrap Mode
+			ret = y % canvasOn.getHeight();
+			ret = (ret < 0) ? ret + (double)canvasOn.getHeight() : ret;
+		} else {
+			// Fence Mode
+			ret = (y < 0) ? 0 : y;
+			ret = (y > (double)canvasOn.getHeight()) ? (double)canvasOn.getHeight() : ret;
+		}
+		return ret;
 	}
 
-	public void setSpeed(double s) {
+	private double calAngle(double a) {
+		double ret = a % CIRCLE_DEGREE;
+		if (ret < 0.)
+			ret += CIRCLE_DEGREE;
+		return ret;
+	}
+
+	private double calSpeed(double s) {
 		if (s < MIN_SPEED || s > MAX_SPEED) {
 			LOGOPP.errorhandler.setRunTime("SET SPEED", "Wrong value for speed, should be between "
 				+ new Integer((int)MIN_SPEED).toString() + " and " 
 				+ new Integer((int)MAX_SPEED).toString() + ".");
-			return;
+			return -1.;
 		}
-		speed = s;
+		return s;
 	}
-	public void setSpeedBack(double s) {
-		if (s < MIN_SPEED || s > MAX_SPEED)
-			return;
-		speedBack = s;
-	}
-
-	public void setXPos(double x) {
-		if (null == canvasOn)
-			return;
-		if (canvasOn.wrap) {
-			// Wrap Mode
-			xPos = x % canvasOn.getWidth();
-			xPos = (xPos < 0) ? xPos + (double)canvasOn.getWidth() : xPos;
-		} else {
-			// Fence Mode
-			xPos = (x < 0) ? 0 : x;
-			xPos = (x > (double)canvasOn.getWidth()) ? (double)canvasOn.getWidth() : xPos;
-		}
-	}
-
-	public void setYPos(double y) {
-		if (null == canvasOn)
-			return;
-		if (canvasOn.wrap) {
-			// Wrap Mode
-			yPos = y % canvasOn.getHeight();
-			yPos = (yPos < 0) ? yPos + (double)canvasOn.getHeight() : yPos;
-		} else {
-			// Fence Mode
-			yPos = (y < 0) ? 0 : y;
-			yPos = (y > (double)canvasOn.getHeight()) ? (double)canvasOn.getHeight() : yPos;
-		}
-	}
-	public void setXPosBack(double x) {
-		if (null == canvasOn)
-			return;
-		if (canvasOn.wrap) {
-			// Wrap Mode
-			xPosBack = x % canvasOn.getWidth();
-			xPosBack = (xPosBack < 0) ? xPosBack + (double)canvasOn.getWidth() : xPosBack;
-		} else {
-			// Fence Mode
-			xPosBack = (x < 0) ? 0 : x;
-			xPosBack = (x > (double)canvasOn.getWidth()) ? (double)canvasOn.getWidth() : xPosBack;
-		}
-	}
-
-	public void setYPosBack(double y) {
-		if (null == canvasOn)
-			return;
-		if (canvasOn.wrap) {
-			// Wrap Mode
-			yPosBack = y % canvasOn.getHeight();
-			yPosBack = (yPos < 0) ? yPosBack + (double)canvasOn.getHeight() : yPosBack;
-		} else {
-			// Fence Mode
-			yPosBack = (y < 0) ? 0 : y;
-			yPosBack = (y > (double)canvasOn.getHeight()) ? (double)canvasOn.getHeight() : yPosBack;
-		}
-	}
-
-	public void setPenDown(boolean p) {penDown = p;}
-	public void setShowTurtle(boolean s) {showTurtle = s;}
 
 	/*
 	 * get color value of current color for BMP file
 	 * not consider alpha value
 	 */
-	public int colorValue() {
-		return color[0]|color[1]<<8|color[2]<<16;
+	public static int colorValue(int[] c) {
+		if (c.length != 3)
+			return 0;
+		return c[0]|c[1]<<8|c[2]<<16;
 	}
 
 	public void changeColor(String c) {
 		if (colorValues.containsKey(c.toUpperCase())) {
 			int [] targetColor = colorValues.get(c.toUpperCase());
-			color[0]=targetColor[0];
-			color[1]=targetColor[1];
-			color[2]=targetColor[2];
+			color = colorValue(targetColor);
 		}
 		else {
 			LOGOPP.errorhandler.setRunTime("COLOR", "Invalid content of color.");
@@ -192,7 +170,7 @@ public class LOGOTurtle{
 		y = (y < 0) ? 0 : y;
 		y = (y > canvasOn.getHeight() - 1) ? canvasOn.getHeight() - 1 : y;
 		//LOGOPP.io.debug("draw to"+x + "," +y);
-		canvasOn.bitmap[canvasOn.getHeight() - 1 - y][x] = colorValue();
+		canvasOn.bitmap[canvasOn.getHeight() - 1 - y][x] = color;
 	}
 
 	/*
@@ -204,17 +182,17 @@ public class LOGOTurtle{
 		int y = ((int)yPos < 0) ? 0 : (int)yPos;
 		y = (y > canvasOn.getHeight() - 1) ? canvasOn.getHeight() - 1 : y;
 		//LOGOPP.io.debug("draw to"+x + "," +y);
-		canvasOn.bitmap[canvasOn.getHeight() - 1 - y][x] = colorValue();
+		canvasOn.bitmap[canvasOn.getHeight() - 1 - y][x] = color;
 	}
 
-	public boolean moveForward(double restXPos, double restYPos) {
+	public boolean moveForward(double restXPos, double restYPos, double step) {
 		double dis = Math.sqrt(restXPos * restXPos + restYPos * restYPos);
-		if (dis <= speed || !LOGOPP.hasAnimation) {
+		if (dis <= step || !LOGOPP.hasAnimation) {
 			moveTurtle(restXPos, restYPos, penDown);
 			//System.out.println("stop!");
 			return true;
 		} else {
-			moveTurtle(speed * restXPos / dis, speed * restYPos / dis, penDown);
+			moveTurtle(step * restXPos / dis, step * restYPos / dis, penDown);
 			return false;
 		}
 	}
@@ -245,22 +223,17 @@ public class LOGOTurtle{
 		}
 		setXPos(tarX);
 		setYPos(tarY);
-		if (LOGOPP.hasAnimation)
-			canvasOn.repaint();
 	}
 
-	public boolean turnTurtle(double deltaAngle) {
-		if (Math.abs(deltaAngle) <= speed * ANGLE_RATIO || !LOGOPP.hasAnimation) {
+	public boolean turnTurtle(double deltaAngle, double step) {
+		if (Math.abs(deltaAngle) <= step * ANGLE_RATIO || !LOGOPP.hasAnimation) {
 			setAngle(angle - deltaAngle);
-			if (LOGOPP.hasAnimation)
-				canvasOn.repaint();
 			return true;
 		} else {
 			if (deltaAngle > 0)
-				setAngle(angle - speed * ANGLE_RATIO);
+				setAngle(angle - step * ANGLE_RATIO);
 			else
-				setAngle(angle + speed * ANGLE_RATIO);
-			canvasOn.repaint();
+				setAngle(angle + step * ANGLE_RATIO);
 			return false;
 		}
 	}
@@ -268,8 +241,6 @@ public class LOGOTurtle{
 	public void teleport(double x, double y) {
 		setXPos(x);
 		setYPos(y);
-		if (LOGOPP.hasAnimation)
-			canvasOn.repaint();
 	}
 
 	/*

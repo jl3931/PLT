@@ -139,6 +139,35 @@ public class LOGOBasic {
 		LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "COLOR", ret);
 		LOGOPP.eventQueue.clearPending(false);
 	}
+
+	public void changeColors(LOGONode arg) {
+		if (arg.children.size() != 3) {
+			LOGOPP.errorhandler.setRunTime("COLOR", "Wrong number of arguments.");
+			return;
+		}
+		Double retR = runAndCheckDouble(arg.children.get(0), "COLOR");
+		if (LOGOPP.errorhandler.error())
+			return;
+		Double retG = runAndCheckDouble(arg.children.get(1), "COLOR");
+		if (LOGOPP.errorhandler.error())
+			return;
+		Double retB = runAndCheckDouble(arg.children.get(2), "COLOR");
+		if (LOGOPP.errorhandler.error())
+			return;
+		int[] c = new int [3];
+		c[0] = (int)(retR.doubleValue());
+		c[1] = (int)(retG.doubleValue());
+		c[2] = (int)(retB.doubleValue());
+		for (int i = 0; i < 3; i++) {
+			if (c[i] < 0 || c[i] > 255) {
+				LOGOPP.errorhandler.setRunTime("COLOR", "No." + Integer.toString(i+1) +
+												" argument is invalid.");
+				return;
+			}
+		}
+		LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "COLORS", LOGOTurtle.colorValue(c));
+		LOGOPP.eventQueue.clearPending(false);
+	}
 	
 	public void load(LOGONode arg) {
 		String ret = runAndCheckString(arg, "LOAD", true);

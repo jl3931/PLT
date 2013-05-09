@@ -42,7 +42,7 @@ command_expr returns [LOGONode node]
 	:	command expression {$node = new LOGOCommandNode($command.text, $expression.node);}
     |   Setxy '(' a=expression ',' b=expression ')' {$node = new LOGOCommandNode("SETXY", $a.node, $b.node);}
     |   Color String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("CHANGECOLOR", temp);}
-    |	Color '(' expression_list ')'
+    |	Color '(' expression_list ')' {$node = new LOGOCommandNode("CHANGECOLORS", $expression_list.node);}
     |   Save String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("SAVEIMAGE", temp);}
     |   Print String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("PRINT", temp);}
     |   Load String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOCommandNode("LOAD", temp);}
