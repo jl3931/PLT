@@ -186,6 +186,40 @@ public class LOGOTurtle{
 		canvasOn.bitmap[canvasOn.getHeight() - 1 - y][x] = color;
 	}
 
+	private int[][] direction = {{-1,0},{0,-1},{1,0},{0,1},{1,1},{1,-1},{-1,1},{-1,-1}};
+
+	public void fill() {
+		int oldColor = canvasOn.getBitmap()[canvasOn.getHeight() - 1 - (int)yPos][(int)xPos];
+		System.out.println(oldColor);
+		floodFill((int)xPos, (int)yPos, oldColor);
+	}
+
+	private void floodFill(int x, int y, int oldColor) {
+		class Pixel {
+			int x;
+			int y;
+			public Pixel(int x_, int y_) {
+				x = x_;
+				y = y_;
+			}
+		}
+		Stack<Pixel> stack = new Stack<Pixel>();
+		Pixel p = new Pixel(x, y);
+		stack.push(p);
+		while (!stack.empty()) {
+			Pixel p_ = stack.pop();
+			canvasOn.getBitmap()[canvasOn.getHeight() - 1 - p_.y][p_.x] = color;
+			for (int i = 0; i < 4; i++) {
+				int x_ = p_.x + direction[i][0];
+				int y_ = p_.y + direction[i][1];
+				if (!canvasOn.outOfBound(x_, y_) && canvasOn.getBitmap()[canvasOn.getHeight() - 1 - y_][x_] == oldColor) {
+					Pixel p__ = new Pixel(x_, y_);
+					stack.push(p__);
+				}
+			}
+		}
+	}
+
 	public boolean moveForward(double restXPos, double restYPos, double step) {
 		double dis = Math.sqrt(restXPos * restXPos + restYPos * restYPos);
 		if (dis <= step || !LOGOPP.hasAnimation) {

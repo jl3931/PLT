@@ -143,6 +143,19 @@ class LOGOEventQueue {
 		}
 	}
 
+	class FillEvent extends Events {
+		public FillEvent(LOGOTurtle tur) {
+			super(tur);
+			rest = LOGOTurtle.MAX_SPEED;
+			restSteps += rest;
+		}
+		public double execute(double step) {
+			turtle.fill();
+			rest = 0.;
+			return LOGOTurtle.MAX_SPEED;
+		}
+	}
+
 	class DisplayEvent extends Events {
 		boolean argB = true;
 		public DisplayEvent(LOGOTurtle tur, boolean show) {
@@ -232,6 +245,9 @@ class LOGOEventQueue {
 		}
 		else if (type.equals("TURTLE") && args.length == 0) {
 			event = new TurtleEvent(tur);
+		}
+		else if (type.equals("FILL") && args.length == 0) {
+			event = new FillEvent(tur);
 		}
 		else {
 			LOGOPP.io.debug("Wrong arg type for event queue.");
@@ -332,6 +348,8 @@ class LOGOEventQueue {
 				queue.poll();
 			if (LOGOPP.hasAnimation)
 				LOGOPP.canvas.repaint();
+			System.out.println(LOGOPP.canvas.getCurTurtle().getName() +
+							":" +LOGOPP.canvas.getCurTurtle().getPenDown());
 		}
 		restSteps -= step - rest;
 		if (queue.size() == 0) {

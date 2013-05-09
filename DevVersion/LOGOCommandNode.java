@@ -69,6 +69,10 @@ public class LOGOCommandNode extends LOGONode {
 				else if (id.equals("FRONT")) {
 					LOGOPP.basic.front();
 				}
+				else if (id.equals("FILL")) {
+					LOGOPP.eventQueue.add(LOGOPP.canvas.getCurTurtle(), "FILL");
+					LOGOPP.eventQueue.clearPending(false);
+				}
 			} else if (children.size() == 1) {
 				// command with 1 arguments
 				if (id.equals("FORWARD"))
@@ -107,7 +111,7 @@ public class LOGOCommandNode extends LOGONode {
 	private final static HashSet<String> CommandList0 = new HashSet<String>(
 					Arrays.asList(new String[] {"ORIGIN", "CLEARSCREEN", 
 							"GETX", "GETY", "GETXY", "GETSPEED", "SHOWTURTLE", "HIDETURTLE", 
-							"WRAP", "FENCE", "PENUP", "PENDOWN", "FRONT"}));
+							"WRAP", "FENCE", "PENUP", "PENDOWN", "FRONT", "FILL"}));
 	private final static HashSet<String> CommandList1 = new HashSet<String>(
 					Arrays.asList(new String[] {"FORWARD", "BACK", "LEFT", 
 							"RIGHT", "SPEED", "SETX", "SETY", "PRINT", "SETSPEED",

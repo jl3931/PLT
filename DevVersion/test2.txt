@@ -3,16 +3,19 @@ RC
 CS
 TURTLE "local"
 COLOR "BLACK"
+HT PD
 SS 20
 LT 90
 TURTLE "tur2"
 COLOR "GRAY"
+PD HT
 SS 20
 RT 90
 
 HINT "you should start here"
 
 TURTLE "local"
+BK 1 FD 1
 
 REPEAT 180 {
 	TURTLE "local"
@@ -49,6 +52,6 @@ SC "challengeTaiJi.bmp"
 QUIT
 
 TURTLE "local"
-HT
-TURTLE "tur2"
-HT
+HOME PU FD 30 FILL
+BK 100 FILL
+COLOR "GRAY" BK 100 FILL

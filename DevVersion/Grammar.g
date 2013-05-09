@@ -36,6 +36,7 @@ command_noarg returns [LOGONode node]
     |	Pendown {$node =  new LOGOCommandNode("PENDOWN");}
     |	Showturtle {$node =  new LOGOCommandNode("SHOWTURTLE");}
     |	Hideturtle {$node =  new LOGOCommandNode("HIDETURTLE");}
+    |   Fill {$node = new LOGOCommandNode("FILL");}
     ;
     
 command_expr returns [LOGONode node]
@@ -288,6 +289,10 @@ Save
 
 Color
         : ('Color' | 'color' | 'COLOR')
+        ;
+
+Fill
+        : ('Fill' | 'fill' | 'FILL')
         ;
 
 Setspeed

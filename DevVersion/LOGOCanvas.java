@@ -31,6 +31,9 @@ public class LOGOCanvas extends JComponent {
 	public int[][] getBitmap() {return bitmap;}
 	public void setBitmap(int[][] b) {bitmap = b;}
 
+	public boolean outOfBound(int x, int y) {
+		return (x < 0|| x >= width || y < 0 || y >= height);
+	}
 	/*
 	 * Constructor using default size
 	 * @name: name of this canvas
@@ -179,11 +182,15 @@ public class LOGOCanvas extends JComponent {
 	public void clearScreen() {
 		clean();
 		Iterator it = turtlePool.entrySet().iterator();
+		LOGOTurtle curTur = getCurTurtle();
 		while (it.hasNext()) {
         	Map.Entry pairs = (Map.Entry)it.next();
         	LOGOTurtle tur = (LOGOTurtle)pairs.getValue();
+        	if (tur.getName().equals(curTur.getName()))
+        		continue;
         	LOGOPP.basic.origin(tur);
    		}
+   		LOGOPP.basic.origin(curTur);
 	}
 
 
