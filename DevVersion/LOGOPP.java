@@ -107,9 +107,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 		scrollPane1.setPreferredSize(new Dimension(canvas.getWidth(), PREV_HEIGHT));
 		JScrollPane scrollPane2 = new JScrollPane(cur);
 		scrollPane2.setPreferredSize(new Dimension(canvas.getWidth() - CUR_LEFT, CUR_HEIGHT));
-		//JScrollPane scrollPane3 = new JScrollPane(noti);
-		//scrollPane2.setPreferredSize(new Dimension(canvas.getWidth(), NOTI_HEIGHT));
-		JLabel label = new JLabel(">");
+		JLabel label = new JLabel("Input:");
 		canvas.setBounds(1,1,canvas.getWidth(), canvas.getHeight());
 		canvas.setWindow(this);
 		canvas.repaint();
@@ -118,13 +116,18 @@ public class LOGOPP extends JFrame implements KeyListener {
 		pane.add(noti);
 		pane.add(canvas);
 		pane.add(label);
-		scrollPane1.setBounds(1, canvas.getHeight() + MARGIN_HEIGHT, canvas.getWidth(), PREV_HEIGHT);
-		scrollPane2.setBounds(CUR_LEFT, canvas.getHeight() + MARGIN_HEIGHT * 2 + PREV_HEIGHT, 
-				      canvas.getWidth() - CUR_LEFT, CUR_HEIGHT);
-		noti.setBounds(1, canvas.getHeight() + MARGIN_HEIGHT * 3 + PREV_HEIGHT + CUR_HEIGHT,
+		scrollPane1.setBounds(1, canvas.getHeight(), canvas.getWidth(), PREV_HEIGHT);
+		label.setBounds(1,canvas.getHeight() + PREV_HEIGHT, canvas.getWidth(), CHAR_HEIGHT);
+		scrollPane2.setBounds(1, canvas.getHeight() + CHAR_HEIGHT  + PREV_HEIGHT, canvas.getWidth(), CUR_HEIGHT);
+		noti.setBounds(1, canvas.getHeight() + CHAR_HEIGHT + PREV_HEIGHT + CUR_HEIGHT,
 						canvas.getWidth(), NOTI_HEIGHT);
 		noti.setBorder(BorderFactory.createEmptyBorder());
-		label.setBounds(1,canvas.getHeight() + MARGIN_HEIGHT * 2 + PREV_HEIGHT, CUR_LEFT, CHAR_HEIGHT);
+		noti.setOpaque(false);
+		this.addWindowListener( new WindowAdapter() {
+		    public void windowOpened( WindowEvent e ){
+		        cur.requestFocus();
+		    }
+		}); 
 		pane.revalidate();
 		this.repaint();
 	}
@@ -157,7 +160,6 @@ public class LOGOPP extends JFrame implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()) {
 		case KeyEvent.VK_ENTER:
-			//////////////////////
 			if (e.getModifiers() == KeyEvent.CTRL_MASK) {
 				int pos = cur.getCaretPosition();
 				String content = cur.getText();
