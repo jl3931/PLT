@@ -11,7 +11,7 @@ PD HT
 SS 20
 RT 90
 
-HINT "you should start here"
+ADDHINT "you should start here"
 
 TURTLE "local"
 BK 1 FD 1
@@ -45,7 +45,7 @@ REPEAT 360 {
 	FD 0.3 RT 1
 }
 
-HINT ("Try to cooperate 2 turtles to finish this figure.", 10, 10)
+ADDHINT ("Try to cooperate 2 turtles to finish this figure.", 10, 10)
 
 SC "challengeTaiJi.bmp"
 QUIT
