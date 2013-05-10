@@ -246,10 +246,10 @@ public class LOGOTurtle{
 			double length = Math.sqrt (deltaX * deltaX + deltaY * deltaY);
 			double stepX = deltaX / length;
 			double stepY = deltaY / length;
-			int count = (int)length;
+			int count = (int)length * 2;
 			for (int cnt = 0; cnt < count; cnt++) {
-				setXPos(xPos + (double)stepX);
-				setYPos(yPos + (double)stepY);
+				setXPos(xPos + (double)stepX / 2);
+				setYPos(yPos + (double)stepY / 2);
 				paintPoint();
 			}
 			setXPos(tarX);
