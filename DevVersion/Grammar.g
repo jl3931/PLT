@@ -1,8 +1,8 @@
 grammar Grammar;
 
 line returns [LOGONode node]
-		: statement_list EOF {$node = $statement_list.node; LOGOPP.io.debug("line->stmt_list");}
-		| play_challenge EOF {$node = $play_challenge.node;}
+		: play_challenge EOF {$node = $play_challenge.node;}
+        | statement_list EOF {$node = $statement_list.node; LOGOPP.io.debug("line->stmt_list");}
 		| Import String EOF
 		;
 		
@@ -180,15 +180,15 @@ record_challenge returns [LOGONode node]
 		: Quit {$node = new LOGOChallengeNode("QUIT"); System.out.println("quit");}
         | Recordchallenge {$node = new LOGOChallengeNode("RECORD");}
         | Recordchallenge String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("RECORD", temp);}
-        | Hint '(' String ',' e1=expression ',' e2=expression ')' {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("WRITEHINT", temp, $e1.node, $e2.node);}
-        | Hint String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("WRITEHINT", temp);}
+        | Addhint '(' String ',' e1=expression ',' e2=expression ')' {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("WRITEHINT", temp, $e1.node, $e2.node);}
+        | Addhint String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("WRITEHINT", temp);}
         | Removehint Number {LOGONode temp = new LOGOLeaf($Number.text); $node = new LOGOChallengeNode("REMOVEHINT", temp);}
         | Removehint {$node = new LOGOChallengeNode("REMOVEALLHINT");}
         | Savechallenge String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("SAVE", temp);}
 		;
 
 play_challenge returns [LOGONode node]
-        :Challenge String { LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("CHALLENGE", temp); System.out.println($String.text);}
+        : Challenge String { LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("CHALLENGE", temp); System.out.println($String.text);}
         | Match {$node = new LOGOChallengeNode("MATCH"); System.out.println("Match");}
         | Hint {$node = new LOGOChallengeNode("SHOWHINT");}
         ;
@@ -377,6 +377,10 @@ Quit
 
 Recordchallenge
         : ('Recordchallenge' | 'RECORDCHALLENGE' | 'recordchallenge' | 'RecordChallenge' | 'RC' | 'Record' | 'RECORD' | 'record')
+        ;
+
+Addhint
+        : ('Addhint' | 'ADDHINT' | 'AddHint' | 'addhint' | 'AH')
         ;
 
 Hint
