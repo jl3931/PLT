@@ -22,8 +22,8 @@ public class GrammarParser extends Parser {
 		Fill=39, Setspeed=40, Hideturtle=41, Showturtle=42, Load=43, Turtle=44, 
 		Set=45, If=46, Else=47, LPAREN=48, RPAREN=49, LBRACE=50, RBRACE=51, While=52, 
 		For=53, Repeat=54, Function=55, Import=56, Challenge=57, Match=58, Quit=59, 
-		Recordchallenge=60, Hint=61, Removehint=62, Savechallenge=63, Number=64, 
-		Identifier=65, String=66, Comment=67, WS=68;
+		Recordchallenge=60, Addhint=61, Hint=62, Removehint=63, Savechallenge=64, 
+		Number=65, Identifier=66, String=67, Comment=68, WS=69;
 	public static final String[] tokenNames = {
 		"<INVALID>", "'^'", "','", "'+'", "'*'", "':'", "'<'", "'='", "'!='", 
 		"'<='", "'&&'", "'||'", "'>'", "'/'", "'>='", "'-'", "'!'", "Forward", 
@@ -32,7 +32,7 @@ public class GrammarParser extends Parser {
 		"Penup", "Pendown", "Save", "Color", "Fill", "Setspeed", "Hideturtle", 
 		"Showturtle", "Load", "Turtle", "Set", "'if'", "'else'", "'('", "')'", 
 		"'{'", "'}'", "'while'", "'for'", "Repeat", "Function", "Import", "Challenge", 
-		"Match", "Quit", "Recordchallenge", "Hint", "Removehint", "Savechallenge", 
+		"Match", "Quit", "Recordchallenge", "Addhint", "Hint", "Removehint", "Savechallenge", 
 		"Number", "Identifier", "String", "Comment", "WS"
 	};
 	public static final int
@@ -73,8 +73,8 @@ public class GrammarParser extends Parser {
 	}
 	public static class LineContext extends ParserRuleContext {
 		public LOGONode node;
-		public Statement_listContext statement_list;
 		public Play_challengeContext play_challenge;
+		public Statement_listContext statement_list;
 		public TerminalNode Import() { return getToken(GrammarParser.Import, 0); }
 		public Statement_listContext statement_list() {
 			return getRuleContext(Statement_listContext.class,0);
@@ -103,26 +103,68 @@ public class GrammarParser extends Parser {
 		enterRule(_localctx, 0, RULE_line);
 		try {
 			setState(69);
-			switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
-			case 1:
+			switch (_input.LA(1)) {
+			case Challenge:
+			case Match:
+			case Hint:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(58); ((LineContext)_localctx).statement_list = statement_list(0);
+				setState(58); ((LineContext)_localctx).play_challenge = play_challenge();
 				setState(59); match(EOF);
-				((LineContext)_localctx).node =  ((LineContext)_localctx).statement_list.node; LOGOPP.io.debug("line->stmt_list");
-				}
-				break;
-
-			case 2:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(62); ((LineContext)_localctx).play_challenge = play_challenge();
-				setState(63); match(EOF);
 				((LineContext)_localctx).node =  ((LineContext)_localctx).play_challenge.node;
 				}
 				break;
-
-			case 3:
+			case Unary_minus:
+			case Unary_not:
+			case Forward:
+			case Back:
+			case Left:
+			case Right:
+			case Setx:
+			case Sety:
+			case Setxy:
+			case Speed:
+			case Print:
+			case Clearscreen:
+			case Origin:
+			case Front:
+			case Wrap:
+			case Fence:
+			case Getx:
+			case Gety:
+			case Getspeed:
+			case Getxy:
+			case Penup:
+			case Pendown:
+			case Save:
+			case Color:
+			case Fill:
+			case Hideturtle:
+			case Showturtle:
+			case Load:
+			case Turtle:
+			case Set:
+			case If:
+			case LPAREN:
+			case While:
+			case For:
+			case Repeat:
+			case Function:
+			case Quit:
+			case Recordchallenge:
+			case Addhint:
+			case Removehint:
+			case Savechallenge:
+			case Number:
+			case Identifier:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(62); ((LineContext)_localctx).statement_list = statement_list(0);
+				setState(63); match(EOF);
+				((LineContext)_localctx).node =  ((LineContext)_localctx).statement_list.node; LOGOPP.io.debug("line->stmt_list");
+				}
+				break;
+			case Import:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(66); match(Import);
@@ -130,6 +172,8 @@ public class GrammarParser extends Parser {
 				setState(68); match(EOF);
 				}
 				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -297,7 +341,7 @@ public class GrammarParser extends Parser {
 			case Turtle:
 			case Quit:
 			case Recordchallenge:
-			case Hint:
+			case Addhint:
 			case Removehint:
 			case Savechallenge:
 				enterOuterAlt(_localctx, 2);
@@ -424,7 +468,7 @@ public class GrammarParser extends Parser {
 				break;
 			case Quit:
 			case Recordchallenge:
-			case Hint:
+			case Addhint:
 			case Removehint:
 			case Savechallenge:
 				enterOuterAlt(_localctx, 3);
@@ -2413,10 +2457,10 @@ public class GrammarParser extends Parser {
 		public ExpressionContext expression(int i) {
 			return getRuleContext(ExpressionContext.class,i);
 		}
+		public TerminalNode Addhint() { return getToken(GrammarParser.Addhint, 0); }
 		public TerminalNode Number() { return getToken(GrammarParser.Number, 0); }
 		public TerminalNode String() { return getToken(GrammarParser.String, 0); }
 		public TerminalNode Recordchallenge() { return getToken(GrammarParser.Recordchallenge, 0); }
-		public TerminalNode Hint() { return getToken(GrammarParser.Hint, 0); }
 		public TerminalNode Quit() { return getToken(GrammarParser.Quit, 0); }
 		public Record_challengeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2466,7 +2510,7 @@ public class GrammarParser extends Parser {
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(508); match(Hint);
+				setState(508); match(Addhint);
 				setState(509); match(LPAREN);
 				setState(510); ((Record_challengeContext)_localctx).String = match(String);
 				setState(511); match(2);
@@ -2481,7 +2525,7 @@ public class GrammarParser extends Parser {
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(518); match(Hint);
+				setState(518); match(Addhint);
 				setState(519); ((Record_challengeContext)_localctx).String = match(String);
 				LOGONode temp = new LOGOLeaf((((Record_challengeContext)_localctx).String!=null?((Record_challengeContext)_localctx).String.getText():null)); ((Record_challengeContext)_localctx).node =  new LOGOChallengeNode("WRITEHINT", temp);
 				}
@@ -2679,7 +2723,7 @@ public class GrammarParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\2\3F\u021f\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4"+
+		"\2\3G\u021f\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4"+
 		"\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20"+
 		"\4\21\t\21\4\22\t\22\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27"+
 		"\4\30\t\30\4\31\t\31\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36"+
@@ -2725,8 +2769,8 @@ public class GrammarParser extends Parser {
 		"\u0146\3\2\2\2\"\u0152\3\2\2\2$\u0164\3\2\2\2&\u017d\3\2\2\2(\u017f\3"+
 		"\2\2\2*\u0182\3\2\2\2,\u019d\3\2\2\2.\u01c3\3\2\2\2\60\u01d1\3\2\2\2\62"+
 		"\u01e6\3\2\2\2\64\u01ef\3\2\2\2\66\u01f1\3\2\2\28\u0213\3\2\2\2:\u021c"+
-		"\3\2\2\2<=\5\4\3\2=>\7\1\2\2>?\b\2\1\2?H\3\2\2\2@A\5:\36\2AB\7\1\2\2B"+
-		"C\b\2\1\2CH\3\2\2\2DE\7:\2\2EF\7D\2\2FH\7\1\2\2G<\3\2\2\2G@\3\2\2\2GD"+
+		"\3\2\2\2<=\5:\36\2=>\7\1\2\2>?\b\2\1\2?H\3\2\2\2@A\5\4\3\2AB\7\1\2\2B"+
+		"C\b\2\1\2CH\3\2\2\2DE\7:\2\2EF\7E\2\2FH\7\1\2\2G<\3\2\2\2G@\3\2\2\2GD"+
 		"\3\2\2\2H\3\3\2\2\2IJ\b\3\1\2JK\5\6\4\2KL\b\3\1\2LS\3\2\2\2MN\6\3\2\3"+
 		"NO\5\6\4\2OP\b\3\1\2PR\3\2\2\2QM\3\2\2\2RU\3\2\2\2SQ\3\2\2\2ST\3\2\2\2"+
 		"T\5\3\2\2\2US\3\2\2\2VW\5\62\32\2WX\b\4\1\2Xf\3\2\2\2YZ\5\b\5\2Z[\b\4"+
@@ -2745,12 +2789,12 @@ public class GrammarParser extends Parser {
 		"\u008b\5\16\b\2\u008b\u008c\5\20\t\2\u008c\u008d\b\7\1\2\u008d\u00ac\3"+
 		"\2\2\2\u008e\u008f\7\31\2\2\u008f\u0090\7\62\2\2\u0090\u0091\5\20\t\2"+
 		"\u0091\u0092\7\4\2\2\u0092\u0093\5\20\t\2\u0093\u0094\7\63\2\2\u0094\u0095"+
-		"\b\7\1\2\u0095\u00ac\3\2\2\2\u0096\u0097\7(\2\2\u0097\u0098\7D\2\2\u0098"+
+		"\b\7\1\2\u0095\u00ac\3\2\2\2\u0096\u0097\7(\2\2\u0097\u0098\7E\2\2\u0098"+
 		"\u00ac\b\7\1\2\u0099\u009a\7(\2\2\u009a\u009b\7\62\2\2\u009b\u009c\5$"+
 		"\23\2\u009c\u009d\7\63\2\2\u009d\u009e\b\7\1\2\u009e\u00ac\3\2\2\2\u009f"+
-		"\u00a0\7\'\2\2\u00a0\u00a1\7D\2\2\u00a1\u00ac\b\7\1\2\u00a2\u00a3\7\33"+
-		"\2\2\u00a3\u00a4\7D\2\2\u00a4\u00ac\b\7\1\2\u00a5\u00a6\7-\2\2\u00a6\u00a7"+
-		"\7D\2\2\u00a7\u00ac\b\7\1\2\u00a8\u00a9\7.\2\2\u00a9\u00aa\7D\2\2\u00aa"+
+		"\u00a0\7\'\2\2\u00a0\u00a1\7E\2\2\u00a1\u00ac\b\7\1\2\u00a2\u00a3\7\33"+
+		"\2\2\u00a3\u00a4\7E\2\2\u00a4\u00ac\b\7\1\2\u00a5\u00a6\7-\2\2\u00a6\u00a7"+
+		"\7E\2\2\u00a7\u00ac\b\7\1\2\u00a8\u00a9\7.\2\2\u00a9\u00aa\7E\2\2\u00aa"+
 		"\u00ac\b\7\1\2\u00ab\u008a\3\2\2\2\u00ab\u008e\3\2\2\2\u00ab\u0096\3\2"+
 		"\2\2\u00ab\u0099\3\2\2\2\u00ab\u009f\3\2\2\2\u00ab\u00a2\3\2\2\2\u00ab"+
 		"\u00a5\3\2\2\2\u00ab\u00a8\3\2\2\2\u00ac\r\3\2\2\2\u00ad\u00ae\7\23\2"+
@@ -2817,12 +2861,12 @@ public class GrammarParser extends Parser {
 		"\u0165\u016d\3\2\2\2\u0166\u0167\6\23\21\3\u0167\u0168\7\4\2\2\u0168\u0169"+
 		"\5\20\t\2\u0169\u016a\b\23\1\2\u016a\u016c\3\2\2\2\u016b\u0166\3\2\2\2"+
 		"\u016c\u016f\3\2\2\2\u016d\u016b\3\2\2\2\u016d\u016e\3\2\2\2\u016e%\3"+
-		"\2\2\2\u016f\u016d\3\2\2\2\u0170\u0171\7B\2\2\u0171\u017e\b\24\1\2\u0172"+
+		"\2\2\2\u016f\u016d\3\2\2\2\u0170\u0171\7C\2\2\u0171\u017e\b\24\1\2\u0172"+
 		"\u0173\7\62\2\2\u0173\u0174\5\20\t\2\u0174\u0175\7\63\2\2\u0175\u0176"+
 		"\b\24\1\2\u0176\u017e\3\2\2\2\u0177\u0178\5*\26\2\u0178\u0179\b\24\1\2"+
 		"\u0179\u017e\3\2\2\2\u017a\u017b\5(\25\2\u017b\u017c\b\24\1\2\u017c\u017e"+
 		"\3\2\2\2\u017d\u0170\3\2\2\2\u017d\u0172\3\2\2\2\u017d\u0177\3\2\2\2\u017d"+
-		"\u017a\3\2\2\2\u017e\'\3\2\2\2\u017f\u0180\7C\2\2\u0180\u0181\b\25\1\2"+
+		"\u017a\3\2\2\2\u017e\'\3\2\2\2\u017f\u0180\7D\2\2\u0180\u0181\b\25\1\2"+
 		"\u0181)\3\2\2\2\u0182\u0183\7/\2\2\u0183\u0184\5(\25\2\u0184\u0185\5\20"+
 		"\t\2\u0185\u0186\b\26\1\2\u0186+\3\2\2\2\u0187\u0188\7\60\2\2\u0188\u0189"+
 		"\7\62\2\2\u0189\u018a\5\20\t\2\u018a\u018b\7\63\2\2\u018b\u018c\7\64\2"+
@@ -2854,23 +2898,23 @@ public class GrammarParser extends Parser {
 		"\25\2\u01de\u01df\7\62\2\2\u01df\u01e0\5\64\33\2\u01e0\u01e1\7\63\2\2"+
 		"\u01e1\u01e2\7\64\2\2\u01e2\u01e3\5\4\3\2\u01e3\u01e4\7\65\2\2\u01e4\u01e5"+
 		"\b\32\1\2\u01e5\u01e7\3\2\2\2\u01e6\u01d3\3\2\2\2\u01e6\u01dc\3\2\2\2"+
-		"\u01e7\63\3\2\2\2\u01e8\u01e9\7C\2\2\u01e9\u01ea\7\4\2\2\u01ea\u01eb\5"+
-		"\64\33\2\u01eb\u01ec\b\33\1\2\u01ec\u01f0\3\2\2\2\u01ed\u01ee\7C\2\2\u01ee"+
+		"\u01e7\63\3\2\2\2\u01e8\u01e9\7D\2\2\u01e9\u01ea\7\4\2\2\u01ea\u01eb\5"+
+		"\64\33\2\u01eb\u01ec\b\33\1\2\u01ec\u01f0\3\2\2\2\u01ed\u01ee\7D\2\2\u01ee"+
 		"\u01f0\b\33\1\2\u01ef\u01e8\3\2\2\2\u01ef\u01ed\3\2\2\2\u01f0\65\3\2\2"+
 		"\2\u01f1\u01f2\5(\25\2\u01f2\u01f3\7\62\2\2\u01f3\u01f4\5$\23\2\u01f4"+
 		"\u01f5\7\63\2\2\u01f5\u01f6\b\34\1\2\u01f6\67\3\2\2\2\u01f7\u01f8\7=\2"+
 		"\2\u01f8\u0214\b\35\1\2\u01f9\u01fa\7>\2\2\u01fa\u0214\b\35\1\2\u01fb"+
-		"\u01fc\7>\2\2\u01fc\u01fd\7D\2\2\u01fd\u0214\b\35\1\2\u01fe\u01ff\7?\2"+
-		"\2\u01ff\u0200\7\62\2\2\u0200\u0201\7D\2\2\u0201\u0202\7\4\2\2\u0202\u0203"+
+		"\u01fc\7>\2\2\u01fc\u01fd\7E\2\2\u01fd\u0214\b\35\1\2\u01fe\u01ff\7?\2"+
+		"\2\u01ff\u0200\7\62\2\2\u0200\u0201\7E\2\2\u0201\u0202\7\4\2\2\u0202\u0203"+
 		"\5\20\t\2\u0203\u0204\7\4\2\2\u0204\u0205\5\20\t\2\u0205\u0206\7\63\2"+
 		"\2\u0206\u0207\b\35\1\2\u0207\u0214\3\2\2\2\u0208\u0209\7?\2\2\u0209\u020a"+
-		"\7D\2\2\u020a\u0214\b\35\1\2\u020b\u020c\7@\2\2\u020c\u020d\7B\2\2\u020d"+
-		"\u0214\b\35\1\2\u020e\u020f\7@\2\2\u020f\u0214\b\35\1\2\u0210\u0211\7"+
-		"A\2\2\u0211\u0212\7D\2\2\u0212\u0214\b\35\1\2\u0213\u01f7\3\2\2\2\u0213"+
+		"\7E\2\2\u020a\u0214\b\35\1\2\u020b\u020c\7A\2\2\u020c\u020d\7C\2\2\u020d"+
+		"\u0214\b\35\1\2\u020e\u020f\7A\2\2\u020f\u0214\b\35\1\2\u0210\u0211\7"+
+		"B\2\2\u0211\u0212\7E\2\2\u0212\u0214\b\35\1\2\u0213\u01f7\3\2\2\2\u0213"+
 		"\u01f9\3\2\2\2\u0213\u01fb\3\2\2\2\u0213\u01fe\3\2\2\2\u0213\u0208\3\2"+
 		"\2\2\u0213\u020b\3\2\2\2\u0213\u020e\3\2\2\2\u0213\u0210\3\2\2\2\u0214"+
-		"9\3\2\2\2\u0215\u0216\7;\2\2\u0216\u0217\7D\2\2\u0217\u021d\b\36\1\2\u0218"+
-		"\u0219\7<\2\2\u0219\u021d\b\36\1\2\u021a\u021b\7?\2\2\u021b\u021d\b\36"+
+		"9\3\2\2\2\u0215\u0216\7;\2\2\u0216\u0217\7E\2\2\u0217\u021d\b\36\1\2\u0218"+
+		"\u0219\7<\2\2\u0219\u021d\b\36\1\2\u021a\u021b\7@\2\2\u021b\u021d\b\36"+
 		"\1\2\u021c\u0215\3\2\2\2\u021c\u0218\3\2\2\2\u021c\u021a\3\2\2\2\u021d"+
 		";\3\2\2\2!GSep\u0088\u00ab\u00bd\u00cd\u00db\u00ec\u00ee\u0109\u010b\u011c"+
 		"\u011e\u0134\u0136\u0140\u0146\u0152\u015c\u0164\u016d\u017d\u019d\u01c3"+
