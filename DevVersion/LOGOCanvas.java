@@ -182,18 +182,18 @@ public class LOGOCanvas extends JComponent {
 	public void clearScreen() {
 		clean();
 		Iterator it = turtlePool.entrySet().iterator();
-		LOGOTurtle curTur = getCurTurtle();
+		LOGOTurtle curTur = turtlePool.get("local");
 		while (it.hasNext()) {
         	Map.Entry pairs = (Map.Entry)it.next();
         	LOGOTurtle tur = (LOGOTurtle)pairs.getValue();
         	if (tur.getName().equals(curTur.getName()))
         		continue;
-        	tur.resetBack();
-        	LOGOPP.eventQueue.add(tur, "RESET");
+        	tur.resetBack(false);
+        	LOGOPP.eventQueue.add(tur, "RESET", false);
 			
    		}
-   		curTur.resetBack();
-   		LOGOPP.eventQueue.add(curTur, "RESET");
+   		curTur.resetBack(true);
+   		LOGOPP.eventQueue.add(curTur, "RESET", true);
    		LOGOPP.eventQueue.clearPending(false);
 	}
 

@@ -278,17 +278,17 @@ public class LOGOTurtle{
 		setYPos(y);
 	}
 
-	public void reset() {
+	public void reset(boolean show) {
 		setXPos((double)(canvasOn.getWidth() / 2));
 		setYPos((double)(canvasOn.getHeight() / 2));
 		setAngle(INIT_ANGLE);
 		setSpeed(INIT_SPEED);
 		setPenDown(true);
-		setShowTurtle(true);
+		setShowTurtle(show);
 		setColor(0);
 	}
 
-	public void resetBack() {
+	public void resetBack(boolean show) {
 		setXPosBack((double)(canvasOn.getWidth() / 2));
 		setYPosBack((double)(canvasOn.getHeight() / 2));
 		setAngleBack(INIT_ANGLE);

@@ -13,17 +13,18 @@ public class LOGOPP extends JFrame implements KeyListener {
 	static JTextArea cur = new JTextArea();
 	static JTextArea noti = new JTextArea();
 	static JPanel pane = new JPanel();
-	static final int PREV_HEIGHT = 100;
-	static final int CHAR_HEIGHT = 20;
-	static final int CUR_HEIGHT = 60;
-	static final int NOTI_HEIGHT = 40;
-	static final int MARGIN_HEIGHT = 5;
+	static final int PREV_HEIGHT       = 100;
+	static final int CHAR_HEIGHT       = 20;
+	static final int CUR_HEIGHT        = 60;
+	static final int CUR_LEFT          = 20;
+	static final int NOTI_HEIGHT       = 20;
+	static final int MARGIN_HEIGHT     = 5;
 	static final int ADDITIONAL_HEIGHT = 100;
-	static final int ADDITIONAL_WIDTH = 10;
-	static final int TIMER_INTERVAL = 20;
-	static boolean hasAnimation = true;
-	static boolean processingCmd = false;
-	static boolean isInterrupted = false;
+	static final int ADDITIONAL_WIDTH  = 10;
+	static final int TIMER_INTERVAL    = 20;
+	static boolean hasAnimation        = true;
+	static boolean processingCmd       = false;
+	static boolean isInterrupted       = false;
 	static ActionListener updateCanvas = new ActionListener() {
 		public void actionPerformed(ActionEvent evt) {
 			javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -67,15 +68,18 @@ public class LOGOPP extends JFrame implements KeyListener {
 		logoPP.pack();
 		logoPP.setVisible(true);
 		logoPP.changeWindowSize(false);
-		//        logoPP.setResizable(false);
 
 		LOGOTurtle tur2 = new LOGOTurtle("tur2");
+		tur2.setShowTurtle(false);
 		canvas.putTurtle(tur2, canvas.getWidth() / 2, canvas.getHeight() / 2);
-		canvas.addHistory();
 		LOGOTurtle tur = new LOGOTurtle("local");
 		canvas.putTurtle(tur, canvas.getWidth() / 2, canvas.getHeight() / 2);
+		canvas.addHistory();
+		
+		LOGOPP.canvas.clearScreen();
 		LOGOPP.io.setStatus("Welcome to LOGO++!");
 		LOGOPP.io.showState();
+
 	}
 
 	private void initComponents() {
@@ -95,27 +99,32 @@ public class LOGOPP extends JFrame implements KeyListener {
 		cur.getInputMap().put(lCB, "none");
 		KeyStroke lB = KeyStroke.getKeyStroke('"');
 		cur.getInputMap().put(lB, "none");
+		cur.setText("");
 		prev.setEditable(false);
 		noti.setEditable(false);
 		noti.setForeground(Color.GRAY);
 		JScrollPane scrollPane1 = new JScrollPane(prev);
 		scrollPane1.setPreferredSize(new Dimension(canvas.getWidth(), PREV_HEIGHT));
 		JScrollPane scrollPane2 = new JScrollPane(cur);
-		scrollPane2.setPreferredSize(new Dimension(canvas.getWidth(), CUR_HEIGHT));
-		JScrollPane scrollPane3 = new JScrollPane(noti);
-		scrollPane2.setPreferredSize(new Dimension(canvas.getWidth(), NOTI_HEIGHT));
+		scrollPane2.setPreferredSize(new Dimension(canvas.getWidth() - CUR_LEFT, CUR_HEIGHT));
+		//JScrollPane scrollPane3 = new JScrollPane(noti);
+		//scrollPane2.setPreferredSize(new Dimension(canvas.getWidth(), NOTI_HEIGHT));
+		JLabel label = new JLabel(">");
 		canvas.setBounds(1,1,canvas.getWidth(), canvas.getHeight());
 		canvas.setWindow(this);
 		canvas.repaint();
 		pane.add(scrollPane1);
 		pane.add(scrollPane2);
-		pane.add(scrollPane3);
+		pane.add(noti);
 		pane.add(canvas);
+		pane.add(label);
 		scrollPane1.setBounds(1, canvas.getHeight() + MARGIN_HEIGHT, canvas.getWidth(), PREV_HEIGHT);
-		scrollPane2.setBounds(1, canvas.getHeight() + MARGIN_HEIGHT * 2 + PREV_HEIGHT, 
-				      canvas.getWidth(), CUR_HEIGHT);
-		scrollPane3.setBounds(1, canvas.getHeight() + MARGIN_HEIGHT * 3 + PREV_HEIGHT + CUR_HEIGHT,
+		scrollPane2.setBounds(CUR_LEFT, canvas.getHeight() + MARGIN_HEIGHT * 2 + PREV_HEIGHT, 
+				      canvas.getWidth() - CUR_LEFT, CUR_HEIGHT);
+		noti.setBounds(1, canvas.getHeight() + MARGIN_HEIGHT * 3 + PREV_HEIGHT + CUR_HEIGHT,
 						canvas.getWidth(), NOTI_HEIGHT);
+		noti.setBorder(BorderFactory.createEmptyBorder());
+		label.setBounds(1,canvas.getHeight() + MARGIN_HEIGHT * 2 + PREV_HEIGHT, CUR_LEFT, CHAR_HEIGHT);
 		pane.revalidate();
 		this.repaint();
 	}

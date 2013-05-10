@@ -36,7 +36,7 @@ public class LOGOChallenge extends JComponent {
             status = challengeType.CHLG_RECORD;
             hintList = new LOGOHintList();
             LOGOPP.io.out("Now start recording your challenge.");
-            LOGOPP.io.setChallengeStatus("RECORDING");
+            LOGOPP.io.setChallengeStatus("RECORD");
             LOGOPP.io.showState();
         }
     }
@@ -188,7 +188,7 @@ public class LOGOChallenge extends JComponent {
             this.repaint();
             windowOn.addChallenge();
             windowOn.changeWindowSize(true);
-            LOGOPP.io.setChallengeStatus("PLAYING");
+            LOGOPP.io.setChallengeStatus("PLAY");
             LOGOPP.io.showState();
         }
         else {

@@ -214,13 +214,15 @@ class LOGOEventQueue {
 	}
 
 	class ResetEvent extends Events {
-		public ResetEvent(LOGOTurtle tur) {
+		boolean argB = true;
+		public ResetEvent(LOGOTurtle tur, boolean show) {
 			super(tur);
+			argB = show;
 			rest = 0.;
 			restSteps += rest;
 		}
 		public double execute(double step) {
-			turtle.reset();
+			turtle.reset(argB);
 			rest = 0.;
 			return 0.;
 		}
@@ -262,9 +264,6 @@ class LOGOEventQueue {
 		else if (type.equals("FILL") && args.length == 0) {
 			event = new FillEvent(tur);
 		}
-		else if (type.equals("RESET") && args.length == 0) {
-			event = new ResetEvent(tur);
-		}
 		else {
 			LOGOPP.io.debug("Wrong arg type for event queue.");
 			return;
@@ -303,6 +302,8 @@ class LOGOEventQueue {
 			event = new DrawEvent(tur, arg);
 		else if (type.equals("WRAP"))
 			event = new WrapEvent(tur, arg);
+		else if (type.equals("RESET"))
+			event = new ResetEvent(tur, arg);
 		else {
 			LOGOPP.io.debug("Wrong arg type for event queue.");
 			return;
