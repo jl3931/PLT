@@ -46,7 +46,7 @@ public class LOGOOperatorNode extends LOGONode{
 				ret = (double)1;
 			else
 				ret = (double)0;
-			LOGOPP.io.debug("unary minus");
+			LOGOPP.io.debug("not");
 			LOGOPP.io.debug(ret.toString());
 			return ret;
 		}

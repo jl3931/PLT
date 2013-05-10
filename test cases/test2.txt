@@ -1,0 +1,56 @@
+RC
+CS
+TURTLE "local"
+COLOR "BLACK"
+HT PD
+SS 20
+LT 90
+TURTLE "tur2"
+COLOR "GRAY"
+PD HT
+SS 20
+RT 90
+
+ADDHINT "you should start here"
+
+TURTLE "local"
+BK 1 FD 1
+
+REPEAT 180 {
+	TURTLE "local"
+	FD 1 RT 1
+	TURTLE "tur2"
+	FD 1 RT 1
+}
+
+REPEAT 180 {
+	TURTLE "local"
+	FD 2 RT 1
+	TURTLE "tur2"
+	FD 2 RT 1
+}
+
+TURTLE "local"
+RT 90
+TURTLE "tur2"
+RT 90
+TURTLE "local"
+PU FD 40 PD LT 90
+TURTLE "tur2"
+PU FD 40 PD LT 90
+REPEAT 360 {
+	TURTLE "local"
+	FD 0.3 RT 1
+	TURTLE "tur2"
+	FD 0.3 RT 1
+}
+
+ADDHINT ("Try to cooperate 2 turtles to finish this figure.", 10, 10)
+
+SC "challengeTaiJi.bmp"
+QUIT
+
+TURTLE "local"
+HOME PU FD 30 FILL
+BK 100 FILL
+COLOR "GRAY" BK 100 FILL
