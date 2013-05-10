@@ -8,8 +8,11 @@ public class LOGOStatementNode extends LOGONode{
 	public Object run() {
 		Object ret = null;
 		if (id.equals("statement_list")) {
-			for (LOGONode node : children)
-					ret = node.run();
+			for (LOGONode node : children) {
+				if (LOGOPP.errorhandler.error())
+					return null;
+				ret = node.run();
+			}
 		}
 		return ret;
 	}
