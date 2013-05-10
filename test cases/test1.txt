@@ -1,0 +1,27 @@
+CS
+TURTLE "local"
+SS 100
+COLOR "RED"
+TURTLE "tur2"
+SS 100
+COLOR "PURPLE"
+repeat 8 {
+	TURTLE "local"
+	RT 45
+	TURTLE "tur2"
+	LT 45
+	repeat 6 {
+		repeat 90 {
+			TURTLE "local"
+			FD 2 RT 2
+			TURTLE "tur2"
+			FD 2 LT 2
+		}
+		TURTLE "local"
+		RT 90
+		TURTLE "tur2"
+		LT 90
+	}
+}
+
+TURTLE "local"

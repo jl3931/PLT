@@ -1,0 +1,41 @@
+function circle (r, d, i, l_or_r) {repeat i {FD r if (l_or_r = 0) {RT d} else {LT d} }}
+
+function P ( ) {
+PU BK 100 LT 90 FD 200 RT 90 PD FD 200 RT 90 FD 20
+circle (1, 1, 180, 0)
+RT 90 PU FD 20 PD RT 90
+circle (0.6, 1, 180, 1)
+LT 90 FD 70 PU FD 16 PD FD 85 RT 90 FD 20
+}
+function L ( ) {
+color "blue"
+PU LT 90 FD 50 RT 90 PD FD 100 LT 90 FD 20 LT 90
+FD 200 LT 90 FD 100 LT 90 FD 20 LT 90 FD 80 RT 90 FD 100
+}
+
+function T ()
+{
+color "black"
+PU RT 90 FD 80 LT 90 PD FD 80 LT 90 FD 60 RT 90
+FD 20 RT 90 FD 140 RT 90 FD 20 RT 90 FD 60 LT 90
+FD 180 RT 90 FD 20 RT 90 FD 100
+}
+
+CS
+
+Turtle "tur2"
+HT
+Turtle "local" 
+color "red"
+
+
+P ()
+HOME
+L ()
+HOME
+T ()
+
+SETXY (390, 200) fill
+SETXY (240, 200) color "blue" fill
+SETXY (140, 200) color "red" fill
+HT
