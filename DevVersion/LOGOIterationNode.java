@@ -78,14 +78,27 @@ public class LOGOIterationNode extends LOGONode{
 			if (LOGOPP.errorhandler.error())
 				return null;
 			double iterator;
-			for (iterator = init; iterator <= fini; iterator += pace) {
-				LOGOPP.symboltable.set(children.get(0).id, iterator);
-				if (LOGOPP.errorhandler.error())
-					return null;
-				we_run_it = 1;
-				ret = children.get(2).run();
-				if (LOGOPP.errorhandler.error())
-					return null;
+			if (pace > 0) {
+				for (iterator = init; iterator <= fini; iterator += pace) {
+					LOGOPP.symboltable.set(children.get(0).id, iterator);
+					if (LOGOPP.errorhandler.error())
+						return null;
+					we_run_it = 1;
+					ret = children.get(2).run();
+					if (LOGOPP.errorhandler.error())
+						return null;
+				}
+			}
+			if (pace < 0) {
+				for (iterator = init; iterator >= fini; iterator += pace) {
+					LOGOPP.symboltable.set(children.get(0).id, iterator);
+					if (LOGOPP.errorhandler.error())
+						return null;
+					we_run_it = 1;
+					ret = children.get(2).run();
+					if (LOGOPP.errorhandler.error())
+						return null;
+				}
 			}
 			if (we_run_it == 1)
 				return ret;
