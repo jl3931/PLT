@@ -47,10 +47,12 @@ REPEAT 360 {
 
 HINT ("Try to cooperate 2 turtles to finish this figure.", 10, 10)
 
-SC "challengeTaiJi.bmp"
-QUIT
+
 
 TURTLE "local"
 HOME PU FD 30 FILL
 BK 100 FILL
 COLOR "GRAY" BK 100 FILL
+
+SC "challengeTaiJi.bmp"
+# QUIT
