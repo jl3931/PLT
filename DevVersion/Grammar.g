@@ -37,7 +37,7 @@ command_noarg returns [LOGONode node]
     |	Showturtle {$node =  new LOGOCommandNode("SHOWTURTLE");}
     |	Hideturtle {$node =  new LOGOCommandNode("HIDETURTLE");}
     |   Fill {$node = new LOGOCommandNode("FILL");}
-    |	Reset
+    |	Reset {$node = new LOGOCommandNode("CS_CLEARSYMBOLTABLE");}
     ;
     
 command_expr returns [LOGONode node]
