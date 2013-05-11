@@ -177,7 +177,7 @@ funcall returns [LOGONode node]
         
 /* -------------------------- challenge ---------------------------*/
 record_challenge returns [LOGONode node]
-		: Quit {$node = new LOGOChallengeNode("QUIT"); System.out.println("quit");}
+		: Quit {$node = new LOGOChallengeNode("QUIT");}
         | Recordchallenge {$node = new LOGOChallengeNode("RECORD");}
         | Recordchallenge String {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("RECORD", temp);}
         | Addhint '(' String ',' e1=expression ',' e2=expression ')' {LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("WRITEHINT", temp, $e1.node, $e2.node);}
@@ -188,8 +188,8 @@ record_challenge returns [LOGONode node]
 		;
 
 play_challenge returns [LOGONode node]
-        : Challenge String { LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("CHALLENGE", temp); System.out.println($String.text);}
-        | Match {$node = new LOGOChallengeNode("MATCH"); System.out.println("Match");}
+        : Challenge String { LOGONode temp = new LOGOLeaf($String.text); $node = new LOGOChallengeNode("CHALLENGE", temp);}
+        | Match {$node = new LOGOChallengeNode("MATCH");}
         | Hint {$node = new LOGOChallengeNode("SHOWHINT");}
         ;
 

@@ -1,20 +1,7 @@
 class LOGOExprListNode extends LOGONode {
-	//int numExpr;
 	public LOGOExprListNode(LOGONode... exprs) {
 		super("expressionList", exprs);
-		//numExpr = 1;
-		//children = new LOGONode[numExpr];
-		//children[0] = expr;
-		System.out.println("expr_list node");
 	}
-	/*public LOGOExprListNode(LOGONode expr, LOGOExprListNode exprList) {
-		super("");
-		numExpr = exprList.numExpr + 1;
-		children = new LOGONode[numExpr];
-		children.get(0) = expr;
-		for (int i = 1; i < numExpr; i++)
-			children[i] = exprList.children[i-1];
-	}*/
 
 	public Object run() {
 		Object[] ret = new Object[children.size()];

@@ -193,14 +193,14 @@ public class LOGOPP extends JFrame implements KeyListener {
 		case KeyEvent.VK_G:
 			if (e.getModifiers() == KeyEvent.CTRL_MASK && processingCmd) {
 				hasAnimation = false;
-				LOGOPP.io.setStatus("Now finishing rest work, you may need to wait for a while.");
+				LOGOPP.io.setStatus("Processing, please wait.");
 				LOGOPP.io.showState();
 			}
 			break;
 		case KeyEvent.VK_C:
 			if (e.getModifiers() == KeyEvent.CTRL_MASK && processingCmd) {
 				isInterrupted = true;
-				LOGOPP.io.setStatus("Process interrupted!");
+				LOGOPP.io.setStatus("Interrupted!");
 				LOGOPP.io.showState();
 			}
 			break;
@@ -264,13 +264,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 		errorhandler.reset();
 		try {
 			LOGONode root = interpreter.parse(str);
-			/*if (root == null) {
-				if (errorhandler.error())
-					errorhandler.errorOut();
-				errorhandler.reset();
-				return;
-			}*/
-			LOGOPP.io.setStatus("Processing commands");
+			LOGOPP.io.setStatus("Processing...");
 			LOGOPP.io.showState();
 			processingCmd = true;
 			root.run();
@@ -281,7 +275,6 @@ public class LOGOPP extends JFrame implements KeyListener {
 					LOGOPP.eventQueue.interrupt();
 					LOGOPP.canvas.interrupt();
 					isInterrupted = false;
-					System.out.println("interrupt");
 				}
 			}
 			else {

@@ -2486,7 +2486,7 @@ public class GrammarParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(501); match(Quit);
-				((Record_challengeContext)_localctx).node =  new LOGOChallengeNode("QUIT"); System.out.println("quit");
+				((Record_challengeContext)_localctx).node =  new LOGOChallengeNode("QUIT");
 				}
 				break;
 
@@ -2601,14 +2601,14 @@ public class GrammarParser extends Parser {
 				{
 				setState(531); match(Challenge);
 				setState(532); ((Play_challengeContext)_localctx).String = match(String);
-				 LOGONode temp = new LOGOLeaf((((Play_challengeContext)_localctx).String!=null?((Play_challengeContext)_localctx).String.getText():null)); ((Play_challengeContext)_localctx).node =  new LOGOChallengeNode("CHALLENGE", temp); System.out.println((((Play_challengeContext)_localctx).String!=null?((Play_challengeContext)_localctx).String.getText():null));
+				 LOGONode temp = new LOGOLeaf((((Play_challengeContext)_localctx).String!=null?((Play_challengeContext)_localctx).String.getText():null)); ((Play_challengeContext)_localctx).node =  new LOGOChallengeNode("CHALLENGE", temp);
 				}
 				break;
 			case Match:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(534); match(Match);
-				((Play_challengeContext)_localctx).node =  new LOGOChallengeNode("MATCH"); System.out.println("Match");
+				((Play_challengeContext)_localctx).node =  new LOGOChallengeNode("MATCH");
 				}
 				break;
 			case Hint:

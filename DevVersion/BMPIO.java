@@ -22,6 +22,11 @@ public class BMPIO {
      *          value = R|G<<8|B<<16|alpha<<24
      */
     public static int[][] getBitmapFromBMP(String filename) {
+    	if (filename.length() < 4 || 
+    		!filename.substring(filename.length()-4).toLowerCase().equals(".bmp")) {
+    		LOGOPP.errorhandler.setRunTime("BMP IO","Wrong file type. You must load a .bmp file.");
+    		return null;
+    	}
         try {
             File imageFile = new File(filename);
             BufferedImage image = ImageIO.read(imageFile);
@@ -39,7 +44,7 @@ public class BMPIO {
             return ret;
         }
         catch (Exception e) {
-            LOGOPP.io.err("Fail to load file, please check the path");
+        	LOGOPP.errorhandler.setRunTime("BMP IO","Fail to load flie, please check path.");
         }
         return null;
     }
@@ -52,15 +57,11 @@ public class BMPIO {
         	int h = image.getHeight();
             FileInputStream fin = new FileInputStream(imageFile);
             byte[] bytes = load(fin);
-            System.out.println(bytes.length);
             int imageLength = imageLength(w, h);
             if (bytes.length > imageLength) {
                 LOGOPP.io.debug("get byte array!");
                 byte[] objectBytes = new byte[bytes.length - imageLength];
                 System.arraycopy(bytes, imageLength, objectBytes, 0, objectBytes.length);
-                /*for (byte b : objectBytes) {
-					System.out.println(b);
-				}*/
                 ByteArrayInputStream bi = new ByteArrayInputStream(objectBytes);
                 ObjectInputStream oi = new ObjectInputStream(bi);
                 Object o = oi.readObject();
@@ -70,7 +71,6 @@ public class BMPIO {
             }
         }
         catch (Exception e) {
-			System.out.println("translation:"+e.getMessage());
         }
         return null;
     }
@@ -100,6 +100,11 @@ class BMPWriter {
 	byte [] bytes;
 	
 	public boolean saveBMP(String filename, int [][] rgbValues, Object o){
+		if (filename.length() < 4 || 
+    		!filename.substring(filename.length()-4).toLowerCase().equals(".bmp")) {
+    		LOGOPP.errorhandler.setRunTime("BMP IO","Wrong file type. You must save to a .bmp file.");
+    		return false;
+    	}
 		try {
 			FileOutputStream fos = new FileOutputStream(new File(filename));
 			
@@ -117,9 +122,6 @@ class BMPWriter {
 				ObjectOutputStream oo = new ObjectOutputStream(bo);
 				oo.writeObject(o);
 				byte[] myBytes = bo.toByteArray();
-				/*for (byte b : myBytes) {
-					System.out.println(b);
-				}*/
 				fos.write(myBytes);
 				bo.close();
 				oo.close();
@@ -127,7 +129,7 @@ class BMPWriter {
 			fos.close();
 			return true;
 		} catch (Exception e) {
-			System.out.println("translation:"+e.getMessage());
+			LOGOPP.errorhandler.setRunTime("BMP IO","Fail to save to a bitmap file.");
 			return false;
 		}
 	}

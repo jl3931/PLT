@@ -33,15 +33,9 @@ public class LOGOHintList implements Serializable {
         }
     }
 
-    public void debugHint(){
-        for (Hint h : hints) {
-            System.out.println(h.content + "," + h.x + "," + h.y);
-        }
-    }
-
     public void removeHint(int index) {
         if (index <= 0 || index > hints.size()) {
-            LOGOPP.io.err("Wrong index of hint!");
+            LOGOPP.errorhandler.setRunTime("REMOVE HINT", "Wrong index of hint!");
             return;
         }
         hints.remove(index-1);

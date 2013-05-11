@@ -1,12 +1,10 @@
 public class LOGOChallengeNode extends LOGONode {
 	public LOGOChallengeNode(String id) {
 		super(id);
-		System.out.println("new command node no arg");
 	}
 
 	public LOGOChallengeNode(String id, LOGONode... args) {
 		super(id, args);
-		System.out.println("new command node with arg");
 	}
 
 	public Object run() {

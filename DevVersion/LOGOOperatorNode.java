@@ -1,3 +1,4 @@
+
 public class LOGOOperatorNode extends LOGONode{
 	public LOGOOperatorNode(String id, LOGONode... args) {
 		super(id, args);
@@ -159,7 +160,7 @@ public class LOGOOperatorNode extends LOGONode{
 		if (id.equals("=")) {
 			arg0 = runAndCheck(children.get(0));
 			arg1 = runAndCheck(children.get(1));
-			System.out.println(arg0 + "==" + arg1 + " " + (arg0 == arg1));
+			//System.out.println(arg0 + "==" + arg1 + " " + (arg0 == arg1));
 			if (LOGOPP.errorhandler.error())
 				return null;
 			if (Math.abs(arg0 - arg1) < EPSILON)

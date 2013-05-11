@@ -325,7 +325,8 @@ class LOGOEventQueue {
                 }  
 			}
 		}
-		LOGOPP.io.showState();
+		if (LOGOPP.hasAnimation)
+			LOGOPP.io.showState();
 	}
 
 	public void tick() {

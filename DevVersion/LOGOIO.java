@@ -65,14 +65,15 @@ public class LOGOIO {
 	public void showState() {
 		LOGOPP.noti.setText("");
 		String content = "";
-		//if (challengeStatus != null && !challengeStatus.equals(""))
-		//	content += "[CHALLENGE: " + challengeStatus+ "]";
+		if (challengeStatus != null && !challengeStatus.equals(""))
+			content += "[Challenge: " + challengeStatus+ "]";
 		content += status;
-		for (int i=0; i< 35 - content.length();i++) {
+		int side = 50 - content.length();
+		for (int i = 0; i < side; i++) {
 			content += " ";
 		}
 		int a = (int)(LOGOPP.canvas.getCurTurtle().getAngle());
-		String angleString = Integer.toString(a) + "o";
+		String angleString = "";
 		if (a == 270) {
 			angleString = "N";
 		}
@@ -97,11 +98,11 @@ public class LOGOIO {
 		else if (a > 0 && a < 90) {
 			angleString = "S " + Integer.toString(90 - a) + " E";
 		}
-		content += "\t[Current Turtle: " +
+		content += "[Current: " +
 						LOGOPP.canvas.getCurTurtle().getName() +
 						", X:" + Integer.toString((int)(LOGOPP.canvas.getCurTurtle().getXPos())) +
 						", Y:" + Integer.toString((int)(LOGOPP.canvas.getCurTurtle().getYPos())) +
-						", Angle: " + angleString +
+						", " + angleString +
 						", Speed: " + Integer.toString((int)(LOGOPP.canvas.getCurTurtle().getSpeed())) +
 						"]";
 

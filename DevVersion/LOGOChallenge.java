@@ -53,10 +53,8 @@ public class LOGOChallenge extends JComponent {
         int[][] map = BMPIO.getBitmapFromBMP(path);
         if (map != null) {
             Object o = BMPIO.getHiddenObject(path);
-            if (o instanceof LOGOHintList) {
+            if (o instanceof LOGOHintList)
                 hintList = (LOGOHintList)o;
-                hintList.debugHint();
-            }
             else
                 hintList = new LOGOHintList();
             status = challengeType.CHLG_RECORD;
@@ -115,6 +113,8 @@ public class LOGOChallenge extends JComponent {
             return;
         int index = (int)(ret.doubleValue());
         hintList.removeHint(index);
+        if (LOGOPP.errorhandler.error())
+            return;
         LOGOPP.canvas.repaint();
     }
 
@@ -139,7 +139,7 @@ public class LOGOChallenge extends JComponent {
         String filename = runAndCheckString(arg, "SAVE CHALLENGE");
         if (LOGOPP.errorhandler.error())
             return;
-        //LOGOPP.io.debug("saving challenge!");
+        LOGOPP.io.debug("saving challenge!");
         LOGOHintList hl = hintList;
         if (hintList.hintNumber() == 0)
             hl = null;
@@ -172,12 +172,12 @@ public class LOGOChallenge extends JComponent {
         if (LOGOPP.errorhandler.error())
             return;
         bitmap = BMPIO.getBitmapFromBMP(path);
+        if (LOGOPP.errorhandler.error())
+            return;
         if (bitmap != null) {
             Object o = BMPIO.getHiddenObject(path);
-            if (o instanceof LOGOHintList) {
+            if (o instanceof LOGOHintList)
                 hintList = (LOGOHintList)o;
-                hintList.debugHint();
-            }
             else
                 hintList = null;
             isShowingHint = false;

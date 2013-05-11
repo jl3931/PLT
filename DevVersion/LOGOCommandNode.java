@@ -3,12 +3,10 @@ import java.util.*;
 public class LOGOCommandNode extends LOGONode {
 	public LOGOCommandNode(String id) {
 		super(id);
-		System.out.println("new command node no arg");
 	}
 
 	public LOGOCommandNode(String id, LOGONode... args) {
 		super(id, args);
-		System.out.println("new command node with arg");
 	}
 
 	public Object run() {

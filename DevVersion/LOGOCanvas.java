@@ -148,10 +148,6 @@ public class LOGOCanvas extends JComponent {
 		BMPIO.saveBMP(title + DISPLAY_IMG_POSTFIX, bitmap, null);
 		try {
 			File imageFile = new File(title + DISPLAY_IMG_POSTFIX);
-			//////////FOR BITMAP COMPARISON TEST
-			//int[][] forTest = getBitmapFromBMP(title+".bmp");
-			//System.out.println(bitmapCompare(forTest, bitmap));
-			//////////END BITMAP COMPARISON TEST
 			Image image = ImageIO.read(imageFile);
 			ImageIcon icon = new ImageIcon(image);
 			Graphics2D g2 = (Graphics2D) g;
@@ -274,7 +270,6 @@ public class LOGOCanvas extends JComponent {
 		}
 		curHis++;
 		history.add(cs);
-		System.out.println(history.size());
 	}
 
 	public void undo () {
@@ -291,7 +286,6 @@ public class LOGOCanvas extends JComponent {
 		}
 		curHis--;
 		loadHistory(curHis);
-		System.out.println(curHis + "/" + history.size());
 		LOGOPP.canvas.repaint();
 	}
 
@@ -305,7 +299,6 @@ public class LOGOCanvas extends JComponent {
 		}
 		curHis++;
 		loadHistory(curHis);
-		System.out.println(curHis + "/" + history.size());
 		LOGOPP.canvas.repaint();
 	}
 
