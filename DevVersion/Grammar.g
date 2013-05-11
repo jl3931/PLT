@@ -233,7 +233,7 @@ Setxy
         ;
 
 Speed
-        : ('Speed' | 'SPEED')
+        : ('Speed' | 'SPEED'| 'SS')
         ;
 
 Print
@@ -241,7 +241,7 @@ Print
         ;
 
 Clearscreen
-        : ('Clearscreen' | 'CLEARSCREEN' | 'CS')
+        : ('Clearscreen' | 'CLEARSCREEN' | 'ClearScreen' | 'CS')
         ;
 
 Origin
@@ -249,7 +249,7 @@ Origin
         ;
 
 Front
-		: ('Front' | 'FRONT' | 'front' | 'FaceFront' | 'FACEFRONT' | 'facefront' | 'Facefront' | 'FF')
+		: ('Front' | 'FRONT' | 'FaceFront' | 'FACEFRONT' | 'Facefront' | 'FF')
 		;
 
 Wrap
@@ -269,7 +269,7 @@ Gety
         ;
 
 Getspeed
-		: ('GetSpeed' | 'GS' | 'GETSPEED' | 'getspeed' | 'Getspeed')
+		: ('GetSpeed' | 'GS' | 'GETSPEED' | 'Getspeed')
 		;
 
 Getxy
@@ -296,9 +296,6 @@ Fill
         : ('Fill' | 'fill' | 'FILL')
         ;
 
-Setspeed
-        : ('SetSpeed' | 'SETSPEED' | 'setspeed' | 'Setspeed' | 'SS')
-        ;
 
 Hideturtle
         : ('Hideturtle' | 'HIDETURTLE' | 'HT')
@@ -317,11 +314,11 @@ Turtle
         ;
 
 Set
-		: ('Set' | 'SET' | 'set')
+		: 'set'
 		;
 		
 Reset
-		: ('Reset' | 'RESET' | 'reset')
+		: 'reset'
 		;
 		
 If
@@ -357,15 +354,15 @@ For
         ;
         
 Repeat
-		: ('Repeat' | 'repeat' | 'REPEAT')
+		: 'repeat'
 		;
 
 Function
-    	: ('FUNCTION' | 'function')
+    	: 'function'
     	;
     	
 Import
-		: ('IMPORT' | 'Import' | 'import')
+		: 'import'
 		;
     	
 Challenge
