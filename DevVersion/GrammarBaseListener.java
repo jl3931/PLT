@@ -39,6 +39,9 @@ public class GrammarBaseListener implements GrammarListener {
 	@Override public void enterEquality_expression(GrammarParser.Equality_expressionContext ctx) { }
 	@Override public void exitEquality_expression(GrammarParser.Equality_expressionContext ctx) { }
 
+	@Override public void enterPower_expression(GrammarParser.Power_expressionContext ctx) { }
+	@Override public void exitPower_expression(GrammarParser.Power_expressionContext ctx) { }
+
 	@Override public void enterUnary_expression(GrammarParser.Unary_expressionContext ctx) { }
 	@Override public void exitUnary_expression(GrammarParser.Unary_expressionContext ctx) { }
 
@@ -72,11 +75,11 @@ public class GrammarBaseListener implements GrammarListener {
 	@Override public void enterStatement(GrammarParser.StatementContext ctx) { }
 	@Override public void exitStatement(GrammarParser.StatementContext ctx) { }
 
-	@Override public void enterAdditive_expression(GrammarParser.Additive_expressionContext ctx) { }
-	@Override public void exitAdditive_expression(GrammarParser.Additive_expressionContext ctx) { }
-
 	@Override public void enterFor_expression(GrammarParser.For_expressionContext ctx) { }
 	@Override public void exitFor_expression(GrammarParser.For_expressionContext ctx) { }
+
+	@Override public void enterAdditive_expression(GrammarParser.Additive_expressionContext ctx) { }
+	@Override public void exitAdditive_expression(GrammarParser.Additive_expressionContext ctx) { }
 
 	@Override public void enterUnary_operator(GrammarParser.Unary_operatorContext ctx) { }
 	@Override public void exitUnary_operator(GrammarParser.Unary_operatorContext ctx) { }

@@ -97,11 +97,15 @@ additive_expression returns [LOGONode node]
         ;
 
 multiplicative_expression returns [LOGONode node]
-        : n=multiplicative_expression '*' unary_expression {$node = new LOGOOperatorNode("*", $n.node, $unary_expression.node); LOGOPP.io.debug("mul->mul*unary " + $node.id);}
-        | n=multiplicative_expression '/' unary_expression {$node = new LOGOOperatorNode("/", $n.node, $unary_expression.node); LOGOPP.io.debug("mul->mul/unary " + $node.id);}
-        | n=multiplicative_expression '^' unary_expression {$node = new LOGOOperatorNode("^", $n.node, $unary_expression.node); LOGOPP.io.debug("mul->mul^unary " + $node.id);}
-        | unary_expression {$node = $unary_expression.node; LOGOPP.io.debug("mul->unary " + $node.id);}
+        : n=multiplicative_expression '*' power_expression {$node = new LOGOOperatorNode("*", $n.node, $power_expression.node); LOGOPP.io.debug("mul->mul*pow " + $node.id);}
+        | n=multiplicative_expression '/' power_expression {$node = new LOGOOperatorNode("/", $n.node, $power_expression.node); LOGOPP.io.debug("mul->mul/pow " + $node.id);}
+        | power_expression {$node = $power_expression.node; LOGOPP.io.debug("mul->unary " + $node.id);}
         ;
+
+power_expression returns [LOGONode node]
+		: unary_expression '^' n=power_expression {$node = new LOGOOperatorNode("^", $unary_expression.node, $n.node); LOGOPP.io.debug("pow->pow^unary " + $node.id);}
+		| unary_expression {$node = $unary_expression.node; LOGOPP.io.debug("mul->unary " + $node.id);}
+		;
 
 unary_expression returns [LOGONode node]
         : postfix_expression {$node = $postfix_expression.node; LOGOPP.io.debug("unary->postfix " + $node.id);}

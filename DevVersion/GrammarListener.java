@@ -36,6 +36,9 @@ public interface GrammarListener extends ParseTreeListener {
 	void enterEquality_expression(GrammarParser.Equality_expressionContext ctx);
 	void exitEquality_expression(GrammarParser.Equality_expressionContext ctx);
 
+	void enterPower_expression(GrammarParser.Power_expressionContext ctx);
+	void exitPower_expression(GrammarParser.Power_expressionContext ctx);
+
 	void enterUnary_expression(GrammarParser.Unary_expressionContext ctx);
 	void exitUnary_expression(GrammarParser.Unary_expressionContext ctx);
 
@@ -69,11 +72,11 @@ public interface GrammarListener extends ParseTreeListener {
 	void enterStatement(GrammarParser.StatementContext ctx);
 	void exitStatement(GrammarParser.StatementContext ctx);
 
-	void enterAdditive_expression(GrammarParser.Additive_expressionContext ctx);
-	void exitAdditive_expression(GrammarParser.Additive_expressionContext ctx);
-
 	void enterFor_expression(GrammarParser.For_expressionContext ctx);
 	void exitFor_expression(GrammarParser.For_expressionContext ctx);
+
+	void enterAdditive_expression(GrammarParser.Additive_expressionContext ctx);
+	void exitAdditive_expression(GrammarParser.Additive_expressionContext ctx);
 
 	void enterUnary_operator(GrammarParser.Unary_operatorContext ctx);
 	void exitUnary_operator(GrammarParser.Unary_operatorContext ctx);
