@@ -1,0 +1,16 @@
+function mod(x,y) {
+	 while (x > y) {
+	       set x x-y
+	 }
+	 x
+}
+
+function test(x) {
+	set SEED 12345
+	set c 1
+	set p 133667
+	Repeat x {
+	       set c mod(c*SEED, p)
+	       Print c/(p-1)
+	}
+}
