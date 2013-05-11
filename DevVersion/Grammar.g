@@ -37,6 +37,7 @@ command_noarg returns [LOGONode node]
     |	Showturtle {$node =  new LOGOCommandNode("SHOWTURTLE");}
     |	Hideturtle {$node =  new LOGOCommandNode("HIDETURTLE");}
     |   Fill {$node = new LOGOCommandNode("FILL");}
+    |	Reset
     ;
     
 command_expr returns [LOGONode node]
@@ -228,7 +229,7 @@ Sety
         ;
 
 Setxy
-        : ('SetXY' | 'SETXY' | 'Teleport' | 'TELEPORT')
+        : ('SetXY' | 'SETXY' | 'Teleport' | 'TELEPORT' | 'TP')
         ;
 
 Speed
@@ -317,6 +318,10 @@ Turtle
 
 Set
 		: ('Set' | 'SET' | 'set')
+		;
+		
+Reset
+		: ('Reset' | 'RESET' | 'reset')
 		;
 		
 If
