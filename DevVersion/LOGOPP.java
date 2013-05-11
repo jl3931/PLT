@@ -183,7 +183,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 		case KeyEvent.VK_DOWN:
 			if (e.getModifiers() == KeyEvent.ALT_MASK) {
 				if (curCmdIndex < commandHistory.size() - 1) {
-					cur.setText(commandHistory.get(curCmdIndex++));
+					cur.setText(commandHistory.get(++curCmdIndex));
 				} else {
 					cur.setText("");
 					curCmdIndex = commandHistory.size();
