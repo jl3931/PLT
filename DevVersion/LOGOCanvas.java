@@ -38,9 +38,9 @@ public class LOGOCanvas extends JComponent {
 	 * Constructor using default size
 	 * @name: name of this canvas
 	 */
-	public LOGOCanvas(String name) {
+	/*public LOGOCanvas(String name) {
 		init(name, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-	}
+	}*/
 
 	/*
 	 * Constructor with customized size
