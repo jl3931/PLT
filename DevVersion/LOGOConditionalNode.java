@@ -1,3 +1,4 @@
+/*Written by Bohong Zhao*/
 public class LOGOConditionalNode extends LOGONode{
 	public LOGOConditionalNode(String id, LOGONode... args) {
 		super(id, args);

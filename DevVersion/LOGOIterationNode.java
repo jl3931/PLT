@@ -1,3 +1,4 @@
+/*Written by Bohong Zhao*/
 public class LOGOIterationNode extends LOGONode{
 
 	public LOGOIterationNode(String id, LOGONode... args) {
