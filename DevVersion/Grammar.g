@@ -1,3 +1,4 @@
+/*Written by Kam Lai, Yi-Ying Chang, Xinyuan Wang, and Jiao Li*/
 grammar Grammar;
 
 line returns [LOGONode node]

@@ -1,3 +1,4 @@
+/*Written by Xinyuan Wang*/
 public class LOGOChallengeNode extends LOGONode {
 	public LOGOChallengeNode(String id) {
 		super(id);

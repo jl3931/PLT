@@ -1,3 +1,4 @@
+/*Written by Xinyuan Wang and Kam Lai*/
 import java.util.*;
 
 public class LOGOCommandNode extends LOGONode {

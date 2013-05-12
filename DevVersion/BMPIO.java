@@ -1,3 +1,4 @@
+/*Written by Xinyuan Wang*/
 import java.io.*;
 import java.awt.image.*;
 import javax.imageio.*;

@@ -1,3 +1,4 @@
+/*Written by Xinyuan Wang*/
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;

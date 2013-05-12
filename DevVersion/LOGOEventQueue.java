@@ -1,3 +1,4 @@
+/*Written by Xinyuan Wang*/
 import java.util.*;
 
 class LOGOEventQueue {
