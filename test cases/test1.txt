@@ -1,9 +1,9 @@
 CS
 TURTLE "local"
-SS 100
+SPEED 50
 COLOR "RED"
 TURTLE "tur2"
-SS 100
+SPEED 50
 COLOR "PURPLE"
 repeat 8 {
 	TURTLE "local"

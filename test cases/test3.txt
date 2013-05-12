@@ -1,11 +1,11 @@
-FUNCTION fillFunc (d, r, offset) {
+function fillFunc (d, r, offset) {
 	HOME
 	FD d RT 90
-	REPEAT offset {
+	repeat offset {
 		FD d*r RT 1
 	}
-	REPEAT 10 {
-		REPEAT 36 {FD d*r RT 1}
+	repeat 10 {
+		repeat 36 {FD d*r RT 1}
 		FILL
 	}
 }
@@ -18,12 +18,12 @@ HT
 COLOR "BLACK"
 SPEED 50
 PD
-REPEAT 10 {
-	REPEAT 360 {FD 1 RT 1}
+repeat 10 {
+	repeat 360 {FD 1 RT 1}
 	RT 36
 }
 PU
-SET radius 1.7 / 100
+set radius 1.7 / 100
 
 COLOR "RED"
 fillFunc(110, radius, 20)

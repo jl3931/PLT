@@ -1,0 +1,10 @@
+CS
+
+function fib(i) {if (i = 1 || i = 0) {i} else { fib (i-1)+ fib (i-2)} }
+function changecolor(i) {if (i = 0) {color "red" 1} else {color "blue" 0}}
+
+SETXY (200, 300)
+
+set k 1
+for i = 1:10
+{set k changecolor(k) repeat 90 {FD fib(i)/10 RT 1}}
