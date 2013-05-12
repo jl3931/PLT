@@ -3,7 +3,6 @@ grammar Grammar;
 line returns [LOGONode node]
 		: play_challenge EOF {$node = $play_challenge.node;}
         | statement_list EOF {$node = $statement_list.node; LOGOPP.io.debug("line->stmt_list");}
-		| Import String EOF
 		;
 		
 statement_list returns [LOGONode node]
@@ -364,10 +363,6 @@ Repeat
 Function
     	: 'function'
     	;
-    	
-Import
-		: 'import'
-		;
     	
 Challenge
 		: ('Challenge' | 'CHALLENGE' | 'challenge')

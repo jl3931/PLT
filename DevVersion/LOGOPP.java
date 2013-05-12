@@ -39,7 +39,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 	static LOGOIO io = new LOGOIO();
 	static LOGOSymbolTable symboltable = new LOGOSymbolTable();
 	static LOGOErrorHandler errorhandler = new LOGOErrorHandler(io);
-	static LOGOCanvas canvas = new LOGOCanvas("LOGO++", 600, 400);
+	static LOGOCanvas canvas = new LOGOCanvas("Logo++", 600, 400);
 	static LOGOInterpreter interpreter = new LOGOInterpreter();
 	static LOGOBasic basic = new LOGOBasic();
 	static LOGOEventQueue eventQueue = new LOGOEventQueue();
@@ -61,7 +61,7 @@ public class LOGOPP extends JFrame implements KeyListener {
 	}
 
 	private static void createAndShowGUI() {
-		LOGOPP logoPP = new LOGOPP("LOGOGUI");
+		LOGOPP logoPP = new LOGOPP("Logo++");
 		logoPP.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		logoPP.initComponents();
 		logoPP.addComponentsToPane();
