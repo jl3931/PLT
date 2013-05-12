@@ -1,4 +1,4 @@
-//package com.ahuier.socket;
+/*Written by Bohong Zhao*/
 
 import java.io.IOException;
 import java.net.ServerSocket;
