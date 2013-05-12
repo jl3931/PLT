@@ -1,3 +1,4 @@
+/*Written by Xinyuan Wang and Jiao Li*/
 import java.util.Scanner;
 import java.io.IOException;
 import java.io.File;

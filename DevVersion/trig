@@ -1,3 +1,4 @@
+#A simple library
 function factorial(x){
 	 if (x = 0) {1}
 	 else {x*factorial(x-1)}
@@ -17,6 +18,4 @@ function cos(x){
 }
 function tan(x){
 	 sin(x)/cos(x)
-}
-function inverse(f, o, min, max){
 }

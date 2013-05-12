@@ -1,3 +1,4 @@
+/*Written by Jiao Li*/
 public class LOGOSetNode extends LOGONode{
 	public LOGOSetNode(String id, LOGONode... args) {
 		super(id, args);

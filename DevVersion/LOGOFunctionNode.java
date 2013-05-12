@@ -1,3 +1,4 @@
+/*Written by Jiao Li*/
 class LOGOFunctionNode extends LOGONode {
 	Object[] arguments;
 	public LOGOFunctionNode(LOGONode name, String type, Object argList, LOGONode... args) {

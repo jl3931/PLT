@@ -1,3 +1,4 @@
+/*Written by Jiao Li*/
 import java.util.ArrayList;
 class LOGOIdList {
 	public ArrayList<String> ids;

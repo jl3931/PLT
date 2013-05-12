@@ -1,3 +1,4 @@
+/*Written by Jiao Li*/
 public class LOGOErrorHandler {
 	static LOGOIO io;
 	String message;

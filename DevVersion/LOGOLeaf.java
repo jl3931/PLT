@@ -1,3 +1,4 @@
+/*Written by Jiao Li*/
 public class LOGOLeaf extends LOGONode{
 	public LOGOLeaf(String id) {
 		super(id);

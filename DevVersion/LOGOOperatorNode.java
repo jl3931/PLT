@@ -1,4 +1,4 @@
-
+/*Written by Jiao Li and Kam Lai*/
 public class LOGOOperatorNode extends LOGONode{
 	public LOGOOperatorNode(String id, LOGONode... args) {
 		super(id, args);

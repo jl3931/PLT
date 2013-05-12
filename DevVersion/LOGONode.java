@@ -1,3 +1,4 @@
+/*Written by Jiao Li*/
 import java.util.*;
 
 public class LOGONode {
